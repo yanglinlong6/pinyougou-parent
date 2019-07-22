@@ -33,6 +33,7 @@ public class AddressServiceImpl extends CoreServiceImpl<TbAddress> implements Ad
     public AddressServiceImpl(TbAddressMapper addressMapper) {
         super(addressMapper, TbAddress.class);
         this.addressMapper = addressMapper;
+        System.out.println("hello my name is leilvlong");
     }
 
 
