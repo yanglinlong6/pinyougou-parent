@@ -16,7 +16,7 @@
         <custom-filter ref="singleLogoutFilter" before="CAS_FILTER"/>
     </http>
 
-    <!-- CAS入口点 开始 -->
+    <!-- CAS入口点开始 -->
     <beans:bean id="casProcessingFilterEntryPoint"
                 class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">
         <!-- 单点登录服务器登录URL -->
