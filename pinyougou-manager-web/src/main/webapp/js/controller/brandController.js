@@ -12,7 +12,7 @@
     methods: {
         //新增品牌审核的需求：
         updateStatus:function (status) {
-            //注意 没有使用restful风格
+            //注意: 没有使用restful风格
             axios.post('/brand/updateStatus.shtml?status='+status,this.ids).then(function (response) {
                 console.log(response);
                 if (response.data.success) {
