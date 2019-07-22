@@ -25,6 +25,20 @@ public class TbBrand implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 状态--新增字段
+     */
+    @Column(name = "status")
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
      * @return id
      */
     public Long getId() {

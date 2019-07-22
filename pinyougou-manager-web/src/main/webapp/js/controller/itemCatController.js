@@ -8,7 +8,8 @@
         ids:[],
         entity_1:{},//变量1
         entity_2:{},//变量2
-        searchEntity:{}
+        searchEntity:{},
+        grade: 1 //面包屑级别的设置
     },
     methods: {
         selectList:function (p_entity) {

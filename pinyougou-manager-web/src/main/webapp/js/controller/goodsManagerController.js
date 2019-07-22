@@ -9,6 +9,7 @@
         status: ['未审核', '已审核', '审核未通过', '已关闭'],
         itemCatList: [],
         searchEntity: {auditStatus: '0'},
+
     },
     methods: {
         updateStatus:function (status) {
@@ -26,20 +27,22 @@
                 for (var i = 0; i < response.data.length; i++) {
                     app.itemCatList[response.data[i].id] = response.data[i].name;
                 }
+                //for循环遍历之后添加手动渲染
+                app.$mount("#app")
             }).catch(function (error) {
                 console.log("1231312131321");
-            })
+            });
         },
         searchList: function (curPage) {
             axios.post('/goods/search.shtml?pageNo=' + curPage, this.searchEntity).then(function (response) {
                 //获取数据
                 app.list = response.data.list;
-
                 //当前页
                 app.pageNo = curPage;
                 //总页数
                 app.pages = response.data.pages;
             });
+
         },
         //查询所有品牌列表
         findAll: function () {
@@ -124,6 +127,7 @@
 
         this.searchList(1);
         this.findAllItemCategory();
+
     }
 
 })
