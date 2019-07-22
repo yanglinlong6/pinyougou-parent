@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <div class="controls">
+        <input autocomplete="off" v-model="num" type="text" value="1" minnum="1"
+               class="itxt"/>
+        <a href="javascript:void(0)" class="increment plus" @click="addNum(1)">+</a>
+        <a href="javascript:void(0)" class="increment mins" @click="addNum(-1)">-</a>
+    </div>
+</div>
+</body>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/axios/axios.js"></script>
+<script src="js/controller/base.js"></script>
+<script src="js/controller/itemController2.js"></script>
+</html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- 配置数据源  配置sqlsessionfactory mapper扫描器 -->
+    <context:component-scan base-package="com.pinyougou.mapper"></context:component-scan>
+
+    <context:property-placeholder location="classpath:properties/jdbc.properties"/>
+    <!--创建druid数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close">
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="maxActive" value="10"/>
+        <property name="minIdle" value="5"/>
+    </bean>
+
+    <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="typeAliasesPackage" value="com.pinyougou.pojo"></property>
+        <property name="configLocation" value="classpath:mybatis/sqlMapConfig.xml"></property>
+        <property name="mapperLocations" value="classpath:com/pinyougou/mapper/*Mapper.xml"></property>
+    </bean>
+    <!-- 对通用接口Mapper的实例化(如果没有,只能调用自己的Mapper接口的方法,不能使用通用Mapper接口的方法) -->
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.pinyougou.mapper"></property>
+
+        <property name="properties">
+            <value>mappers=tk.mybatis.mapper.common.Mapper</value>
+        </property>
+
+    </bean>
+    <!--<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">-->
+    <!--<property name="basePackage" value="com.pinyougou.mapper"></property>-->
+    <!--</bean>-->
+</beans>
