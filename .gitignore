@@ -12,6 +12,7 @@
 .idea/
 target/
 # Package Files #
+*.iml
 *.jar
 *.war
 *.nar
