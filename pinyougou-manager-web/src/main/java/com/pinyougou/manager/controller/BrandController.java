@@ -11,7 +11,7 @@ import com.pinyougou.pojo.TbBrand;
 import com.github.pagehelper.PageInfo;
 
 /**
- * controller
+ * controller222
  *
  * @author Administrator
  */
@@ -24,6 +24,7 @@ public class BrandController {
 
     @RequestMapping("/updateStatus")
     public Result updateStatus(@RequestParam String status, @RequestBody Long[] ids){
+
         try {
             brandService.updateStatus(ids,status);
             return new Result(true,"审核成功");
