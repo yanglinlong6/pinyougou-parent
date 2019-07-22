@@ -8,12 +8,12 @@
         ids: [],
         status: ['未审核', '已审核', '审核未通过', '已关闭'],
         itemCatList: [],
-        searchEntity: { auditStatus: '0' },
+        searchEntity: {auditStatus: '0'},
     },
     methods: {
-        updateStatus: function (status) {
-            axios.post('/goods/updateStatus/' + status + '.shtml', this.ids).then(function (response) {
-                if (response.data.success) {
+        updateStatus:function (status) {
+            axios.post('/goods/updateStatus/'+status+'.shtml',this.ids).then(function (response) {
+                if(response.data.success){
                     app.searchList(1);
                 }
             }).catch(function (error) {
@@ -26,8 +26,9 @@
                 for (var i = 0; i < response.data.length; i++) {
                     app.itemCatList[response.data[i].id] = response.data[i].name;
                 }
-                //重新手动渲染
-                app.$mount("#app");
+                //for循环遍历之后添加手动渲染
+                app.$mount("#app")
+
             }).catch(function (error) {
                 console.log("1231312131321");
             })

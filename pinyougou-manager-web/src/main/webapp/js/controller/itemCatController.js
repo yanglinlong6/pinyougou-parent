@@ -9,7 +9,7 @@
         entity_1:{},//变量1
         entity_2:{},//变量2
         searchEntity:{},
-        grade:1
+        grade: 1 //面包屑级别的设置
     },
     methods: {
         selectList:function (p_entity) {

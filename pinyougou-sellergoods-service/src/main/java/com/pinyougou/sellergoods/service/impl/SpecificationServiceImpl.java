@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pinyougou.mapper.TbSpecificationOptionMapper;
+import com.pinyougou.pojo.TbBrand;
+import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbSpecificationOption;
 import entity.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,5 +130,14 @@ public class SpecificationServiceImpl extends CoreServiceImpl<TbSpecification> i
             tbSpecificationOption.setSpecId(specification.getSpecification().getId());
             optionMapper.insert(tbSpecificationOption);
         }
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        TbSpecification record = new TbSpecification();
+        record.setStatus(status);
+        Example example = new Example(TbGoods.class);
+        example.createCriteria().andIn("id", Arrays.asList(ids));
+        specificationMapper.updateByExampleSelective(record, example);//update set status=1 where id in (12,3)
     }
 }

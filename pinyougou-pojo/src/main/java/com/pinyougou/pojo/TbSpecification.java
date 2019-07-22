@@ -20,6 +20,19 @@ public class TbSpecification implements Serializable {
     private String specName;
 
     private static final long serialVersionUID = 1L;
+    /**
+     * 状态--新增字段
+     */
+    @Column(name = "status")
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     /**
      * 获取主键

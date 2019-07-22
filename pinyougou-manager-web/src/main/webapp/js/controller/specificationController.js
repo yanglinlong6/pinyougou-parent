@@ -6,9 +6,22 @@
         list:[],
         entity:{specification:{},optionList:[]},
         ids:[],
-        searchEntity:{}
+        searchEntity:{},
+        status: ['未审核', '已审核', '审核未通过', '已关闭'], //定义商品的状态数组
     },
     methods: {
+        //新增规格审核的需求：
+        updateStatus:function (status) {
+            //注意 没有使用restful风格
+            axios.post('/specification/updateStatus.shtml?status='+status,this.ids).then(function (response) {
+                console.log(response);
+                if (response.data.success) {
+                    app.searchList(1);
+                }
+            }).catch(function (error) {
+                console.log("1231312131321");
+            });
+        },
         removeTableRow:function(index){
             this.entity.optionList.splice(index,1) ;
         },

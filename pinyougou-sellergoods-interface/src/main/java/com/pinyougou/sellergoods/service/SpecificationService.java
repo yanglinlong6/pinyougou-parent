@@ -38,4 +38,7 @@ public interface SpecificationService extends CoreService<TbSpecification> {
 	void delete(Long[] ids);
 
 	void update(Specification specification);
+
+    void updateStatus(Long[] ids, String status);
+
 }

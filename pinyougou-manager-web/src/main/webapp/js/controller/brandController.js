@@ -6,9 +6,22 @@
         list:[],
         entity:{},
         ids:[],
-        searchEntity:{}
+        searchEntity:{},
+        status: ['未审核', '已审核', '审核未通过', '已关闭'], //定义商品的状态数组
     },
     methods: {
+        //新增品牌审核的需求：
+        updateStatus:function (status) {
+            //注意: 没有使用restful风格
+            axios.post('/brand/updateStatus.shtml?status='+status,this.ids).then(function (response) {
+                console.log(response);
+                if (response.data.success) {
+                    app.searchList(1);
+                }
+            }).catch(function (error) {
+                console.log("1231312131321");
+            });
+        },
         searchList:function (curPage) {
             axios.post('/brand/search.shtml?pageNo='+curPage,this.searchEntity).then(function (response) {
                 //获取数据

@@ -37,6 +37,12 @@
                         <button type="button" class="btn btn-default" title="删除" @click="dele()"><i class="fa fa-trash-o"></i> 删除
                         </button>
 
+                        <!--新增品牌审核的代码 审核通过和驳回功能-->
+                        <button type="button" class="btn btn-default" title="审核通过" @click="updateStatus(1)"><i
+                                class="fa fa-check"></i> 审核通过
+                        </button>
+                        <button type="button" class="btn btn-default" title="驳回" @click="updateStatus(2)"><i class="fa fa-ban"></i> 驳回</button>
+
                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
                                 class="fa fa-refresh"></i> 刷新
                         </button>
@@ -59,6 +65,7 @@
                     </th>
                     <th class="sorting_asc">规格ID</th>
                     <th class="sorting">规格名称</th>
+                    <th class="sorting">状态</th>
                     <th class="text-center">操作</th>
                 </tr>
                 </thead>
@@ -67,22 +74,13 @@
                     <td><input type="checkbox" :value="entity.id" v-model="ids"></td>
                     <td>{{entity.id}}</td>
                     <td>{{entity.specName}}</td>
+                    <td>{{status[entity.status]}}</td>
                     <td class="text-center">
                         <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" @click="findOne(entity.id)">
                             修改
                         </button>
                     </td>
                 </tr>
-                <!--<tr>-->
-                    <!--<td><input type="checkbox"></td>-->
-                    <!--<td>2</td>-->
-                    <!--<td>服装尺码</td>-->
-                    <!--<td class="text-center">-->
-                        <!--<button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal">-->
-                            <!--修改-->
-                        <!--</button>-->
-                    <!--</td>-->
-                <!--</tr>-->
                 </tbody>
             </table>
             <!--数据列表/-->
