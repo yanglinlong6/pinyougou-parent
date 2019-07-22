@@ -34,6 +34,7 @@ public class AddressServiceImpl extends CoreServiceImpl<TbAddress> implements Ad
         super(addressMapper, TbAddress.class);
         this.addressMapper = addressMapper;
         System.out.println("hello my name is leilvlong");
+        System.out.println("test commit");
     }
 
 
