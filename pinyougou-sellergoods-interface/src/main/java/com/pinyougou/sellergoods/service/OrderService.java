@@ -4,6 +4,12 @@ import com.pinyougou.pojo.TbOrder;
 
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.core.service.CoreService;
+import java.util.Map;
+
+import com.github.pagehelper.PageInfo;
+import com.pinyougou.core.service.CoreService;
+import com.pinyougou.pojo.TbOrder;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -28,5 +34,7 @@ public interface OrderService extends CoreService<TbOrder> {
 	 * @return
 	 */
 	PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder Order);
-	
+
+
+	Map<String, Double> getSalesReport(String sellerId, String beginTime, String endTime);
 }

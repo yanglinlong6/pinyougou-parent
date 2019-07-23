@@ -33,6 +33,7 @@ public class GoodsTask {
     /**
      * 一个被反复执行的方法,
      * 通过注解 来指定 cron表达式:指定何时执行的
+     * 任务类的作用就是每隔30秒 重新从数据库中查询所有的秒杀商品 将其存入到redis中，请注意条件。
      */
     @Scheduled(cron = "0/5 * * * * ?")
     public void pushGoods() {
@@ -71,7 +72,7 @@ public class GoodsTask {
 //        for (TbSeckillGoods tbSeckillGoods : seckillGoodsList) {
 //            redisTemplate.boundHashOps(SysConstants.SEC_KILL_GOODS).put(tbSeckillGoods.getId(), tbSeckillGoods);
 //        }
-        redisTemplate.boundValueOps("nihao").set("nishi yife ");
+        redisTemplate.boundValueOps("n+ihao").set("nishi yife ");
         System.out.println("chenggong");
     }
 
@@ -80,6 +81,23 @@ public class GoodsTask {
         for (Integer i = 0; i < goods.getStockCount(); i++) {
             //库存为多少就是多少个SIZE 值就是id即可
             redisTemplate.boundListOps(SysConstants.SEC_KILL_GOODS_PREFIX + goods.getId()).leftPush(goods.getId());
+        }
+    }
+
+    @Scheduled(cron = "0/2 * * * * ?")
+    public void popGoodsList(){
+        Example example = new Example(TbSeckillGoods.class);
+        Example.Criteria criteria = example.createCriteria();//条件
+        //剩余库存小于1
+        criteria.andLessThan("stockCount",1);
+
+        Date date = new Date();
+        criteria.andLessThan("endTime",date);
+
+        List<TbSeckillGoods> tbSeckillGoods = seckillGoodsMapper.selectByExample(example);
+        //将redis中的商品删除
+        for (TbSeckillGoods good : tbSeckillGoods) {
+            redisTemplate.boundHashOps(SysConstants.SEC_KILL_GOODS).delete(good.getId());
         }
     }
 

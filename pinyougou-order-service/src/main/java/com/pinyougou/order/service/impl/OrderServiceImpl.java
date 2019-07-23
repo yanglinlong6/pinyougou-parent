@@ -183,7 +183,6 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
                 orderItem.setGoodsId(item.getGoodsId());
                 money += orderItem.getTotalFee().doubleValue();
                 orderItemMapper.insert(orderItem);
-
             }
             tbOrder.setPayment(new BigDecimal(money));
             total_money += money;
@@ -217,7 +216,6 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
         payLog.setTransactionId(transaction_id);
         payLog.setTradeState("1");//
         payLogMapper.updateByPrimaryKey(payLog);
-
 
         //* 2.根据支付日志 获取到商品订单列表 更新商品订单状态
         String orderList = payLog.getOrderList();//   37,38
