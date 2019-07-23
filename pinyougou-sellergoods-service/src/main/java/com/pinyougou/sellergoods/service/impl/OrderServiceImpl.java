@@ -1,19 +1,15 @@
-package com.pinyougou.order.service.impl;
+package com.pinyougou.sellergoods.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-import com.pinyougou.common.util.IdWorker;
-import com.pinyougou.mapper.TbItemMapper;
 import com.pinyougou.mapper.TbOrderItemMapper;
-import com.pinyougou.mapper.TbPayLogMapper;
-import com.pinyougou.order.service.OrderService;
-import com.pinyougou.pojo.TbItem;
+import com.pinyougou.mapper.TbOrderMapper;
+import com.pinyougou.pojo.TbOrder;
 import com.pinyougou.pojo.TbOrderItem;
-import com.pinyougou.pojo.TbPayLog;
-import entity.Cart;
+import com.pinyougou.sellergoods.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -22,11 +18,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import com.pinyougou.core.service.CoreServiceImpl;
 
-import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
-
-import com.pinyougou.mapper.TbOrderMapper;
-import com.pinyougou.pojo.TbOrder;
 
 
 /**
@@ -39,18 +31,6 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
 
 
     private TbOrderMapper orderMapper;
-
-    @Autowired
-    private RedisTemplate redisTemplate;
-    @Autowired
-    private TbOrderItemMapper orderItemMapper;
-    @Autowired
-    private TbItemMapper itemMapper;
-    @Autowired
-    private IdWorker idWorker;
-
-    @Autowired
-    private TbPayLogMapper payLogMapper;
 
     @Autowired
     public OrderServiceImpl(TbOrderMapper orderMapper) {
@@ -155,78 +135,64 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
         return pageInfo;
     }
 
+    @Autowired
+    private TbOrderItemMapper tbOrderItemMapper;
+
+    /**
+     * 获取销售额
+     *
+     * @param sellerId
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
     @Override
-    public void add(TbOrder order) {
-        List<Cart> cartList = (List<Cart>) redisTemplate.boundHashOps("CART_REDIS_KEY").get(order.getUserId());
-        List<Long> orderList = new ArrayList<>();
-        double total_money = 0;
-        for (Cart cart : cartList) {
-            long orderId = idWorker.nextId();
-            TbOrder tbOrder = new TbOrder();
-            tbOrder.setOrderId(orderId);
-            tbOrder.setUserId(order.getUserId());
-            tbOrder.setPaymentType(order.getPaymentType());
-            tbOrder.setStatus("1");
-            tbOrder.setCreateTime(new Date());
-            tbOrder.setUpdateTime(new Date());
-            tbOrder.setReceiverAreaName(order.getReceiverAreaName());
-            tbOrder.setReceiverMobile(order.getReceiverMobile());
-            tbOrder.setReceiver(order.getReceiver());
-            tbOrder.setSourceType(order.getSourceType());
-            tbOrder.setSellerId(cart.getSellerId());
-            double money = 0;
-            for (TbOrderItem orderItem : cart.getOrderItemList()) {
-                orderItem.setId(idWorker.nextId());
-                orderItem.setOrderId(orderId);
-                orderItem.setSellerId(cart.getSellerId());
-                TbItem item = itemMapper.selectByPrimaryKey(orderItem.getItemId());
-                orderItem.setGoodsId(item.getGoodsId());
-                money += orderItem.getTotalFee().doubleValue();
-                orderItemMapper.insert(orderItem);
+    public Map<String, Double> getSalesReport(String sellerId, String beginTime, String endTime) {
+        Map<String, Double> map = new HashMap();
+        try {
+            //1根据条件 当前商家 当前时间段的
+            Example example = new Example(TbOrder.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("sellerId", sellerId); //确定当前商家
+            //将String 转换成Date
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date dateStart = dateFormat.parse(beginTime);
+            Date dateEnd = dateFormat.parse(endTime);
+            //设置时间区间
+            criteria.andBetween("paymentTime", dateStart, dateEnd);
+            List<TbOrder> tbOrders = orderMapper.selectByExample(example);
+
+            //2获取到该时间段该商家的订单 进行遍历
+            if (tbOrders.size() > 0 && tbOrders != null) {
+                //如果不为null name根据订单id获取订单明细 获取总价格
+                for (TbOrder tbOrder : tbOrders) {
+                    Long orderId = tbOrder.getOrderId(); //获取到订单id 订单里面有好多订单明细
+                    Date paymentTime = tbOrder.getPaymentTime(); //获取到该订单的支付时间
+                    //Date换成String
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    String dateStr = sdf.format(paymentTime);
+                    Example example1 = new Example(TbOrderItem.class);
+                    Example.Criteria criteria1 = example1.createCriteria();
+                    criteria1.andEqualTo("orderId", orderId);
+                    List<TbOrderItem> tbOrderItems = tbOrderItemMapper.selectByExample(example1);
+                    //获取到订单明细来进行加 价格
+                    Double totalMoney=0.0;
+                    for (TbOrderItem tbOrderItem : tbOrderItems) {
+                        BigDecimal totalFee = tbOrderItem.getTotalFee(); //获取一个订单明细的总价
+                        System.out.println("订单明细中总价为   "+totalFee);
+                        //进行累加销售额
+                        totalMoney+= totalFee.doubleValue();
+                    }
+                    map.put(dateStr,totalMoney); //将累加的销售额存入map
+                }
+            }else {
+                return new HashMap();
             }
-            tbOrder.setPayment(new BigDecimal(money));
-            total_money += money;
-            orderMapper.insert(tbOrder);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new HashMap();
         }
-        TbPayLog payLog = new TbPayLog();
-        String outTradeNo = idWorker.nextId() + "";
-        payLog.setOutTradeNo(outTradeNo);
-        payLog.setCreateTime(new Date());
-        String ids = orderList.toString().replace("[", "").replace("]", "").replace("", "");
-        payLog.setOrderList(ids);
-        payLog.setPayType("1");
-        payLog.setTotalFee((long) (total_money * 100));
-        payLog.setTradeState("0");
-        payLog.setUserId(order.getUserId());
-        payLogMapper.insert(payLog);
-        redisTemplate.boundHashOps("payLog").put(order.getUserId(), payLog);
-        redisTemplate.boundHashOps("CART_REDIS_KEY").delete(order.getUserId());
+        return map;
     }
 
-    @Override
-    public TbPayLog searchPayLogFromRedis(String userId) {
-        return (TbPayLog) redisTemplate.boundHashOps("payLog").get(userId);
-    }
-
-    @Override
-    public void updateOrderStatus(String out_trade_no, String transaction_id) {
-        TbPayLog payLog = payLogMapper.selectByPrimaryKey(out_trade_no);
-
-        payLog.setPayTime(new Date());
-        payLog.setTransactionId(transaction_id);
-        payLog.setTradeState("1");//
-        payLogMapper.updateByPrimaryKey(payLog);
-
-        //* 2.根据支付日志 获取到商品订单列表 更新商品订单状态
-        String orderList = payLog.getOrderList();//   37,38
-        String[] split = orderList.split(",");
-        for (String orderidstring : split) {// 37 38
-            TbOrder tbOrder = orderMapper.selectByPrimaryKey(Long.valueOf(orderidstring));
-            tbOrder.setStatus("2");//已经付完款
-            tbOrder.setUpdateTime(new Date());
-            tbOrder.setPaymentTime(tbOrder.getUpdateTime());
-            orderMapper.updateByPrimaryKey(tbOrder);
-        }
-        redisTemplate.boundHashOps("payLog").delete(payLog.getUserId());
-    }
 }
