@@ -1,14 +1,16 @@
-package com.pinyougou.manager.controller;
+package com.pinyougou.shop.controller;
 
 import java.util.List;
 
-import entity.Result;
-import com.pinyougou.sellergoods.service.TypeTemplateService;
+import com.pinyougou.sellergoods.service.SeckillGoodsService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.pinyougou.pojo.TbTypeTemplate;
+import com.pinyougou.pojo.TbOrder;
+import com.pinyougou.sellergoods.service.OrderService;
 
 import com.github.pagehelper.PageInfo;
+import entity.Result;
 
 /**
  * controller
@@ -17,11 +19,11 @@ import com.github.pagehelper.PageInfo;
  *
  */
 @RestController
-@RequestMapping("/typeTemplate")
-public class TypeTemplateController {
+@RequestMapping("/order")
+public class OrderController {
     
     @Reference
-    private TypeTemplateService typeTemplateService;
+    private OrderService orderService;
     
     /**
      * 返回全部列表
@@ -29,27 +31,27 @@ public class TypeTemplateController {
      * @return
      */
     @RequestMapping("/findAll")
-    public List<TbTypeTemplate> findAll() {
-        return typeTemplateService.findAll();
+    public List<TbOrder> findAll() {
+        return orderService.findAll();
     }
     
     @RequestMapping("/findPage")
-    public PageInfo<TbTypeTemplate> findPage(
+    public PageInfo<TbOrder> findPage(
         @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
         @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize) {
-        return typeTemplateService.findPage(pageNo, pageSize);
+        return orderService.findPage(pageNo, pageSize);
     }
     
     /**
      * 增加
      * 
-     * @param typeTemplate
+     * @param order
      * @return
      */
     @RequestMapping("/add")
-    public Result add(@RequestBody TbTypeTemplate typeTemplate) {
+    public Result add(@RequestBody TbOrder order) {
         try {
-            typeTemplateService.add(typeTemplate);
+            orderService.add(order);
             return new Result(true, "增加成功");
         }
         catch (Exception e) {
@@ -61,13 +63,13 @@ public class TypeTemplateController {
     /**
      * 修改
      * 
-     * @param typeTemplate
+     * @param order
      * @return
      */
     @RequestMapping("/update")
-    public Result update(@RequestBody TbTypeTemplate typeTemplate) {
+    public Result update(@RequestBody TbOrder order) {
         try {
-            typeTemplateService.update(typeTemplate);
+            orderService.update(order);
             return new Result(true, "修改成功");
         }
         catch (Exception e) {
@@ -83,8 +85,8 @@ public class TypeTemplateController {
      * @return
      */
     @RequestMapping("/findOne/{id}")
-    public TbTypeTemplate findOne(@PathVariable(value = "id") Long id) {
-        return typeTemplateService.findOne(id);
+    public TbOrder findOne(@PathVariable(value = "id") Long id) {
+        return orderService.findOne(id);
     }
     
     /**
@@ -96,7 +98,7 @@ public class TypeTemplateController {
     @RequestMapping("/delete")
     public Result delete(@RequestBody Long[] ids) {
         try {
-            typeTemplateService.delete(ids);
+            orderService.delete(ids);
             return new Result(true, "删除成功");
         }
         catch (Exception e) {
@@ -106,22 +108,13 @@ public class TypeTemplateController {
     }
     
     @RequestMapping("/search")
-    public PageInfo<TbTypeTemplate> findPage(
+    public PageInfo<TbOrder> findPage(
         @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
         @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
-        @RequestBody TbTypeTemplate typeTemplate) {
-        return typeTemplateService.findPage(pageNo, pageSize, typeTemplate);
+        @RequestBody TbOrder order) {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        order.setSellerId(sellerId);
+        return orderService.findPage(pageNo, pageSize, order);
     }
     
-    @RequestMapping("/updateStatus")
-    public Result updateStatus(@RequestParam String status, @RequestBody Long[] ids) {
-        try {
-            typeTemplateService.updateStatus(ids, status);
-            return new Result(true, "审核成功");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return new Result(false, "审核失败");
-        }
-    }
 }

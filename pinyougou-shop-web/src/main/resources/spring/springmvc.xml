@@ -25,7 +25,9 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
     <!--配置应用名 服务消费方-->
-    <dubbo:application name="pinyougou-shop-web"></dubbo:application>
+    <dubbo:application name="pinyougou-shop-web">
+        <dubbo:parameter key="qos.port" value="45965"></dubbo:parameter>
+    </dubbo:application>
     <!--配置注册中心-->
     <dubbo:registry protocol="zookeeper" address="192.168.25.133" port="2181"></dubbo:registry>
 

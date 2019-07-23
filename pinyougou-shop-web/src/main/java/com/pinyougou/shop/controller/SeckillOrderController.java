@@ -1,14 +1,16 @@
-package com.pinyougou.manager.controller;
+package com.pinyougou.shop.controller;
 
 import java.util.List;
 
-import entity.Result;
-import com.pinyougou.sellergoods.service.TypeTemplateService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.pinyougou.pojo.TbTypeTemplate;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
+import com.pinyougou.pojo.TbSeckillOrder;
+import com.pinyougou.sellergoods.service.SeckillOrderService;
+
+import entity.Result;
 
 /**
  * controller
@@ -17,11 +19,11 @@ import com.github.pagehelper.PageInfo;
  *
  */
 @RestController
-@RequestMapping("/typeTemplate")
-public class TypeTemplateController {
+@RequestMapping("/seckillOrder")
+public class SeckillOrderController {
     
     @Reference
-    private TypeTemplateService typeTemplateService;
+    private SeckillOrderService seckillOrderService;
     
     /**
      * 返回全部列表
@@ -29,27 +31,27 @@ public class TypeTemplateController {
      * @return
      */
     @RequestMapping("/findAll")
-    public List<TbTypeTemplate> findAll() {
-        return typeTemplateService.findAll();
+    public List<TbSeckillOrder> findAll() {
+        return seckillOrderService.findAll();
     }
     
     @RequestMapping("/findPage")
-    public PageInfo<TbTypeTemplate> findPage(
+    public PageInfo<TbSeckillOrder> findPage(
         @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
         @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize) {
-        return typeTemplateService.findPage(pageNo, pageSize);
+        return seckillOrderService.findPage(pageNo, pageSize);
     }
     
     /**
      * 增加
      * 
-     * @param typeTemplate
+     * @param seckillOrder
      * @return
      */
     @RequestMapping("/add")
-    public Result add(@RequestBody TbTypeTemplate typeTemplate) {
+    public Result add(@RequestBody TbSeckillOrder seckillOrder) {
         try {
-            typeTemplateService.add(typeTemplate);
+            seckillOrderService.add(seckillOrder);
             return new Result(true, "增加成功");
         }
         catch (Exception e) {
@@ -61,13 +63,13 @@ public class TypeTemplateController {
     /**
      * 修改
      * 
-     * @param typeTemplate
+     * @param seckillOrder
      * @return
      */
     @RequestMapping("/update")
-    public Result update(@RequestBody TbTypeTemplate typeTemplate) {
+    public Result update(@RequestBody TbSeckillOrder seckillOrder) {
         try {
-            typeTemplateService.update(typeTemplate);
+            seckillOrderService.update(seckillOrder);
             return new Result(true, "修改成功");
         }
         catch (Exception e) {
@@ -83,8 +85,8 @@ public class TypeTemplateController {
      * @return
      */
     @RequestMapping("/findOne/{id}")
-    public TbTypeTemplate findOne(@PathVariable(value = "id") Long id) {
-        return typeTemplateService.findOne(id);
+    public TbSeckillOrder findOne(@PathVariable(value = "id") Long id) {
+        return seckillOrderService.findOne(id);
     }
     
     /**
@@ -96,7 +98,7 @@ public class TypeTemplateController {
     @RequestMapping("/delete")
     public Result delete(@RequestBody Long[] ids) {
         try {
-            typeTemplateService.delete(ids);
+            seckillOrderService.delete(ids);
             return new Result(true, "删除成功");
         }
         catch (Exception e) {
@@ -106,22 +108,14 @@ public class TypeTemplateController {
     }
     
     @RequestMapping("/search")
-    public PageInfo<TbTypeTemplate> findPage(
+    public PageInfo<TbSeckillOrder> findPage(
         @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
         @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
-        @RequestBody TbTypeTemplate typeTemplate) {
-        return typeTemplateService.findPage(pageNo, pageSize, typeTemplate);
+        @RequestBody TbSeckillOrder seckillOrder) {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(sellerId);
+        seckillOrder.setSellerId(sellerId);
+        return seckillOrderService.findPage(pageNo, pageSize, seckillOrder);
     }
     
-    @RequestMapping("/updateStatus")
-    public Result updateStatus(@RequestParam String status, @RequestBody Long[] ids) {
-        try {
-            typeTemplateService.updateStatus(ids, status);
-            return new Result(true, "审核成功");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return new Result(false, "审核失败");
-        }
-    }
 }

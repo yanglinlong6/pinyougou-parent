@@ -25,7 +25,6 @@ import com.pinyougou.sellergoods.service.TypeTemplateService;
 
 import javax.swing.plaf.basic.BasicTreeUI;
 
-
 /**
  * 服务实现层
  *
@@ -33,92 +32,100 @@ import javax.swing.plaf.basic.BasicTreeUI;
  */
 @Service
 public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate> implements TypeTemplateService {
-
-
+    
     private TbTypeTemplateMapper typeTemplateMapper;
+    
     @Autowired
     private TbSpecificationOptionMapper optionMapper;
+    
     @Autowired
     private RedisTemplate redisTemplate;
-
+    
     @Autowired
     public TypeTemplateServiceImpl(TbTypeTemplateMapper typeTemplateMapper) {
         super(typeTemplateMapper, TbTypeTemplate.class);
         this.typeTemplateMapper = typeTemplateMapper;
     }
-
-
+    
     @Override
     public PageInfo<TbTypeTemplate> findPage(Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo, pageSize);
         List<TbTypeTemplate> all = typeTemplateMapper.selectAll();
         PageInfo<TbTypeTemplate> info = new PageInfo<TbTypeTemplate>(all);
-
-        //序列化再反序列化
+        
+        // 序列化再反序列化
         String s = JSON.toJSONString(info);
         PageInfo<TbTypeTemplate> pageInfo = JSON.parseObject(s, PageInfo.class);
         return pageInfo;
     }
-
-
+    
     @Override
     public PageInfo<TbTypeTemplate> findPage(Integer pageNo, Integer pageSize, TbTypeTemplate typeTemplate) {
         PageHelper.startPage(pageNo, pageSize);
-
+        
         Example example = new Example(TbTypeTemplate.class);
         Example.Criteria criteria = example.createCriteria();
-
+        
         if (typeTemplate != null) {
             if (StringUtils.isNotBlank(typeTemplate.getName())) {
                 criteria.andLike("name", "%" + typeTemplate.getName() + "%");
-                //criteria.andNameLike("%"+typeTemplate.getName()+"%");
+                // criteria.andNameLike("%"+typeTemplate.getName()+"%");
             }
             if (StringUtils.isNotBlank(typeTemplate.getSpecIds())) {
                 criteria.andLike("specIds", "%" + typeTemplate.getSpecIds() + "%");
-                //criteria.andSpecIdsLike("%"+typeTemplate.getSpecIds()+"%");
+                // criteria.andSpecIdsLike("%"+typeTemplate.getSpecIds()+"%");
             }
             if (StringUtils.isNotBlank(typeTemplate.getBrandIds())) {
                 criteria.andLike("brandIds", "%" + typeTemplate.getBrandIds() + "%");
-                //criteria.andBrandIdsLike("%"+typeTemplate.getBrandIds()+"%");
+                // criteria.andBrandIdsLike("%"+typeTemplate.getBrandIds()+"%");
             }
             if (StringUtils.isNotBlank(typeTemplate.getCustomAttributeItems())) {
                 criteria.andLike("customAttributeItems", "%" + typeTemplate.getCustomAttributeItems() + "%");
-                //criteria.andCustomAttributeItemsLike("%"+typeTemplate.getCustomAttributeItems()+"%");
+                // criteria.andCustomAttributeItemsLike("%"+typeTemplate.getCustomAttributeItems()+"%");
             }
-
+            
         }
         List<TbTypeTemplate> all = typeTemplateMapper.selectByExample(example);
         PageInfo<TbTypeTemplate> info = new PageInfo<TbTypeTemplate>(all);
-        //序列化再反序列化
+        // 序列化再反序列化
         String s = JSON.toJSONString(info);
         PageInfo<TbTypeTemplate> pageInfo = JSON.parseObject(s, PageInfo.class);
-
-        //获取模板数据
+        
+        // 获取模板数据
         List<TbTypeTemplate> typeTemplateList = this.findAll();
         for (TbTypeTemplate typeTemplate1 : typeTemplateList) {
-            //存储品牌列表
+            // 存储品牌列表
             List<Map> brandList = JSON.parseArray(typeTemplate1.getBrandIds(), Map.class);
             redisTemplate.boundHashOps("brandList").put(typeTemplate1.getId(), brandList);
-            //存储规格列表
+            // 存储规格列表
             List<Map> specList = findSpecList(typeTemplate1.getId());
             redisTemplate.boundHashOps("specList").put(typeTemplate1.getId(), specList);
         }
-
+        
         return pageInfo;
     }
-
+    
     @Override
     public List<Map> findSpecList(Long id) {
         TbTypeTemplate tbTypeTemplate = typeTemplateMapper.selectByPrimaryKey(id);
         String specIds = tbTypeTemplate.getSpecIds();
         List<Map> maps = JSON.parseArray(specIds, Map.class);
         for (Map map : maps) {
-            Integer id1 = (Integer) map.get("id");//规格的ID
+            Integer id1 = (Integer)map.get("id");// 规格的ID
             TbSpecificationOption record = new TbSpecificationOption();
             record.setSpecId(Long.valueOf(id1));
             List<TbSpecificationOption> optionsList = optionMapper.select(record);
             map.put("options", optionsList);
         }
         return maps;
+    }
+    
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        TbTypeTemplate typeTemplate = new TbTypeTemplate();
+        typeTemplate.setStatus(status);
+        Example example = new Example(TbTypeTemplate.class);
+        example.createCriteria().andIn("id", Arrays.asList(ids));
+        typeTemplateMapper.updateByExampleSelective(typeTemplate, example);
     }
 }

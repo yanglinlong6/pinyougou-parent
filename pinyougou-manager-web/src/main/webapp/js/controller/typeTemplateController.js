@@ -4,13 +4,26 @@
         pages: 15,
         pageNo: 1,
         list: [],
-        entity: {customAttributeItems: []},
+        entity: { customAttributeItems: [] },
         brandOptions: [],//显示品牌的列表
         specOptions: [],//显示规格的列表
         ids: [],
-        searchEntity: {}
+        searchEntity: {},
+        status: ['未审核', '已审核', '审核未通过', '已关闭'], //定义商品的状态数组
     },
     methods: {
+        //新增规格审核的需求：
+        updateStatus: function (status) {
+            //注意 没有使用restful风格
+            axios.post('/typeTemplate/updateStatus.shtml?status=' + status, this.ids).then(function (response) {
+                console.log(response);
+                if (response.data.success) {
+                    app.searchList(1);
+                }
+            }).catch(function (error) {
+                console.log("1231312131321");
+            });
+        },
         jsonToString: function (list, key) {
             //用于循环遍历  获取对象中的属性的值 拼接字符串,返回
             var listJson = JSON.parse(list);//[{"id":27,"text":"网络"},{"id":32,"text":"机身内存"}]
@@ -38,7 +51,7 @@
             axios.get('/specification/findAll.shtml').then(function (response) {
                 let specList = response.data;//[{id,name}]
                 for (var i = 0; i < specList.length; i++) {
-                    app.specOptions.push({id: specList[i].id, text: specList[i].specName});
+                    app.specOptions.push({ id: specList[i].id, text: specList[i].specName });
                 }
             }).catch(function (error) {
                 console.log("1231312131321");
@@ -49,7 +62,7 @@
             axios.get('/brand/findAll.shtml').then(function (response) {
                 let brandList = response.data;//[{id,name}]
                 for (var i = 0; i < brandList.length; i++) {
-                    app.brandOptions.push({id: brandList[i].id, text: brandList[i].name});
+                    app.brandOptions.push({ id: brandList[i].id, text: brandList[i].name });
                 }
             }).catch(function (error) {
                 console.log("1231312131321");
@@ -59,7 +72,7 @@
             axios.post('/typeTemplate/search.shtml?pageNo=' + curPage, this.searchEntity).then(function (response) {
                 //获取数据
                 app.list = response.data.list;
-
+                console.log(app.list)
                 //当前页
                 app.pageNo = curPage;
                 //总页数

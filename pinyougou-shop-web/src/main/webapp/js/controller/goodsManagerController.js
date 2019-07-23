@@ -8,7 +8,9 @@
         ids: [],
         status: ['未审核', '已审核', '审核未通过', '已关闭'],
         itemCatList: [],
-        searchEntity: {},
+        startKillTime: "",
+        endKillTime: "",
+        searchEntity: {}
     },
     methods: {
         findAllItemCategory: function () {
@@ -17,6 +19,8 @@
                 for (var i = 0; i < response.data.length; i++) {
                     app.itemCatList[response.data[i].id] = response.data[i].name;
                 }
+                //for循环遍历之后添加手动渲染
+                app.$mount("#app")
             }).catch(function (error) {
                 console.log("1231312131321");
             })
@@ -105,8 +109,14 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
+        },
+        setKill: function () {
+            axios.post('/goods/setKill.shtml', this.ids).then(resp => {
+                if (resp.data.success) {
+                    window.location.href = "seckill_goods.html"
+                }
+            })
         }
-
 
     },
     //钩子函数 初始化了事件和

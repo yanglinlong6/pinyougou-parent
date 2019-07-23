@@ -9,47 +9,65 @@ public class TbTypeTemplate implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     /**
      * 模板名称
      */
     @Column(name = "name")
     private String name;
-
+    
     /**
      * 关联规格
      */
     @Column(name = "spec_ids")
     private String specIds;
-
+    
     /**
      * 关联品牌
      */
     @Column(name = "brand_ids")
     private String brandIds;
-
+    
     /**
      * 自定义属性
      */
     @Column(name = "custom_attribute_items")
     private String customAttributeItems;
-
+    
+    /**
+     * 状态--新增字段
+     */
+    @Column(name = "status")
+    private String status;
+    
     private static final long serialVersionUID = 1L;
-
+    
+    public String getStatus() {
+        return status;
+    }
+    
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+    
     /**
      * @return id
      */
     public Long getId() {
         return id;
     }
-
+    
     /**
      * @param id
      */
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     /**
      * 获取模板名称
      *
@@ -58,7 +76,7 @@ public class TbTypeTemplate implements Serializable {
     public String getName() {
         return name;
     }
-
+    
     /**
      * 设置模板名称
      *
@@ -67,7 +85,7 @@ public class TbTypeTemplate implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
+    
     /**
      * 获取关联规格
      *
@@ -76,7 +94,7 @@ public class TbTypeTemplate implements Serializable {
     public String getSpecIds() {
         return specIds;
     }
-
+    
     /**
      * 设置关联规格
      *
@@ -85,7 +103,7 @@ public class TbTypeTemplate implements Serializable {
     public void setSpecIds(String specIds) {
         this.specIds = specIds;
     }
-
+    
     /**
      * 获取关联品牌
      *
@@ -94,7 +112,7 @@ public class TbTypeTemplate implements Serializable {
     public String getBrandIds() {
         return brandIds;
     }
-
+    
     /**
      * 设置关联品牌
      *
@@ -103,7 +121,7 @@ public class TbTypeTemplate implements Serializable {
     public void setBrandIds(String brandIds) {
         this.brandIds = brandIds;
     }
-
+    
     /**
      * 获取自定义属性
      *
@@ -112,7 +130,7 @@ public class TbTypeTemplate implements Serializable {
     public String getCustomAttributeItems() {
         return customAttributeItems;
     }
-
+    
     /**
      * 设置自定义属性
      *

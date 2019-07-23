@@ -49,9 +49,19 @@
                         <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
                                 data-target="#editModal"><i class="fa fa-file-o" @click="entity={}"></i> 新建
                         </button>
-                        <button type="button" class="btn btn-default" title="删除" @click="dele()"><i class="fa fa-trash-o"></i> 删除
+                        <button type="button" class="btn btn-default" title="删除" @click="dele()"><i
+                                class="fa fa-trash-o"></i> 删除
                         </button>
-                        <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-check"></i> 刷新</button>
+                        <!--新增品牌审核的代码 审核通过和驳回功能-->
+                        <button type="button" class="btn btn-default" title="审核通过" @click="updateStatus(1)"><i
+                                class="fa fa-check"></i> 审核通过
+                        </button>
+                        <button type="button" class="btn btn-default" title="驳回" @click="updateStatus(2)"><i
+                                class="fa fa-ban"></i> 驳回
+                        </button>
+                        <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                                class="fa fa-check"></i> 刷新
+                        </button>
 
                     </div>
                 </div>
@@ -68,7 +78,7 @@
                     <th class="sorting_asc">分类ID</th>
                     <th class="sorting">分类名称</th>
                     <th class="sorting">类型模板ID</th>
-
+                    <th class="sorting">状态</th>
                     <th class="text-center">操作</th>
                 </tr>
                 </thead>
@@ -78,44 +88,19 @@
                     <td>{{entity.id}}</td>
                     <td>{{entity.name}}</td>
                     <td>{{entity.typeId}}</td>
+                    <td>{{status[entity.status]}}</td>
                     <td class="text-center">
                         <span v-if="grade!=3">
 	                    <button type="button" class="btnbg-olive btn-xs"
                                 @click=" grade=grade+1,selectList(entity)">查询下级</button>
                         </span>
-                        <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" @click="findOne(entity.id)">
+                        <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"
+                                @click="findOne(entity.id)">
                             修改
                         </button>
                     </td>
                 </tr>
-                <!--<tr>-->
-                <!--<td><input type="checkbox"></td>-->
-                <!--<td>983</td>-->
-                <!--<td>手镯/手链/脚链</td>-->
-                <!--<td>-->
-                <!--11-->
-                <!--</td>-->
-                <!--<td class="text-center">-->
-                <!--<button type="button" class="btn bg-olive btn-xs">查询下级</button>-->
-                <!--<button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal">-->
-                <!--修改-->
-                <!--</button>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td><input type="checkbox"></td>-->
-                <!--<td>984</td>-->
-                <!--<td>戒指/耳饰</td>-->
-                <!--<td>-->
-                <!--11-->
-                <!--</td>-->
-                <!--<td class="text-center">-->
-                <!--<button type="button" class="btn bg-olive btn-xs">查询下级</button>-->
-                <!--<button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal">-->
-                <!--修改-->
-                <!--</button>-->
-                <!--</td>-->
-                <!--</tr>-->
+
                 </tbody>
             </table>
             <!--数据列表/-->
@@ -164,7 +149,8 @@
                         <tr>
                             <td>类型模板</td>
                             <td>
-                                <input v-model="entity.typeId" select2 config="options['type_template']" placeholder="商品类型模板"
+                                <input v-model="entity.typeId" select2 config="options['type_template']"
+                                       placeholder="商品类型模板"
                                        class="form-control" type="text"/>
                             </td>
                         </tr>

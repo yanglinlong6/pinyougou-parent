@@ -6,7 +6,7 @@
         list: [],
         entity: {},
         ids: [],
-        searchEntity: {status: '0'}
+        searchEntity: { status: '0' }
     },
     methods: {
         updateStatus: function (id, status) {
@@ -29,7 +29,7 @@
             axios.post('/seller/search.shtml?pageNo=' + curPage, this.searchEntity).then(function (response) {
                 //获取数据
                 app.list = response.data.list;
-
+                console.log(app.list)
                 //当前页
                 app.pageNo = curPage;
                 //总页数

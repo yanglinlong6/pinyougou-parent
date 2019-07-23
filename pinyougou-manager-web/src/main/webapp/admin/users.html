@@ -23,7 +23,7 @@
     <!-- .box-body -->
 
     <div class="box-header with-border">
-        <h3 class="box-title">秒杀商品审核</h3>
+        <h3 class="box-title">用户审核</h3>
     </div>
 
     <div class="box-body">
@@ -42,7 +42,7 @@
                             <i class="fa fa-check"></i> 审核通过
                         </button>
                         <button type="button" @click="updateStatus('2')" class="btn btn-default" title="审核不通过">
-                            <i class="fa fa-ban"></i> 审核不通过
+                            <i class="fa fa-ban"></i> 冻结
                         </button>
                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
                                 class="fa fa-refresh"></i> 刷新
@@ -52,7 +52,7 @@
             </div>
             <div class="box-tools pull-right">
                 <div class="has-feedback">
-                    商品名称：<input type="text" v-model="searchEntity.title">
+                    用户名称：<input type="text" v-model="searchEntity.username">
                     <button class="btn btn-default" @click="searchList(1)">查询</button>
                 </div>
             </div>
@@ -66,35 +66,44 @@
                     <th class="" style="padding-right:0px">
                         <input id="selall" type="checkbox" class="icheckbox_square-blue">
                     </th>
-                    <th class="sorting_asc">商品ID</th>
-                    <th class="sorting">商品名称</th>
-                    <th class="sorting">商品价格</th>
-                    <th class="sorting">秒杀价</th>
-                    <th class="sorting">开始时间</th>
-                    <th class="sorting">结束时间</th>
-                    <th class="sorting">数量</th>
-                    <th class="sorting">库存量</th>
-                    <th class="sorting">状态</th>
-                    <th class="text-center">操作</th>
+                    <th class="sorting_asc">用户名</th>
+                    <th class="sorting">注册手机号</th>
+                    <th class="sorting">注册邮箱</th>
+                    <th class="sorting">创建时间</th>
+                    <th class="sorting">昵称</th>
+                    <th class="sorting">真实姓名</th>
+                    <th class="sorting">使用状态</th>
+                    <th class="sorting">QQ号码</th>
+                    <th class="sorting">账户余额</th>
+                    <th class="sorting">手机是否验证</th>
+                    <th class="text-center">邮箱是否检测</th>
+                    <th class="text-center">性别</th>
+                    <th class="text-center">会员等级</th>
+                    <th class="text-center">积分</th>
+                    <th class="text-center">经验值</th>
+                    <th class="text-center">最后登录时间</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="item in list">
-                    <td><input :value="item.id" v-model="ids" type="checkbox"></td>
-                    <td>{{item.id}}</td>
-                    <td>{{item.title}}</td>
-                    <td>{{item.price}}</td>
-                    <td>{{item.costPrice}}</td>
-                    <td>{{item.startTime}}</td>
-                    <td>{{item.endTime}}</td>
-                    <td>{{item.num}}</td>
-                    <td>{{item.stockCount}}</td>
-                    <td>{{status[item.status]}}</td>
-                    <td class="text-center">
-                        <button type="button" class="btn bg-olive btn-xs" @click="findOne(item.id)">详情</button>
-                    </td>
+                <tr v-for="user in list">
+                    <td><input :value="user.id" v-model="ids" type="checkbox"></td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.phone}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.created}}</td>
+                    <td>{{user.nickName}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{status[user.status]}}</td>
+                    <td>{{user.qq}}</td>
+                    <td>{{user.accountBalance}}</td>
+                    <td>{{user.isMobileCheck}}</td>
+                    <td>{{user.isEmailCheck}}</td>
+                    <td>{{user.sex}}</td>
+                    <td>{{user.userLevel}}</td>
+                    <td>{{user.points}}</td>
+                    <td>{{user.experienceValue}}</td>
+                    <td>{{user.lastLoginTime}}</td>
                 </tr>
-
                 </tbody>
             </table>
             <!--数据列表/-->
@@ -114,5 +123,5 @@
 <script src="../plugins/vue/vue.js"></script>
 <script src="../plugins/axios/axios.js"></script>
 <script src="../js/pagination.js"></script>
-<script src="../js/controller/seckillGoodsController.js"></script>
+<script src="../js/controller/userController.js"></script>
 </html>

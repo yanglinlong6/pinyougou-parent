@@ -12,27 +12,45 @@ public class TbItemCat implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     /**
      * 父类目ID=0时，代表的是一级的类目
      */
     @Column(name = "parent_id")
     private Long parentId;
-
+    
     /**
      * 类目名称
      */
     @Column(name = "name")
     private String name;
-
+    
     /**
      * 类型id
      */
     @Column(name = "type_id")
     private Long typeId;
-
+    
+    /**
+     * 状态--新增字段
+     */
+    @Column(name = "status")
+    private String status;
+    
+    public String getStatus() {
+        return status;
+    }
+    
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+    
     private static final long serialVersionUID = 1L;
-
+    
     /**
      * 获取类目ID
      *
@@ -41,7 +59,7 @@ public class TbItemCat implements Serializable {
     public Long getId() {
         return id;
     }
-
+    
     /**
      * 设置类目ID
      *
@@ -50,7 +68,7 @@ public class TbItemCat implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     /**
      * 获取父类目ID=0时，代表的是一级的类目
      *
@@ -59,7 +77,7 @@ public class TbItemCat implements Serializable {
     public Long getParentId() {
         return parentId;
     }
-
+    
     /**
      * 设置父类目ID=0时，代表的是一级的类目
      *
@@ -68,7 +86,7 @@ public class TbItemCat implements Serializable {
     public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
-
+    
     /**
      * 获取类目名称
      *
@@ -77,7 +95,7 @@ public class TbItemCat implements Serializable {
     public String getName() {
         return name;
     }
-
+    
     /**
      * 设置类目名称
      *
@@ -86,7 +104,7 @@ public class TbItemCat implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
+    
     /**
      * 获取类型id
      *
@@ -95,7 +113,7 @@ public class TbItemCat implements Serializable {
     public Long getTypeId() {
         return typeId;
     }
-
+    
     /**
      * 设置类型id
      *

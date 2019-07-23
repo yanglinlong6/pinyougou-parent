@@ -32,12 +32,14 @@
             <div class="table-box">
 
                 <!--工具栏-->
-
+                <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                        class="fa fa-refresh"></i> 刷新
+                </button>
                 <div class="box-tools pull-right">
                     <div class="has-feedback">
-                        公司名称：<input>
-                        店铺名称： <input>
-                        <button class="btn btn-default">查询</button>
+                        公司名称：<input type="text" v-model="searchEntity.name">
+                        店铺名称： <input type="text" v-model="searchEntity.nickName">
+                        <button class="btn btn-default" @click="searchList(1)">查询</button>
                     </div>
                 </div>
                 <!--工具栏/-->
@@ -68,28 +70,17 @@
                         <td>{{entity.telephone}}</td>
 
                         <td class="text-center">
-                            <button type="button" class="btnbg-olive btn-xs" data-toggle="modal" data-target="#sellerModal"
-                                    @click="findOne(entity.sellerId)">详情</button>
+                            <button type="button" class="btnbg-olive btn-xs" data-toggle="modal"
+                                    data-target="#sellerModal"
+                                    @click="findOne(entity.sellerId)">详情
+                            </button>
                         </td>
                     </tr>
-                    <!--<tr>-->
-                        <!--<td><input type="checkbox"></td>-->
-                        <!--<td>2</td>-->
-                        <!--<td>黑瞎子苹果专卖店</td>-->
-                        <!--<td>黑瞎子</td>-->
-                        <!--<td>孙大鹏</td>-->
-                        <!--<td>13622244111</td>-->
 
-                        <!--<td class="text-center">-->
-                            <!--<button type="button" class="btn bg-olive btn-xs" data-toggle="modal"-->
-                                    <!--data-target="#sellerModal">详情-->
-                            <!--</button>-->
-                        <!--</td>-->
-                    <!--</tr>-->
                     </tbody>
                 </table>
                 <!--数据列表/-->
-                <navigation :pages="pages" :current.sync="pageNo"  @navpage="searchList"></navigation>
+                <navigation :pages="pages" :current.sync="pageNo" @navpage="searchList"></navigation>
             </div>
             <!-- 数据表格 /-->
 
@@ -145,19 +136,19 @@
                                 <table class="table table-bordered table-striped">
                                     <tr>
                                         <td>联系人姓名</td>
-                                        <td>王美琪</td>
+                                        <td>{{entity.linkmanName}}</td>
                                     </tr>
                                     <tr>
                                         <td>联系人QQ</td>
-                                        <td>78223322</td>
+                                        <td>{{entity.linkmanQq}}</td>
                                     </tr>
                                     <tr>
                                         <td>联系人手机</td>
-                                        <td>13500223322</td>
+                                        <td>{{entity.linkmanMobile}}</td>
                                     </tr>
                                     <tr>
                                         <td>联系人E-Mail</td>
-                                        <td>78223322@qq.com</td>
+                                        <td>{{entity.linkmanEmail}}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -166,15 +157,15 @@
                                 <table class="table table-bordered table-striped">
                                     <tr>
                                         <td>营业执照号</td>
-                                        <td>330106000109206</td>
+                                        <td>{{entity.licenseNumber}}</td>
                                     </tr>
                                     <tr>
                                         <td>税务登记证号</td>
-                                        <td>0292039393011</td>
+                                        <td>{{entity.taxNumber}}</td>
                                     </tr>
                                     <tr>
                                         <td>组织机构代码证号</td>
-                                        <td>22320320302421</td>
+                                        <td>{{entity.orgNumber}}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -183,11 +174,11 @@
                                 <table class="table table-bordered table-striped">
                                     <tr>
                                         <td>法定代表人</td>
-                                        <td>王小聪</td>
+                                        <td>{{entity.legalPerson}}</td>
                                     </tr>
                                     <tr>
                                         <td>法定代表人身份证号</td>
-                                        <td>211030198503223122</td>
+                                        <td>{{entity.legalPersonCardId}}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -196,11 +187,11 @@
                                 <table class="table table-bordered table-striped">
                                     <tr>
                                         <td>开户行名称</td>
-                                        <td>中国建设银行北京市分行</td>
+                                        <td>{{entity.bankUser}}</td>
                                     </tr>
                                     <tr>
                                         <td>开户行支行</td>
-                                        <td>海淀支行</td>
+                                        <td>{{entity.bankName}}</td>
                                     </tr>
                                     <tr>
                                         <td>银行账号</td>
@@ -214,11 +205,17 @@
 
                     </div>
                     <div class="modal-footer">
-                    <button class="btnbtn-success" data-dismiss="modal" aria-hidden="true" @click="updateStatus(entity.sellerId,'1')">审核通过</button>
-                    <button class="btnbtn-danger" data-dismiss="modal" aria-hidden="true" @click="updateStatus(entity.sellerId,'2')">审核未通过</button>
-                    <button class="btnbtn-danger" data-dismiss="modal" aria-hidden="true" @click="updateStatus(entity.sellerId,'3')">关闭商家</button>
-                    <button class="btnbtn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
-                </div>
+                        <button class="btnbtn-success" data-dismiss="modal" aria-hidden="true"
+                                @click="updateStatus(entity.sellerId,'1')">审核通过
+                        </button>
+                        <button class="btnbtn-danger" data-dismiss="modal" aria-hidden="true"
+                                @click="updateStatus(entity.sellerId,'2')">审核未通过
+                        </button>
+                        <button class="btnbtn-danger" data-dismiss="modal" aria-hidden="true"
+                                @click="updateStatus(entity.sellerId,'3')">关闭商家
+                        </button>
+                        <button class="btnbtn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    </div>
                 </div>
             </div>
         </div>

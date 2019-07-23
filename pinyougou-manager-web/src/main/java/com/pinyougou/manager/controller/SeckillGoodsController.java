@@ -24,10 +24,10 @@ import com.github.pagehelper.PageInfo;
 @RestController
 @RequestMapping("/seckillGoods")
 public class SeckillGoodsController {
-
+    
     @Reference
     private SeckillGoodsService seckillGoodsService;
-
+    
     /**
      * 返回全部列表
      *
@@ -37,14 +37,14 @@ public class SeckillGoodsController {
     public List<TbSeckillGoods> findAll() {
         return seckillGoodsService.findAll();
     }
-
-
+    
     @RequestMapping("/findPage")
-    public PageInfo<TbSeckillGoods> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
-                                             @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize) {
+    public PageInfo<TbSeckillGoods> findPage(
+        @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
+        @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize) {
         return seckillGoodsService.findPage(pageNo, pageSize);
     }
-
+    
     /**
      * 增加
      *
@@ -56,12 +56,13 @@ public class SeckillGoodsController {
         try {
             seckillGoodsService.add(seckillGoods);
             return new Result(true, "增加成功");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "增加失败");
         }
     }
-
+    
     /**
      * 修改
      *
@@ -73,12 +74,13 @@ public class SeckillGoodsController {
         try {
             seckillGoodsService.update(seckillGoods);
             return new Result(true, "修改成功");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "修改失败");
         }
     }
-
+    
     /**
      * 获取实体
      *
@@ -89,7 +91,7 @@ public class SeckillGoodsController {
     public TbSeckillGoods findOne(@PathVariable(value = "id") Long id) {
         return seckillGoodsService.findOne(id);
     }
-
+    
     /**
      * 批量删除
      *
@@ -101,23 +103,24 @@ public class SeckillGoodsController {
         try {
             seckillGoodsService.delete(ids);
             return new Result(true, "删除成功");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "删除失败");
         }
     }
-
-
+    
     @RequestMapping("/search")
-    public PageInfo<TbSeckillGoods> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
-                                             @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
-                                             @RequestBody TbSeckillGoods seckillGoods) {
+    public PageInfo<TbSeckillGoods> findPage(
+        @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
+        @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
+        @RequestBody TbSeckillGoods seckillGoods) {
         return seckillGoodsService.findPage(pageNo, pageSize, seckillGoods);
     }
-
+    
     @Autowired
     private DefaultMQProducer producer;
-
+    
     @RequestMapping("/updateStatus")
     public Result updateStatus(@RequestBody Long[] ids, String status) {
         try {
@@ -127,12 +130,15 @@ public class SeckillGoodsController {
                 goods.setStatus(status);
                 seckillGoodsService.updateByPrimaryKeySelective(goods);
             }
-
-            MessageInfo messageInfo = new MessageInfo("TOPIC_SECKILL", "Tags_genHtml", "seckillGoods_updateStatus", ids, MessageInfo.METHOD_ADD);
-            producer.send(new Message(messageInfo.getTopic(), messageInfo.getTags(), messageInfo.getKeys(), JSON.toJSONString(messageInfo).getBytes(RemotingHelper.DEFAULT_CHARSET)));
+            
+            MessageInfo messageInfo = new MessageInfo("TOPIC_SECKILL", "Tags_genHtml", "seckillGoods_updateStatus", ids,
+                MessageInfo.METHOD_ADD);
+            producer.send(new Message(messageInfo.getTopic(), messageInfo.getTags(), messageInfo.getKeys(),
+                JSON.toJSONString(messageInfo).getBytes(RemotingHelper.DEFAULT_CHARSET)));
             System.out.println("发送成功");
             return new Result(true, "成功");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "失败");
         }

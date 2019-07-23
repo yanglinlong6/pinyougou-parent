@@ -36,7 +36,8 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-default" title="新建"><i class="fa fa-file-o"></i> 新建
                         </button>
-                        <button type="button" class="btn btn-default" title="删除" @click="dele()"><i class="fa fa-trash-o"></i> 删除
+                        <button type="button" class="btn btn-default" title="删除" @click="dele()"><i
+                                class="fa fa-trash-o"></i> 删除
                         </button>
                         <button type="button" class="btn btn-default" title="提交审核"><i class="fa fa-check"></i> 提交审核
                         </button>
@@ -47,6 +48,11 @@
                                 class="fa fa-refresh"></i> 刷新
                         </button>
                     </div>
+                </div>
+                <div class="form-group form-inline">
+                    <button type="button" class="btn btn-default" title="设为秒杀商品" @click="setKill()"><i
+                            class="fa fa-check"></i> 设为秒杀商品
+                    </button>
                 </div>
             </div>
             <div class="box-tools pull-right">
@@ -59,7 +65,7 @@
                     <option value="3">已驳回</option>
                 </select>
                     商品名称：<input v-model="searchEntity.goodsName">
-                    <button class="btn btn-default"  @click="searchList(1)">查询</button>
+                    <button class="btn btn-default" @click="searchList(1)">查询</button>
                 </div>
             </div>
             <!--工具栏/-->
@@ -83,7 +89,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="(entity,index) in list">
-                    <td><input type="checkbox"></td>
+                    <td><input :value="entity.id" v-model="ids" type="checkbox"></td>
                     <td>{{entity.id}}</td>
                     <td>{{entity.goodsName}}</td>
                     <td>{{entity.price}}</td>
@@ -97,13 +103,13 @@
                     </td>
                     <td class="text-center">
                         <!--<a :href="'goods_edit.html?id='+entity.id" class="btn bg-olive btn-xs" >修改</a>-->
-                        <a :href="'goods_edit.html?id='+entity.id" class="btn bg-olive btn-xs" >修改</a>
+                        <a :href="'goods_edit.html?id='+entity.id" class="btn bg-olive btn-xs">修改</a>
                     </td>
                 </tr>
                 </tbody>
             </table>
             <!--数据列表/-->
-            <navigation :pages="pages" :current.sync="pageNo"  @navpage="searchList"></navigation>
+            <navigation :pages="pages" :current.sync="pageNo" @navpage="searchList"></navigation>
 
         </div>
         <!-- 数据表格 /-->

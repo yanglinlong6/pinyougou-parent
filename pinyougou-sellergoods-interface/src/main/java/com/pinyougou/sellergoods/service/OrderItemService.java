@@ -1,6 +1,6 @@
 package com.pinyougou.sellergoods.service;
 import java.util.List;
-import com.pinyougou.pojo.TbUser;
+import com.pinyougou.pojo.TbOrderItem;
 
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.core.service.CoreService;
@@ -9,7 +9,7 @@ import com.pinyougou.core.service.CoreService;
  * @author Administrator
  *
  */
-public interface UserService extends CoreService<TbUser> {
+public interface OrderItemService extends CoreService<TbOrderItem> {
 	
 	
 	
@@ -17,7 +17,7 @@ public interface UserService extends CoreService<TbUser> {
 	 * 返回分页列表
 	 * @return
 	 */
-	 PageInfo<TbUser> findPage(Integer pageNo, Integer pageSize);
+	 PageInfo<TbOrderItem> findPage(Integer pageNo, Integer pageSize);
 	
 	
 
@@ -27,7 +27,6 @@ public interface UserService extends CoreService<TbUser> {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	PageInfo<TbUser> findPage(Integer pageNo, Integer pageSize, TbUser User);
-
-    void updateStatus(Long[] ids, String status);
+	PageInfo<TbOrderItem> findPage(Integer pageNo, Integer pageSize, TbOrderItem OrderItem);
+	
 }
