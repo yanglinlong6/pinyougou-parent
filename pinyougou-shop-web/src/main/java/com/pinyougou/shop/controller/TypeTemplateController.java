@@ -114,4 +114,16 @@ public class TypeTemplateController {
         return typeTemplateService.findSpecList(id);
 
     }
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(@RequestBody Long[] ids){
+        try {
+            long Status=1;
+            typeTemplateService.updateStatus(ids);
+            return new Result(true, "删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "删除失败");
+        }
+
+    }
 }

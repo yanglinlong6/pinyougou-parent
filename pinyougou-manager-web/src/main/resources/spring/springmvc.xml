@@ -57,4 +57,13 @@
     <import resource="spring-security.xml"></import>
     <import resource="spring-producer.xml"></import>
 
+    <bean class="com.pinyougou.common.util.ImportExcel" id="importExcel"></bean>
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="307200000"/>
+        <property name="maxInMemorySize" value="4096" />
+    </bean>
+
+
 </beans>
