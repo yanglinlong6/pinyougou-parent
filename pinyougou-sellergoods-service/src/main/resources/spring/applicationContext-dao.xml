@@ -10,7 +10,7 @@
     <!-- 配置数据源  配置sqlsessionfactory mapper扫描器 -->
     <context:component-scan base-package="com.pinyougou.mapper"></context:component-scan>
 
-    <context:property-placeholder location="classpath:properties/jdbc.properties"/>
+    <context:property-placeholder location="classpath:properties/*.properties"/>
     <!--创建druid数据源-->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
           destroy-method="close">

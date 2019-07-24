@@ -45,6 +45,9 @@
             <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
                     class="fa fa-refresh"></i> 刷新
             </button>
+            <button type="button" @click="deliverGoods()" class="btn btn-default" title="发货">
+                <i class="fa fa-ban"></i> 发货
+            </button>
             <!--数据列表-->
             <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
                 <thead>
@@ -70,7 +73,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="order in list">
-                    <td><input :value="order.id" v-model="ids" type="checkbox"></td>
+                    <td><input :value="order.orderId" v-model="ids" type="checkbox"></td>
                     <td>{{order.orderId}}</td>
                     <td>{{order.payment}}</td>
                     <td>{{payType[order.paymentType]}}</td>
@@ -105,4 +108,5 @@
 <script src="../plugins/axios/axios.js"></script>
 <script src="../js/pagination.js"></script>
 <script src="../js/controller/orderController.js"></script>
+
 </html>
