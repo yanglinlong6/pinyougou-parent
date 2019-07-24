@@ -252,7 +252,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     public void deleteByIds(Long[] ids) {
         DeleteQuery query = new DeleteQuery();
         //删除多个goodsid
-        query.setQuery(QueryBuilders.termQuery("goodsId", ids));
+        query.setQuery(QueryBuilders.termsQuery("goodsId", ids));
         //根据删除条件 索引名 和类型
         elasticsearchTemplate.delete(query, TbItem.class);
     }
