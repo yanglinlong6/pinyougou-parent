@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.pinyougou.mapper.TbSpecificationOptionMapper;
+import com.pinyougou.pojo.TbBrand;
 import com.pinyougou.pojo.TbItemCat;
 import com.pinyougou.pojo.TbSpecificationOption;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,13 +120,16 @@ public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate> imp
         }
         return maps;
     }
-    
+
     @Override
-    public void updateStatus(Long[] ids, String status) {
-        TbTypeTemplate typeTemplate = new TbTypeTemplate();
-        typeTemplate.setStatus(status);
-        Example example = new Example(TbTypeTemplate.class);
-        example.createCriteria().andIn("id", Arrays.asList(ids));
-        typeTemplateMapper.updateByExampleSelective(typeTemplate, example);
+    public void updateStatus(Long[] ids) {
+        TbTypeTemplate template = new TbTypeTemplate();
+        template.setStatus("1");
+
+        Example exmaple = new Example(TbBrand.class);
+        Example.Criteria criteria = exmaple.createCriteria();
+        criteria.andIn("id",Arrays.asList(ids));
+        typeTemplateMapper.updateByExampleSelective(template,exmaple);
+
     }
 }
