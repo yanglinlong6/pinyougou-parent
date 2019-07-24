@@ -31,6 +31,10 @@ public interface BrandService extends CoreService<TbBrand> {
 
     void updateStatus(Long[] ids, String status);
 
+<<<<<<< HEAD
     void insertAll(List<TbBrand> tbBrands);
 
+=======
+    void updateStatus(Long[] ids);
+>>>>>>> b7e6602cc8df67570582ed59eb88bfc17770df4c
 }
