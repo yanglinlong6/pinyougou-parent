@@ -62,6 +62,22 @@ public class ImportExcel {
         outputStream.close();
     }
 
+    /**
+     * @param file  Excle文件 注意 此处未做判断
+     * @param type  数据库对应的POJO对象
+     * @param <T>   约定的泛型
+     * @return
+     * @throws IOException
+     * @throws InvalidFormatException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * 通过正则表达式获取对应的setter方法以方便后续执行数据填充
+     * 将数据填充到对应的POJO对象后加入List随后进行批量插入操作
+     * 注意事项:
+     *      应约束好用户的列名,防止无法填充数据导致的错误
+     */
     public <T> List<T> importDataForExcel(File file, Class<T> type) throws IOException, InvalidFormatException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         Method[] methods = type.getMethods();
         Map<String, Method> methodMap = new HashMap<>();

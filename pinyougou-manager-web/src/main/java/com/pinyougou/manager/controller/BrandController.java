@@ -144,15 +144,17 @@ public class BrandController {
         try {
             System.out.println("执行导出请求");
             List<TbBrand> tbBrands = brandService.selectAll();
-            for (TbBrand tbBrand : tbBrands) {
-                System.out.println(tbBrand.getId());
-            }
             importExcel.importExcel(tbBrands, TbBrand.class, "brands.xls",response);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 使用POI提供的文档进行数据导入
+     * 在ImportExcel 封装importDataForExcel方法
+     * 该方法对用户提交的Excel表格进行操作取出对应的数据插入数据库
+     */
     @RequestMapping("/importData")
     public Result importData(@RequestParam MultipartFile file){
         try {
