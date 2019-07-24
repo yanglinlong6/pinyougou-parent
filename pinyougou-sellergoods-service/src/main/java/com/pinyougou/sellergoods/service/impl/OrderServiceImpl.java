@@ -1,5 +1,5 @@
 package com.pinyougou.sellergoods.service.impl;
-
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.rocketmq.client.exception.MQBrokerException;
@@ -31,50 +31,52 @@ import tk.mybatis.mapper.entity.Example;
 
 /**
  * 服务实现层
- * 
+ *
  * @author Administrator
  *
- * 
+ *
  *         /** 服务实现层
  *
  * @author Administrator
  */
 @Service
 public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderService {
-    
+
+
     private TbOrderMapper orderMapper;
-    
+
     @Value("${template_code}")
     private String templateCode;
-    
+
     @Value("${sign_name}")
     private String signName;
-    
+
     @Autowired
     public OrderServiceImpl(TbOrderMapper orderMapper) {
         super(orderMapper, TbOrder.class);
         this.orderMapper = orderMapper;
     }
-    
+
+
     @Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo, pageSize);
         List<TbOrder> all = orderMapper.selectAll();
         PageInfo<TbOrder> info = new PageInfo<TbOrder>(all);
-        
+
         // 序列化再反序列化
         String s = JSON.toJSONString(info);
         PageInfo<TbOrder> pageInfo = JSON.parseObject(s, PageInfo.class);
         return pageInfo;
     }
-    
-    @Override
+
+	 @Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder order) {
         PageHelper.startPage(pageNo, pageSize);
-        
+
         Example example = new Example(TbOrder.class);
         Example.Criteria criteria = example.createCriteria();
-        
+
         if (order != null) {
             if (StringUtils.isNotBlank(order.getPaymentType())) {
                 criteria.andLike("paymentType", "%" + order.getPaymentType() + "%");
@@ -140,20 +142,20 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
                 criteria.andLike("sellerId", "%" + order.getSellerId() + "%");
                 // criteria.andSellerIdLike("%"+order.getSellerId()+"%");
             }
-            
+
         }
         List<TbOrder> all = orderMapper.selectByExample(example);
         PageInfo<TbOrder> info = new PageInfo<TbOrder>(all);
-        // 序列化再反序列化
+        //序列化再反序列化
         String s = JSON.toJSONString(info);
         PageInfo<TbOrder> pageInfo = JSON.parseObject(s, PageInfo.class);
-        
+
         return pageInfo;
     }
-    
+
     @Autowired
     private TbOrderItemMapper tbOrderItemMapper;
-    
+
     /**
      * 获取销售额
      *
@@ -177,7 +179,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
             // 设置时间区间
             criteria.andBetween("paymentTime", dateStart, dateEnd);
             List<TbOrder> tbOrders = orderMapper.selectByExample(example);
-            
+
             // 2获取到该时间段该商家的订单 进行遍历
             if (tbOrders.size() > 0 && tbOrders != null) {
                 // 如果不为null name根据订单id获取订单明细 获取总价格
@@ -212,10 +214,10 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
         }
         return map;
     }
-    
+
     @Autowired
     private DefaultMQProducer producer;
-    
+
     @Override
     public void deliverGoods(Long[] ids) {
         // todo
@@ -228,7 +230,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
             order.setShippingName("顺丰快递");
             int i = orderMapper.updateByPrimaryKey(order);
             System.out.println("成功" + i);
-            
+
             // String code = (long)((Math.random() * 9 + 1) * 100000) + "";
             // Map<String, String> map = new HashMap<>();
             // map.put("mobile", order.getReceiverMobile());
@@ -246,5 +248,6 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
             // }
         }
     }
-    
+
+
 }

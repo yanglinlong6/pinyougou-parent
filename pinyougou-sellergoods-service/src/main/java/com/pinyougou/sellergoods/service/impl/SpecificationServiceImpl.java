@@ -4,9 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pinyougou.mapper.TbSpecificationOptionMapper;
-import com.pinyougou.pojo.TbBrand;
-import com.pinyougou.pojo.TbGoods;
-import com.pinyougou.pojo.TbSpecificationOption;
+import com.pinyougou.pojo.*;
 import entity.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -19,7 +17,6 @@ import com.pinyougou.core.service.CoreServiceImpl;
 import tk.mybatis.mapper.entity.Example;
 
 import com.pinyougou.mapper.TbSpecificationMapper;
-import com.pinyougou.pojo.TbSpecification;
 
 import com.pinyougou.sellergoods.service.SpecificationService;
 
@@ -133,11 +130,14 @@ public class SpecificationServiceImpl extends CoreServiceImpl<TbSpecification> i
     }
 
     @Override
-    public void updateStatus(Long[] ids, String status) {
-        TbSpecification record = new TbSpecification();
-        record.setStatus(status);
-        Example example = new Example(TbGoods.class);
-        example.createCriteria().andIn("id", Arrays.asList(ids));
-        specificationMapper.updateByExampleSelective(record, example);//update set status=1 where id in (12,3)
+    public void updateStatus(Long[] ids) {
+        TbSpecification tbSpecification = new TbSpecification();
+        tbSpecification.setStatus("1");
+
+        Example exmaple = new Example(TbBrand.class);
+        Example.Criteria criteria = exmaple.createCriteria();
+        criteria.andIn("id",Arrays.asList(ids));
+        specificationMapper.updateByExampleSelective(tbSpecification,exmaple);
+
     }
 }
