@@ -131,6 +131,7 @@ public class SeckillOrderServiceImpl extends CoreServiceImpl<TbSeckillOrder> imp
         if (goodsId == null) {
             //说明商品已经没有库存了
             throw new RuntimeException("商品已被抢光");
+
         }
 
         //用户进入排队中

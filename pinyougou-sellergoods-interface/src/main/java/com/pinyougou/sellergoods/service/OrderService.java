@@ -36,5 +36,4 @@ public interface OrderService extends CoreService<TbOrder> {
 	PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder Order);
 
 
-	Map<String, Double> getSalesReport(String sellerId, String beginTime, String endTime);
 }

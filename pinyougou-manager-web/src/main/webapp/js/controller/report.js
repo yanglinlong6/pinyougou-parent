@@ -21,8 +21,7 @@ var app = new Vue({
             myChart.clear();
             var option = {
                 title: {
-                    text: '销售额曲线图',
-                    subtext:'纯属虚构'
+                    text: '销售额曲线图'
                 },
                 //提示框组件
                 tooltip: {
@@ -37,30 +36,12 @@ var app = new Vue({
                 legend: {
                     data: ['销售额']
                 },
-                toolbox: {
-                    show : true,
-                    feature : {
-                        mark : {show: true},
-                        dataView : {show: true, readOnly: false},
-                        magicType : {show: true, type: ['line', 'bar']},
-                        restore : {show: true},
-                        saveAsImage : {show: true}
-                    }
-                },
-                calculable : true,
                 //横轴
                 xAxis: {
-                    type:'date',
-                    boundaryGap:false,
                     data: data.xAxisList
                 },
                 //纵轴
-                yAxis: {
-                    type : 'value',
-                    axisLabel : {
-                        formatter: '{value} 元'
-                    }
-                },
+                yAxis: {},
                 //系列列表。每个系列通过type决定自己的图表类型
                 series: [
                     {
