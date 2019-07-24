@@ -97,4 +97,12 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
         brandMapper.updateByExampleSelective(record, example);//update set status=1 where id in (12,3)
     }
 
+    @Override
+    public void insertAll(List<TbBrand> tbBrands) {
+        for (TbBrand tbBrand : tbBrands) {
+            tbBrand.setStatus("0");
+            brandMapper.insert(tbBrand);
+        }
+    }
+
 }

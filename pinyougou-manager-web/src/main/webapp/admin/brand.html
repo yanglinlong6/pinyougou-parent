@@ -41,8 +41,14 @@
                         </button>
                         <button type="button" class="btn btn-default" title="驳回" @click="updateStatus(2)"><i class="fa fa-ban"></i> 驳回</button>
                         <button type="button" class="btn btn-default" title="导出" ><i
-                                class="fa fa-refresh"></i> <a href="/brand/import.shtml">导出</a>
+                                class="fa fa-refresh"></i> <a href="/brand/importExcel.shtml">导出</a>
                         </button>
+                        <td>
+                            <input type="file" id="file"/>
+                            <button type="button" class="btn btn-default" title="导出" @click="upload()">
+                                导入
+                            </button>
+                        </td>
                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
                                 class="fa fa-refresh"></i> 刷新
                         </button>
@@ -50,6 +56,9 @@
                     </div>
                 </div>
             </div>
+
+
+
             <div class="box-tools pull-right">
                 <div class="has-feedback">
                     品牌名称：<input type="text" v-model="searchEntity.name">
