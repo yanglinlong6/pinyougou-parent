@@ -2,13 +2,17 @@ package com.pinyougou.manager.controller;
 
 import java.util.List;
 
+import com.pinyougou.common.util.ImportExcel;
 import entity.Result;
 import com.pinyougou.sellergoods.service.BrandService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.TbBrand;
 
 import com.github.pagehelper.PageInfo;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * controller222
@@ -119,6 +123,27 @@ public class BrandController {
                                       @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
                                       @RequestBody TbBrand brand) {
         return brandService.findPage(pageNo, pageSize, brand);
+    }
+
+
+    @Autowired
+    ImportExcel importExcel;
+
+    /**
+     * @param response
+     * 使用POI提供的文档进行数据导出
+     * 在ImportExcel 封装importExcel方法
+     * 该方法对数据进行操作返回给用户一个Excel表格
+     */
+    @RequestMapping("/import")
+    public void importExcel(HttpServletResponse response){
+        try {
+            System.out.println("执行导出请求");
+            List<TbBrand> tbBrands = brandService.selectAll();
+            importExcel.importExcel(tbBrands, TbBrand.class, "brands.xls",response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -57,4 +57,6 @@
     <import resource="spring-security.xml"></import>
     <import resource="spring-producer.xml"></import>
 
+    <bean class="com.pinyougou.common.util.ImportExcel" id="importExcel"></bean>
+
 </beans>
