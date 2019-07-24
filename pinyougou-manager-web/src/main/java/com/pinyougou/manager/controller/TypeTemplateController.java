@@ -1,14 +1,23 @@
 package com.pinyougou.manager.controller;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 
+import com.pinyougou.common.util.ImportExcel;
+import com.pinyougou.pojo.TbBrand;
 import entity.Result;
 import com.pinyougou.sellergoods.service.TypeTemplateService;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.TbTypeTemplate;
 
 import com.github.pagehelper.PageInfo;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
  * controller
@@ -116,12 +125,31 @@ public class TypeTemplateController {
     @RequestMapping("/updateStatus")
     public Result updateStatus(@RequestParam String status, @RequestBody Long[] ids) {
         try {
-            typeTemplateService.updateStatus(ids, status);
+            typeTemplateService.updateStatus(ids);
             return new Result(true, "审核成功");
         }
         catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "审核失败");
+        }
+    }
+
+
+    @Autowired
+    ImportExcel importExcel;
+
+    @RequestMapping("/importData")
+    public Result importData(@RequestParam MultipartFile file){
+        try {
+            CommonsMultipartFile cmf= (CommonsMultipartFile)file;
+            DiskFileItem dfi=(DiskFileItem) cmf.getFileItem();
+            File fo=dfi.getStoreLocation();
+            List<Map<String, String>> forExcel = importExcel.importDataForExcel(fo);
+            typeTemplateService.insertAll(forExcel);
+            return new Result(true,"成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"失败");
         }
     }
 }

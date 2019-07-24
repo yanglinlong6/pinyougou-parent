@@ -3,7 +3,10 @@ package com.pinyougou;
 import static org.junit.Assert.assertTrue;
 
 import com.pinyougou.mapper.TbBrandMapper;
+import com.pinyougou.mapper.TbSpecificationMapper;
 import com.pinyougou.pojo.TbBrand;
+import com.pinyougou.pojo.TbSpecification;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,15 +19,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Unit test for simple App.
@@ -105,9 +106,60 @@ public class AppTest {
     }
 
     @Test
-    public void mahfsd(){
-        System.out.println("setName".replace("set","").toLowerCase());
+    public void mahfsd() throws IOException, InvalidFormatException {
+        Map<Integer, Map<String,String>> resultMap = new HashMap<>();
+        Workbook workbook = new XSSFWorkbook(new File("C:\\Users\\L1455013965\\Desktop\\TbG.xls"));
+        Sheet sheet = workbook.getSheetAt(0);
+        List<String> excelFiledList = new ArrayList<>();
+        for (Row cells : sheet) {
+            int cellNum = cells.getLastCellNum();
+            if (cells.getRowNum() == 0) {
+                for (int i = 0; i < cellNum; i++) {
+                    String value = cells.getCell(i).getStringCellValue();
+                    excelFiledList.add(value);
+                }
+            } else {
+                Map<String, String> map = new HashMap<>();
+                for (int i = 0; i < cellNum; i++) {
+                    String value = cells.getCell(i).getStringCellValue();
+                    map.put(excelFiledList.get(i),value );
+                }
+                resultMap.put(cells.getRowNum(), map);
+            }
+        }
+
+        System.out.println(resultMap);
     }
 
+
+    @Autowired
+    private TbSpecificationMapper tbSpecificationMapper;
+
+    @Test
+    public void testSpec(){
+        Long[] ids = {26L,27L,28L};
+        Example example = new Example(TbSpecification.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id", Arrays.asList(ids));
+        List<TbSpecification> tbSpecifications = tbSpecificationMapper.selectByExample(example);
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for (TbSpecification tbSpecification : tbSpecifications) {
+            builder.append("{").
+                    append("id").
+                    append(":").
+                    append(tbSpecification.getId()).
+                    append(",").
+                    append("text").
+                    append(":").
+                    append(tbSpecification.getSpecName()).
+                    append("}").
+                    append(",");
+        }
+        builder.replace(builder.length()-1, builder.length(), "]");
+
+
+    }
 
 }

@@ -98,13 +98,14 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
     }
 
     @Override
-<<<<<<< HEAD
     public void insertAll(List<TbBrand> tbBrands) {
         for (TbBrand tbBrand : tbBrands) {
             tbBrand.setStatus("0");
             brandMapper.insert(tbBrand);
         }
-=======
+    }
+
+    @Override
     public void updateStatus(Long[] ids) {
         TbBrand tbBrand = new TbBrand();
         tbBrand.setStatus("1");
@@ -114,7 +115,7 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
         criteria.andIn("id",Arrays.asList(ids));
         brandMapper.updateByExampleSelective(tbBrand,exmaple);
 
->>>>>>> b7e6602cc8df67570582ed59eb88bfc17770df4c
+
     }
 
 }

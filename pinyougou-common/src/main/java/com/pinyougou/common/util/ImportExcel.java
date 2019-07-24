@@ -119,5 +119,37 @@ public class ImportExcel {
         return resultList;
     }
 
-
+    /**
+     *
+     * @param fo  用户上传的excel对象
+     * @return 返回复合对象
+     * @throws IOException
+     * @throws InvalidFormatException
+     *  导入的API要求用户传入的数据必须合法
+     *  即数据格式合法 与pojo对应的字段合法
+     *
+     */
+    public List<Map<String,String>> importDataForExcel(File fo) throws IOException, InvalidFormatException {
+        List<Map<String, String>> resultList = new ArrayList<>();
+        Workbook workbook = new XSSFWorkbook(fo);
+        Sheet sheet = workbook.getSheetAt(0);
+        List<String> excelFiledList = new ArrayList<>();
+        for (Row cells : sheet) {
+            int cellNum = cells.getLastCellNum();
+            if (cells.getRowNum() == 0) {
+                for (int i = 0; i < cellNum; i++) {
+                    String value = cells.getCell(i).getStringCellValue();
+                    excelFiledList.add(value);
+                }
+            } else {
+                Map<String, String> map = new HashMap<>();
+                for (int i = 0; i < cellNum; i++) {
+                    String value = cells.getCell(i).getStringCellValue();
+                    map.put(excelFiledList.get(i),value );
+                }
+                resultList.add(map);
+            }
+        }
+        return resultList;
+    }
 }
