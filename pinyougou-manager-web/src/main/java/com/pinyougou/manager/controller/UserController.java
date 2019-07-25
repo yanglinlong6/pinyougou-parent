@@ -1,6 +1,7 @@
 package com.pinyougou.manager.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import entity.Result;
 import com.pinyougou.sellergoods.service.UserService;
@@ -123,5 +124,10 @@ public class UserController {
             e.printStackTrace();
             return new Result(false, "审核失败");
         }
+    }
+    
+    @RequestMapping("/findUserNum")
+    public Map<String, Integer> findUserNum() {
+        return userService.findUserNum();
     }
 }

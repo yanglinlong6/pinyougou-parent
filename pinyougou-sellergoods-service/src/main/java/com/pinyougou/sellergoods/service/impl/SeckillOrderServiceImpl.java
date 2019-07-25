@@ -15,6 +15,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import com.pinyougou.core.service.CoreServiceImpl;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import com.pinyougou.mapper.TbSeckillOrderMapper;
@@ -32,6 +33,9 @@ import com.pinyougou.sellergoods.service.SeckillOrderService;
 public class SeckillOrderServiceImpl extends CoreServiceImpl<TbSeckillOrder> implements SeckillOrderService {
     
     private TbSeckillOrderMapper seckillOrderMapper;
+    
+    @Autowired
+    private RedisTemplate redisTemplate;
     
     @Autowired
     public SeckillOrderServiceImpl(TbSeckillOrderMapper seckillOrderMapper) {

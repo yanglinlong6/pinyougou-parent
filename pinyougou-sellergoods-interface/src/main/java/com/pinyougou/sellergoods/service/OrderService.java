@@ -37,4 +37,7 @@ public interface OrderService extends CoreService<TbOrder> {
 
 
 	Map<String, Double> getSalesReport(String sellerId, String beginTime, String endTime);
+
+	void deliverGoods(Long[] ids);
+
 }

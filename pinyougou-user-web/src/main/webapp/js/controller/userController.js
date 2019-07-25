@@ -9,8 +9,7 @@
         ids: [],
         smsCode: '',
         repwd: '',
-        searchEntity: {},
-        userOrderList:[]
+        searchEntity: {}
     },
     methods: {
         //获取登录名
@@ -141,6 +140,11 @@
         findAllOrder:function () {
             axios.get("/order/getAllOrder.shtml").then(function (response) {
                 app.userOrderList = response.data;
+            })
+        },
+        findFootMark: function () {
+            axios.get('/user/findFootMark.shtml').then(resp => {
+                app.footMarkList = app.data.footMarkList;
             })
         }
     },

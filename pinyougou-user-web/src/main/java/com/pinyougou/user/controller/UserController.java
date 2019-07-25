@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * controller
@@ -151,7 +152,7 @@ public class UserController {
             return new Result(true, "验证码发送失败");
         }
     }
-    
+
     @RequestMapping(path = "/updateDetail")
     /**
     *@Description //更新用户个人信息
@@ -183,5 +184,11 @@ public class UserController {
         TbUser tbUser = new TbUser();
         tbUser.setUsername(userId);
         return userService.selectOne(tbUser);
+    }
+
+    @RequestMapping("/findFootMark")
+    public Map findFootMark() {
+        return userService.findFootMark();
+
     }
 }

@@ -30,4 +30,11 @@ public interface BrandService extends CoreService<TbBrand> {
 	PageInfo<TbBrand> findPage(Integer pageNo, Integer pageSize, TbBrand Brand);
 
     void updateStatus(Long[] ids, String status);
+
+
+    void insertAll(List<TbBrand> tbBrands);
+
+
+    void updateStatus(Long[] ids);
+
 }

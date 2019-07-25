@@ -66,7 +66,7 @@ public class PayController {
                     if ("ORDERPAID".equals(map.get("err_code"))) {
                         //已经支付则更新入库
                         orderService.updateOrderStatus(resultMap.get("transaction_id"), userId);
-                    } else if ("SUCCESS".equals(resultMap.get("result_code")) || "ORDERCLOSED".equals(resultMap.get("err_code"))) {
+                    } else if ("SUCCESS".equals(map.get("result_code")) || "ORDERCLOSED".equals(map.get("err_code"))) {
                         //删除预订单
                         orderService.deleteOrder(userId);
                     } else {
