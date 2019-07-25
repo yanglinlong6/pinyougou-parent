@@ -4,8 +4,9 @@
         pages:15,
         pageNo:1,
         list:[],
-        entity:{},
         ids:[],
+        entity:{specification:{},optionList:[{},{},{}]},
+        status:['未申请','申请中','已审核','已驳回'],
         searchEntity:{}
     },
     methods: {
@@ -72,6 +73,7 @@
             if(this.entity.id!=null){
                 this.update();
             }else{
+                this.entity.status=0;
                 this.add();
             }
         },
@@ -102,7 +104,6 @@
                 console.log("1231312131321");
             });
         }
-
 
 
 

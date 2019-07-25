@@ -136,6 +136,29 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
+        },
+        upload: function () {
+            var formData = new FormData();
+            //参数formData.append('file' 中的file 为表单的参数名  必须和 后台的file一致
+            //file.files[0]  中的file 指定的时候页面中的input="file"的id的值 files 指定的是选中的图片所在的文件对象数组，这里只有一个就选中[0]
+            formData.append('file', file.files[0]);
+            axios({
+                url: '/itemCat/importData.shtml',
+                data: formData,
+                method: 'post',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+
+            }).then(function (response) {
+                if (response.data.success) {
+                    alert("上传成功");
+                    window.location.reload();
+                } else {
+                    //上传失败
+                    alert(response.data.message);
+                }
+            })
         }
 
 

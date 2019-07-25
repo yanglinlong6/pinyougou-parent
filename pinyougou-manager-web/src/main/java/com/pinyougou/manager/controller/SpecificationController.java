@@ -1,15 +1,22 @@
 package com.pinyougou.manager.controller;
 
+import java.io.File;
 import java.util.List;
 
+import com.pinyougou.common.util.ImportExcel;
+import com.pinyougou.pojo.TbItemCat;
 import entity.Result;
 import com.pinyougou.sellergoods.service.SpecificationService;
 import entity.Specification;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.TbSpecification;
 
 import com.github.pagehelper.PageInfo;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
  * controller
@@ -119,6 +126,27 @@ public class SpecificationController {
                                               @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
                                               @RequestBody TbSpecification specification) {
         return specificationService.findPage(pageNo, pageSize, specification);
+    }
+
+
+
+    @Autowired
+    ImportExcel importExcel;
+
+    @RequestMapping("/importData")
+    public Result importData(@RequestParam MultipartFile file){
+        try {
+            CommonsMultipartFile cmf= (CommonsMultipartFile)file;
+            DiskFileItem dfi=(DiskFileItem) cmf.getFileItem();
+            File fo=dfi.getStoreLocation();
+            List<TbSpecification> specifications = importExcel.importDataForExcel(fo, TbSpecification.class);
+
+            specificationService.insertAll(specifications);
+            return new Result(true,"成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"失败");
+        }
     }
 
 }

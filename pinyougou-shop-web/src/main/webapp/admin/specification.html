@@ -35,7 +35,8 @@
                         </button>
                         <button type="button" class="btn btn-default" title="删除"><i class="fa fa-trash-o"></i> 删除
                         </button>
-                        <button type="button" @click="updateStatus()" class="btn btn-default" title="提交审核"><i class="fa fa-check"></i> 提交审核
+                        <button type="button" @click="updateStatus()" class="btn btn-default" title="提交审核"><i
+                                class="fa fa-check"></i> 提交审核
                         </button>
                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
                                 class="fa fa-refresh"></i> 刷新
@@ -71,9 +72,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                {{ids}}
                 <tr v-for="entity in list">
-                    <td><input type="checkbox":value="entity.id" v-model="ids"></td>
+                    <td><input type="checkbox" :value="entity.id" v-model="ids"></td>
                     <td>{{entity.id}}</td>
                     <td>{{entity.specName}}</td>
                     <td>{{status[entity.status]}}</td>
@@ -107,7 +107,6 @@
                 <div class="modal-body">
 
                     <table class="table table-bordered table-striped" width="800px">
-                        {{entity}}
                         <tr>
                             <td>规格名称</td>
                             <td><input class="form-control" placeholder="规格名称" v-model="entity.specification.specName">

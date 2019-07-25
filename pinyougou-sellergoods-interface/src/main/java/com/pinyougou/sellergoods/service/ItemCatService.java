@@ -33,5 +33,9 @@ public interface ItemCatService extends CoreService<TbItemCat> {
 
     void updateStatus(Long[] ids, String status);
 
+
     void updateStatus(Long[] ids);
+
+    void insertAll(List<TbItemCat> itemCats);
+
 }

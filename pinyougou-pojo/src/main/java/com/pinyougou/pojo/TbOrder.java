@@ -1,5 +1,7 @@
 package com.pinyougou.pojo;
 
+import com.pinyougou.common.util.DateUtil;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -267,6 +269,14 @@ public class TbOrder implements Serializable {
      */
     public Date getCreateTime() {
         return createTime;
+    }
+
+    //时间转换第三种做法
+    public String getCreateTimeStr() {
+        if (createTime != null) {
+            return DateUtil.date2str1(createTime);
+        }
+        return "";
     }
 
     /**

@@ -129,15 +129,25 @@ public class SpecificationServiceImpl extends CoreServiceImpl<TbSpecification> i
         }
     }
 
+
     @Override
     public void updateStatus(Long[] ids) {
         TbSpecification tbSpecification = new TbSpecification();
         tbSpecification.setStatus("1");
+
 
         Example exmaple = new Example(TbBrand.class);
         Example.Criteria criteria = exmaple.createCriteria();
         criteria.andIn("id",Arrays.asList(ids));
         specificationMapper.updateByExampleSelective(tbSpecification,exmaple);
 
+    }
+
+    @Override
+    public void insertAll(List<TbSpecification> specifications) {
+        for (TbSpecification specification : specifications) {
+            specification.setStatus("0");
+            specificationMapper.insert(specification);
+        }
     }
 }

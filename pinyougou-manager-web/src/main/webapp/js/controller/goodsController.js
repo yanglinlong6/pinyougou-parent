@@ -60,7 +60,7 @@
         },
         //当点击复选框的时候调用 并影响变量：entity.goodsDesc.specficationItems的值
         updateChecked: function ($event, specName, specValue) {
-            let searchObject = this.searchObjectByKey(this.entity.goodsDesc.specificationItems, specName, 'attributeName');
+            var searchObject = this.searchObjectByKey(this.entity.goodsDesc.specificationItems, specName, 'attributeName');
             if (searchObject != null) {
                 //searchObject====={"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]}
                 if ($event.target.checked) {
@@ -88,7 +88,7 @@
          */
         searchObjectByKey: function (list, specName, key) {
             for (var i = 0; i < list.length; i++) {
-                let specificationItem = list[i];//{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]}
+                var specificationItem = list[i];//{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]}
                 if (specificationItem[key] == specName) {
                     return specificationItem;
                 }
@@ -104,7 +104,7 @@
          */
         searchObjectByKey: function (list, specName, key) {
             for (var i = 0; i < list.length; i++) {
-                let specificationItem = list[i];//{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]}
+                var specificationItem = list[i];//{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]}
                 if (specificationItem[key] == specName) {
                     return specificationItem;
                 }

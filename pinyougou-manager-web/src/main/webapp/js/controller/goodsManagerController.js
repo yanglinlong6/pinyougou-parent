@@ -8,7 +8,8 @@
         ids: [],
         status: ['未审核', '已审核', '审核未通过', '已关闭'],
         itemCatList: [],
-        searchEntity: {auditStatus: '0'},
+        //searchEntity: {auditStatus: '0'},
+        searchEntity: {},
     },
     methods: {
         updateStatus:function (status) {
