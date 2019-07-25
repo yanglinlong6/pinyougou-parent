@@ -1,11 +1,15 @@
 package com.pinyougou.pojo;
 
+import com.pinyougou.common.util.DateUtil;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "tb_order")
 public class TbOrder implements Serializable {
@@ -160,6 +164,9 @@ public class TbOrder implements Serializable {
     @Column(name = "seller_id")
     private String sellerId;
 
+    @Transient
+    private List<TbOrderItem> orderItemList;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -259,6 +266,14 @@ public class TbOrder implements Serializable {
      */
     public Date getCreateTime() {
         return createTime;
+    }
+
+    //时间转换第三种做法
+    public String getCreateTimeStr() {
+        if (createTime != null) {
+            return DateUtil.date2str1(createTime);
+        }
+        return "";
     }
 
     /**
@@ -610,5 +625,13 @@ public class TbOrder implements Serializable {
      */
     public void setSellerId(String sellerId) {
         this.sellerId = sellerId;
+    }
+
+    public List<TbOrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<TbOrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 }

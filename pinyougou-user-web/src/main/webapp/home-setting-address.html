@@ -15,6 +15,7 @@
 <body>
     <!-- 头部栏位 -->
     <!--页面顶部-->
+<div id="app">
 <div id="nav-bottom">
 	<!--顶部-->
 	<div class="nav-top">
@@ -122,30 +123,6 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-<script type="text/javascript">
-$(function(){
-	$("#service").hover(function(){
-		$(".service").show();
-	},function(){
-		$(".service").hide();
-	});
-	$("#shopcar").hover(function(){
-		$("#shopcarlist").show();
-	},function(){
-		$("#shopcarlist").hide();
-	});
-
-})
-</script>
-<script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
-<script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
-<script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
-<script type="text/javascript" src="js/widget/nav.js"></script>
-<script type="text/javascript" src="pages/userInfo/distpicker.data.js"></script>
-<script type="text/javascript" src="pages/userInfo/distpicker.js"></script>
-<script type="text/javascript" src="pages/userInfo/main.js"></script>
-</body>
     <!--header-->
     <div id="account">
         <div class="py-container">
@@ -231,7 +208,7 @@ $(function(){
                         </div>
                         <!--新增地址弹出层-->
                          <div  tabindex="-1" role="dialog" data-hasfoot="false" class="sui-modal hide fade edit" style="width:580px;">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog">{{address}}
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" data-dismiss="modal" aria-hidden="true" class="sui-close">×</button>
@@ -242,7 +219,7 @@ $(function(){
                                             <div class="control-group">
                                             <label class="control-label">收货人：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" v-model="address.contact">
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -250,7 +227,7 @@ $(function(){
                                             <div class="controls">
                                                 <div data-toggle="distpicker">
                                                 <div class="form-group area">
-                                                    <select class="form-control" id="province1"></select>
+                                                    <select class="form-control" id="province1" v-model="address.province"></select>
                                                 </div>
                                                 <div class="form-group area">
                                                     <select class="form-control" id="city1"></select>
@@ -264,13 +241,13 @@ $(function(){
                                         <div class="control-group">
                                             <label class="control-label">详细地址：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-large">
+                                                <input type="text" class="input-large" v-model="address.address">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">联系电话：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" v-model="address.mobile">
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -282,10 +259,12 @@ $(function(){
                                         <div class="control-group">
                                             <label class="control-label">地址别名：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" v-model="address.notes">
                                             </div>
                                             <div class="othername">
-                                                建议填写常用地址：<a href="#" class="sui-btn btn-default">家里</a>　<a href="#" class="sui-btn btn-default">父母家</a>　<a href="#" class="sui-btn btn-default">公司</a>
+                                                建议填写常用地址：<a @click="address.notes='家里'" class="sui-btn btn-default">家里</a>　
+																<a @click="address.notes='父母家'" class="sui-btn btn-default">父母家</a>　
+																<a @click="address.notes='公司'" class="sui-btn btn-default">公司</a>
                                             </div>
                                         </div>
                                         
@@ -306,6 +285,8 @@ $(function(){
             </div>
         </div>
     </div>
+</div>
+</body>
     <!-- 底部栏位 -->
     <!--页面底部-->
 <div class="clearfix footer">
@@ -442,6 +423,31 @@ $(function(){
 
 
 
-undefined
+<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#service").hover(function(){
+			$(".service").show();
+		},function(){
+			$(".service").hide();
+		});
+		$("#shopcar").hover(function(){
+			$("#shopcarlist").show();
+		},function(){
+			$("#shopcarlist").hide();
+		});
+
+	})
+</script>
+<script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
+<script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
+<script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
+<script type="text/javascript" src="js/widget/nav.js"></script>
+<script type="text/javascript" src="js/plugins/citypicker/distpicker.data.js"></script>
+<script type="text/javascript" src="js/plugins/citypicker/distpicker.js"></script>
+<script type="text/javascript" src="js/pages/main.js"></script>
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/axios/axios.js"></script>
+<script src="js/controller/userAddressController.js"></script>
 
 </html>

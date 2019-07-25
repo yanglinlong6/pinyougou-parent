@@ -105,6 +105,7 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
         }
     }
 
+
     @Override
     public void updateStatus(Long[] ids) {
         TbBrand tbBrand = new TbBrand();
@@ -114,7 +115,6 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand>  implements Brand
         Example.Criteria criteria = exmaple.createCriteria();
         criteria.andIn("id",Arrays.asList(ids));
         brandMapper.updateByExampleSelective(tbBrand,exmaple);
-
 
     }
 

@@ -4,7 +4,6 @@
         pages: 15,
         pageNo: 1,
         list: [],
-        footMarkList: [],
         entity: {},
         loginName: '',
         ids: [],
@@ -138,6 +137,11 @@
                 console.log("1231312131321");
             });
         },
+        findAllOrder:function () {
+            axios.get("/order/getAllOrder.shtml").then(function (response) {
+                app.userOrderList = response.data;
+            })
+        },
         findFootMark: function () {
             axios.get('/user/findFootMark.shtml').then(resp => {
                 app.footMarkList = app.data.footMarkList;
@@ -147,6 +151,7 @@
     //钩子函数 初始化了事件和
     created: function () {
 
+        this.findAllOrder();
         // this.searchList(1);
         this.getName();
     }

@@ -121,6 +121,7 @@ public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate> imp
         return maps;
     }
 
+
     @Override
     public void updateStatus(Long[] ids) {
         TbTypeTemplate template = new TbTypeTemplate();

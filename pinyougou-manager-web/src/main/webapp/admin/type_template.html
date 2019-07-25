@@ -48,12 +48,16 @@
                         <button type="button" class="btn btn-default" title="审核通过" @click="updateStatus(1)"><i
                                 class="fa fa-check"></i> 审核通过
                         </button>
-                        <td>
+
+                        <button  class="btn btn-default" data-toggle="modal" data-target="#myModal" title="导入" >
+                            <i class="fa fa-refresh"></i> 导入
+                        </button>
+                        <!--<td>
                             <input type="file" id="file"/>
                             <button type="button" class="btn btn-default" title="导入" @click="upload()">
                                 导入
                             </button>
-                        </td>
+                        </td>-->
                         <button type="button" class="btn btn-default" title="驳回" @click="updateStatus(2)"><i
                                 class="fa fa-ban"></i> 驳回
                         </button>
@@ -195,6 +199,33 @@
                 </div>
             </div>
         </div>
+    </div>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        请选择Excel文件
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <td>
+                        <input type="file" id="file"/>
+                    </td>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" @click="upload()">
+                        提交更改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
     </div>
 </div>
 </body>

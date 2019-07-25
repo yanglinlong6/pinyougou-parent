@@ -98,10 +98,14 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
                 criteria.andLike("shippingCode", "%" + order.getShippingCode() + "%");
                 // criteria.andShippingCodeLike("%"+order.getShippingCode()+"%");
             }
+            /*===================================修改 1 */
             if (StringUtils.isNotBlank(order.getUserId())) {
-                criteria.andLike("userId", "%" + order.getUserId() + "%");
-                // criteria.andUserIdLike("%"+order.getUserId()+"%");
+                criteria.andEqualTo("userId",order.getUserId());
+                //criteria.andLike("userId", "%" + order.getUserId() + "%");
+                //criteria.andUserIdLike("%"+order.getUserId()+"%");
             }
+            /*===================================修改 1 */
+
             if (StringUtils.isNotBlank(order.getBuyerMessage())) {
                 criteria.andLike("buyerMessage", "%" + order.getBuyerMessage() + "%");
                 // criteria.andBuyerMessageLike("%"+order.getBuyerMessage()+"%");
@@ -138,9 +142,18 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
                 criteria.andLike("sourceType", "%" + order.getSourceType() + "%");
                 // criteria.andSourceTypeLike("%"+order.getSourceType()+"%");
             }
+            /*===================================修改 1 */
+
             if (StringUtils.isNotBlank(order.getSellerId())) {
-                criteria.andLike("sellerId", "%" + order.getSellerId() + "%");
-                // criteria.andSellerIdLike("%"+order.getSellerId()+"%");
+                criteria.andEqualTo("sellerId",order.getSellerId());
+                //criteria.andLike("sellerId", "%" + order.getSellerId() + "%");
+                //criteria.andSellerIdLike("%"+order.getSellerId()+"%");
+            }
+            /*===================================修改 1 */
+            if (StringUtils.isNotBlank(order.getOrderId()+"")) {
+                criteria.andEqualTo("orderId",order.getOrderId());
+                //criteria.andLike("sellerId", "%" + order.getSellerId() + "%");
+                //criteria.andSellerIdLike("%"+order.getSellerId()+"%");
             }
 
         }
