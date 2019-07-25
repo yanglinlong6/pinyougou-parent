@@ -3,22 +3,21 @@
     data: {
         pages: 15,
         pageNo: 1,
-        list0:[],
-        list1:[],
-        list2:[],
-
+        list0: [],
+        list1: [],
+        list2: [],
         entity: {},
-        contentList:[],
+        contentList: [],
         grade: 1,// 分类级别
         ids: [],
-        keywords:'',
+        keywords: '',
         searchEntity: {},
 
         //list2:[ { "id": 1, "name": "图书、音像、电子书刊", "parentId": 0, "status": "1", "typeId": 35 }, { "id": 74, "name": "家用电器", "parentId": 0, "status": "0", "typeId": 35 }, { "id": 161, "name": "电脑、办公", "parentId": 0, "status": "0", "typeId": 35 }, { "id": 249, "name": "个护化妆", "parentId": 0, "status": "1", "typeId": 35 }, { "id": 290, "name": "钟表", "parentId": 0, "status": "1", "typeId": 35 }, { "id": 296, "name": "母婴", "parentId": 0, "status": "1", "typeId": 35 }, { "id": 378, "name": "食品饮料、保健食品", "parentId": 0, "status": "1", "typeId": 35 }, { "id": 438, "name": "汽车用品", "parentId": 0, "status": "1", "typeId": 35 }, { "id": 495, "name": "玩具乐器", "parentId": 0, "status": "1", "typeId": 35 }, { "id": 558, "name": "手机", "parentId": 0, "status": "0", "typeId": 35 }, { "id": 580, "name": "数码", "parentId": 0, "status": "0", "typeId": 35 }, { "id": 633, "name": "家居家装", "parentId": 0, "status": "0", "typeId": 35 }, { "id": 699, "name": "厨具", "parentId": 0, "status": "1", "typeId": 35 }, { "id": 749, "name": "服饰内衣", "parentId": 0, "status": "1", "typeId": 35 }, { "id": 865, "name": "鞋靴", "parentId": 0, "status": "0", "typeId": 35 }, { "id": 903, "name": "礼品箱包", "parentId": 0, "status": "0", "typeId": 35 }, { "id": 963, "name": "珠宝", "parentId": 0, "status": "1", "typeId": 35 }, { "id": 1031, "name": "运动健康", "parentId": 0, "status": null, "typeId": 35 }, { "id": 1147, "name": "彩票、旅行、充值、票务", "parentId": 0, "status": null, "typeId": 35 }, { "id": 1186, "name": "小白大数据", "parentId": 0, "status": null, "typeId": 35 }],
     },
     methods: {
-        doSearch:function () {
-            window.location.href="http://localhost:9104/search.html?keywords="+encodeURIComponent(this.keywords);
+        doSearch: function () {
+            window.location.href = "http://localhost:9104/search.html?keywords=" + encodeURIComponent(this.keywords);
         },
         findByCategoryId: function (categoryId) {
             axios.get('/content/findByCategoryId/' + categoryId + '.shtml').then(function (response) {
@@ -128,16 +127,16 @@
                 this.entity_2 = p_entity;
             }
             this.findByParentId(p_entity.id);
-            this.findByParentId(p_entity.id+1);
+            this.findByParentId(p_entity.id + 1);
         },
         findByParentId: function (parentId) {
             axios.get('/itemCat/findByParentId/' + parentId + '.shtml').then(function (response) {
 
-                if (parentId==0){
+                if (parentId == 0) {
                     app.list0 = response.data;
-                }else if (parentId==1) {
+                } else if (parentId == 1) {
                     app.list1 = response.data;
-                }else{
+                } else {
                     app.list2 = response.data;
                 }
 
@@ -157,7 +156,7 @@
     //钩子函数 初始化了事件和
     created: function () {
 
-       // this.searchList(1);
+        // this.searchList(1);
         this.findByCategoryId(1);
         this.findByParentId(0);
         //this.selectList({ id: 0 });
