@@ -114,9 +114,15 @@ public class ItemCatController {
         @RequestBody TbItemCat itemCat) {
         return itemCatService.findPage(pageNo, pageSize, itemCat);
     }
-    
+
+    /**
+     * 前台商品分类展示
+     * @param parentId
+     * @return
+     */
     @RequestMapping("/findByParentId/{parentId}")
     public List<TbItemCat> findByParentId(@PathVariable(value = "parentId") Long parentId) {
+           // return itemCatService.findByItemCat3(parentId);
             return itemCatService.findByParentId(parentId);
     }
     

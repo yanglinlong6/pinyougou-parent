@@ -1,7 +1,6 @@
 package com.pinyougou.sellergoods.service.impl;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import com.pinyougou.pojo.TbBrand;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,6 +119,59 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat> implements It
             itemCat.setStatus("0");
             itemCatMapper.insert(itemCat);
         }
+    }
+
+    @Override
+    public Map findByItemCat3(Long parentId01) {
+        // 1.先从redis缓存中 , 获取三级分类信息!
+        List<TbItemCat> itemCat01List  = (List<TbItemCat>) redisTemplate.boundValueOps("itemCat03").get();
+        TbItemCat cat = new TbItemCat();
+        cat.setParentId(parentId01);
+        Map map = new HashMap();
+        // 2.若缓存中没有数据 , 从数据库中查询( 并放到缓存中 )
+        if (itemCat01List==null){
+            // 缓存穿透 -> 请求排队等候.
+            synchronized (this){
+                // 进行二次校验?
+                itemCat01List  = (List<TbItemCat>) redisTemplate.boundValueOps("itemCat03").get();
+                if (itemCat01List==null){
+                    // 创建一个集合 , 存放一级分类
+                    itemCat01List = new ArrayList<>();
+
+                    // 根据parent_id = 0 , 获取一级分类信息!
+
+                    List<TbItemCat> itemCatList = itemCatMapper.select(cat);
+                    map.put("list0",itemCatList);
+                    for (TbItemCat itemCat : itemCatList) {
+
+                        // 根据一级分类的id -> 找到对应的二级分类!
+                        TbItemCat tbItemCat02 = new TbItemCat();
+                        tbItemCat02.setParentId(itemCat.getId());
+                        List<TbItemCat> itemCat02List = itemCatMapper.select(tbItemCat02);
+                        map.put("list1",tbItemCat02);
+                        System.out.println(itemCat02List);
+                        for (TbItemCat itemCat2 : itemCat02List) {
+
+                            // 根据二级分类的id -> 找到对应的三级分类!
+                            TbItemCat tbItemCat03 = new TbItemCat();
+                            tbItemCat03.setParentId(itemCat2.getId());
+                            List<TbItemCat> itemCat03 = itemCatMapper.select(tbItemCat03);
+                            map.put("list2",itemCat03);
+                            System.out.println(itemCat02List);
+
+                        }
+                    }
+                    // 将查询到的数据放入缓存中!
+                    redisTemplate.boundValueOps("itemCat03").set(map);
+                    return map;
+                }
+            }
+
+        }
+
+        // 3.若缓存中有数据 , 直接返回即可!
+        return map;
+
     }
 
 }

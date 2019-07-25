@@ -15,7 +15,7 @@
 
 <body>
 <div id="app">
-	{{list0}}
+
 
 	<!-- 头部栏位 -->
 	<!--页面顶部-->
@@ -522,26 +522,13 @@
 					<!--banner轮播-->
 					<div id="myCarousel" data-ride="carousel" data-interval="4000" class="sui-carousel slide">
 						<ol class="carousel-indicators">
-							<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-							<li data-target="#myCarousel" data-slide-to="1"></li>
-							<li data-target="#myCarousel" data-slide-to="2"></li>
+							<li data-target="#myCarousel" data-slide-to="0" v-for="(content,index) in contentList" :class="{'active':index==0?true:false}"></li>
 						</ol>
 						<div class="carousel-inner">
-							<div class="active item">
-								<a href="http://baidu2.wypxj.com/">
-									<img src="img/banner1.jpg"  />
+							<div v-for="(content,index) in contentList" :class="{'active':index==0?true:false,'item':true}" >
+								<a :href="content.url">
+									<img :src="content.pic"  />
 								</a>
-							</div>
-							<div class="item">
-								<a href="http://baidu2.wypxj.com/">
-									<img src="img/banner2.jpg"  />
-								</a>
-							</div>
-							<div class="item">
-								<a href="http://baidu2.wypxj.com/">
-									<img src="img/banner3.jpg"  />
-								</a>
-
 							</div>
 						</div><a href="#myCarousel" data-slide="prev" class="carousel-control left">‹</a><a href="#myCarousel" data-slide="next" class="carousel-control right">›</a>
 					</div>
