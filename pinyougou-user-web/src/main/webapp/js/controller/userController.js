@@ -137,11 +137,17 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
+        },
+        findAllOrder:function () {
+            axios.get("/order/getAllOrder.shtml").then(function (response) {
+                app.userOrderList = response.data;
+            })
         }
     },
     //钩子函数 初始化了事件和
     created: function () {
 
+        this.findAllOrder();
         // this.searchList(1);
         this.getName();
     }

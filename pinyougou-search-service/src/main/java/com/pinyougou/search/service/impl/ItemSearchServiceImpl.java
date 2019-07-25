@@ -41,22 +41,22 @@ import java.util.*;
  */
 @Service
 public class ItemSearchServiceImpl implements ItemSearchService {
-    
+
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
-    
+
     @Autowired
     private RedisTemplate redisTemplate;
-    
+
     @Autowired
     private ItemDao dao;
-    
+
     @Override
     public Map<String, Object> search(Map<String, Object> searchMap) {
         Map<String, Object> resultMap = new HashMap<>();
         // 1.获取关键字
         String keywords = (String)searchMap.get("keywords");
-        
+
         // 创建查询条件
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
         // builder.withIndices("pinyougou");
@@ -73,7 +73,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         // (1) 设置高亮显示的域 并设置前缀 后缀
         builder.withHighlightFields(new HighlightBuilder.Field("title"))
             .withHighlightBuilder(new HighlightBuilder().preTags("<em style=\"color:red\">").postTags("</em>"));
-        
+
         // 过滤查询 商品分类过滤
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         String category = (String)searchMap.get("category");
@@ -107,19 +107,19 @@ public class ItemSearchServiceImpl implements ItemSearchService {
                 boolQueryBuilder.filter(QueryBuilders.rangeQuery("price").from(split[0], true).to(split[1], true));
             }
         }
-        
+
         builder.withFilter(boolQueryBuilder);
-        
+
         // 构建查询对象
         NativeSearchQuery query = builder.build();
-        
+
         // 3.1设置分页条件
         Integer pageNo = (Integer)searchMap.get("pageNo");
         Integer pageSize = (Integer)searchMap.get("pageSize");
         if (pageNo == null) {
             pageNo = 1;
         }
-        
+
         if (pageSize == null) {
             pageSize = 40;
         }
@@ -163,7 +163,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
                         String sourceAsString = hit.getSourceAsString();
                         TbItem tbItem = JSON.parseObject(sourceAsString, TbItem.class);
                         System.out.println("高亮前的数据:" + tbItem.getTitle());
-                        
+
                         if (highlightField != null) {
                             // 获取高亮的碎片
                             Text[] fragments = highlightField.getFragments();
@@ -180,7 +180,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
                                 tbItem.setTitle(sb.toString());
                             }
                         }
-                        
+
                         content.add((T)tbItem);
                     }
                     // 2.获取分页的信息对象 已有
@@ -189,11 +189,11 @@ public class ItemSearchServiceImpl implements ItemSearchService {
                     Aggregations aggregations = response.getAggregations();
                     // 5.获取scrollid 深度分页的ID
                     String scrollId = response.getScrollId();
-                    
+
                     return new AggregatedPageImpl<T>(content, pageable, totalHits, aggregations, scrollId);
                 }
             });
-        
+
         // 5.获取结果 封装结果集
         // 获取分组的数据
         List<String> categoryList = new ArrayList<>();
@@ -218,11 +218,11 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             }
         }
         List<TbItem> itemList = tbItems.getContent();
-        
+
         long totalElements = tbItems.getTotalElements();
-        
+
         int totalPages = tbItems.getTotalPages();
-        
+
         for (TbItem tbItem : itemList) {
             System.out.println("数据：" + tbItem.getTitle());
         }
@@ -231,10 +231,10 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         resultMap.put("totalPages", totalPages);
         resultMap.put("categoryList", categoryList);
         System.out.println(resultMap);
-        
+
         return resultMap;
     }
-    
+
     @Override
     public void updateIndex(List<TbItem> items) {
         // 先设置map 再一次性插入
@@ -246,16 +246,19 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         System.out.println("更新成功...");
         dao.saveAll(items);
     }
-    
+
     @Override
     public void deleteByIds(Long[] ids) {
         DeleteQuery query = new DeleteQuery();
         // 删除多个goodsid
         query.setQuery(QueryBuilders.termQuery("goodsId", ids));
         // 根据删除条件 索引名 和类型
+        //删除多个goodsid
+        query.setQuery(QueryBuilders.termsQuery("goodsId", ids));
+        //根据删除条件 索引名 和类型
         elasticsearchTemplate.delete(query, TbItem.class);
     }
-    
+
     private Map searchBrandAndSpecList(String category) {
         Map map = new HashMap();
         Long typeId = (Long)redisTemplate.boundHashOps("itemCat").get(category);// 获取模板ID

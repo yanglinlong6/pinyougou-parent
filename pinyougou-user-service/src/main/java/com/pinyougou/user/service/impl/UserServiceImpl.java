@@ -19,6 +19,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
+import java.lang.reflect.MalformedParameterizedTypeException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 服务实现层
@@ -44,7 +49,7 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
     
     @Autowired
     private TbItemMapper itemMapper;
-    
+
     @Autowired
     public UserServiceImpl(TbUserMapper userMapper) {
         super(userMapper, TbUser.class);

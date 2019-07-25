@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.pinyougou.common.pojo.MessageInfo;
 import com.pinyougou.mapper.TbSeckillGoodsMapper;
 import com.pinyougou.mapper.TbSeckillOrderMapper;
+import com.pinyougou.pay.service.WeixinPayService;
 import com.pinyougou.pojo.TbSeckillOrder;
 import com.pinyougou.seckill.service.SeckillOrderService;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目名:pinyougou-parent
@@ -36,6 +38,9 @@ public class DelayMessageListener implements MessageListenerConcurrently {
     @Reference
     private SeckillOrderService seckillOrderService;
 
+    @Reference
+    private WeixinPayService weixinPayService;
+
     @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
         try {
@@ -50,24 +55,31 @@ public class DelayMessageListener implements MessageListenerConcurrently {
                     if (messageInfo.getMethod() == MessageInfo.METHOD_UPDATE) {
 
 
-                        //获取Redis中的未支付订单的信息
+                        //获取延迟消息中Redis中的1分钟前未支付订单的信息
                         TbSeckillOrder tbSeckillOrder = JSON.parseObject(messageInfo.getContext().toString(), TbSeckillOrder.class);
 
                         //获取数据库中的订单的信息
                         TbSeckillOrder seckillOrder = seckillOrderMapper.selectByPrimaryKey(tbSeckillOrder.getId());
-                        if (seckillOrder == null) {
-                            //关闭微信订单  如果 关闭微信订单的时候出现该订单已经关闭 则说明不需要 再恢复库存
+                        //数据库找不到，说明有可能没支付
+                        if (seckillOrder == null) {//数据库中找不到
+                            //关闭微信订单
+                            Map map = weixinPayService.closePay(tbSeckillOrder.getId()+"");
 
-                            /**
-                             * if(微信订单的状态为没有关闭 或者 其他的错误){
-                             *     调用删除订单 恢复库存的方法，
-                             * }else{
-                             *     啥也不干
-                             * }
-                             */
-                            //删除订单
-                            System.out.println(tbSeckillOrder.getUserId());
-                            seckillOrderService.deleteOrder(tbSeckillOrder.getUserId());
+                            if ("SUCCESS".equals(map.get("result_code"))|| "ORDERCLOSED".equals(map.get("err_code"))){
+                                //删除预订单
+                                seckillOrderService.deleteOrder(tbSeckillOrder.getUserId());
+                            }
+
+                            if ("ORDERPAID".equals(map.get("err_code"))){//说明最后一秒已付款,但是数据库没有
+                                //去微信端查找流水号
+                                Map<String,String>  resultMap = weixinPayService.queryStatus(tbSeckillOrder.getId()+"");
+                                //已经支付则更新入库
+                                seckillOrderService.updateOrderStatus(resultMap.get("transaction_id"),tbSeckillOrder.getUserId());
+                            }else{
+                                System.out.println("由于微信端错误");
+                            }
+                            break;
+
                         }
                         //有订单 无需关心
                     }
