@@ -32,4 +32,5 @@ public interface UserService extends CoreService<TbUser> {
 	public void createSmsCode(String phone);
 
 	boolean checkSmsCode(String phone, String code);
+
 }
