@@ -1,6 +1,8 @@
 package com.pinyougou.common.util;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -9,6 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -87,7 +90,12 @@ public class ImportExcel {
             };
         }
 
-        Workbook workbook = new XSSFWorkbook(file);
+        Workbook workbook;
+        try{
+            workbook  = new XSSFWorkbook(file);
+        }catch (Exception e){
+            workbook = new HSSFWorkbook(new FileInputStream(file));
+        }
         Sheet sheet = workbook.getSheetAt(0);
         ArrayList<String> excelFiledList = new ArrayList<>();
         ArrayList<T> resultList = new ArrayList<>();
@@ -125,7 +133,7 @@ public class ImportExcel {
 
     /**
      *
-     * @param fo  用户上传的excel对象
+     * @param file  用户上传的excel对象
      * @return 返回复合对象
      * @throws IOException
      * @throws InvalidFormatException
@@ -133,9 +141,15 @@ public class ImportExcel {
      *  即数据格式合法 与pojo对应的字段合法
      *
      */
-    public List<Map<String,String>> importDataForExcel(File fo) throws IOException, InvalidFormatException {
+    public List<Map<String,String>> importDataForExcel(File file) throws IOException, InvalidFormatException {
         List<Map<String, String>> resultList = new ArrayList<>();
-        Workbook workbook = new XSSFWorkbook(fo);
+        Workbook workbook;
+
+        try{
+            workbook  = new XSSFWorkbook(file);
+        }catch (Exception e){
+            workbook = new HSSFWorkbook(new FileInputStream(file));
+        }
         Sheet sheet = workbook.getSheetAt(0);
         List<String> excelFiledList = new ArrayList<>();
         for (Row cells : sheet) {
