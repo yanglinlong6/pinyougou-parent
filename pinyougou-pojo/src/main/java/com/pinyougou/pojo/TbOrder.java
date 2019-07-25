@@ -165,6 +165,9 @@ public class TbOrder implements Serializable {
     @Transient
     private List<TbOrderItem> orderItemList;
 
+    @Transient
+    private String sellerNickName;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -623,5 +626,13 @@ public class TbOrder implements Serializable {
 
     public void setOrderItemList(List<TbOrderItem> orderItemList) {
         this.orderItemList = orderItemList;
+    }
+
+    public String getSellerNickName() {
+        return sellerNickName;
+    }
+
+    public void setSellerNickName(String sellerNickName) {
+        this.sellerNickName = sellerNickName;
     }
 }
