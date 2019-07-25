@@ -73,6 +73,7 @@
             if(this.entity.id!=null){
                 this.update();
             }else{
+                this.entity.status=0;
                 this.add();
             }
         },
