@@ -140,4 +140,12 @@ public class SpecificationServiceImpl extends CoreServiceImpl<TbSpecification> i
         specificationMapper.updateByExampleSelective(tbSpecification,exmaple);
 
     }
+
+    @Override
+    public void insertAll(List<TbSpecification> specifications) {
+        for (TbSpecification specification : specifications) {
+            specification.setStatus("0");
+            specificationMapper.insert(specification);
+        }
+    }
 }
