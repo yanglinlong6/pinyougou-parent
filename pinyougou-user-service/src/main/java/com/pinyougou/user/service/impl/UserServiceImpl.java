@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import java.lang.reflect.MalformedParameterizedTypeException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
