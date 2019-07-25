@@ -84,8 +84,7 @@ public class ImportExcel {
         for (Method method : methods) {
             if (method.getName().matches("set\\w+")) {
                 methodMap.put(method.getName().replace("set", "").toLowerCase(), method);
-            }
-            ;
+            };
         }
 
         Workbook workbook = new XSSFWorkbook(file);
@@ -102,7 +101,12 @@ public class ImportExcel {
             } else {
                 T t = type.newInstance();
                 for (int i = 0; i < cellNum; i++) {
-                    String value = cells.getCell(i).getStringCellValue();
+                    String value;
+                    try{
+                        value = cells.getCell(i).getStringCellValue();
+                    }catch (Exception e){
+                        value = String.valueOf((long)cells.getCell(i).getNumericCellValue());
+                    }
 
                     Method method = methodMap.get(
                             excelFiledList.get(i).toLowerCase()
@@ -144,7 +148,12 @@ public class ImportExcel {
             } else {
                 Map<String, String> map = new HashMap<>();
                 for (int i = 0; i < cellNum; i++) {
-                    String value = cells.getCell(i).getStringCellValue();
+                    String value;
+                    try{
+                        value = cells.getCell(i).getStringCellValue();
+                    }catch (Exception e){
+                        value = String.valueOf((long)cells.getCell(i).getNumericCellValue());
+                    }
                     map.put(excelFiledList.get(i),value );
                 }
                 resultList.add(map);
