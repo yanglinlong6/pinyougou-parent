@@ -10,11 +10,23 @@
 
     <link rel="stylesheet" type="text/css" href="css/webbase.css" />
     <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
+	<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
+	<script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
+	<script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
+	<script type="text/javascript" src="js/widget/nav.js"></script>
+	<script type="text/javascript" src="js/plugins/birthday/birthday.js"></script>
+	<script type="text/javascript" src="js/plugins/citypicker/distpicker.data.js"></script>
+	<script type="text/javascript" src="js/plugins/citypicker/distpicker.js"></script>
+	<script type="text/javascript" src="js/plugins/upload/uploadPreview.js"></script>
+	<script type="text/javascript" src="js/pages/main.js"></script>
+
 </head>
 
 <body>
     <!-- 头部栏位 -->
     <!--页面顶部-->
+<div id="app">
 <div id="nav-bottom">
 	<!--顶部-->
 	<div class="nav-top">
@@ -119,44 +131,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
 
-<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-<script type="text/javascript">
-$(function(){
-	$("#service").hover(function(){
-		$(".service").show();
-	},function(){
-		$(".service").hide();
-	});
-	$("#shopcar").hover(function(){
-		$("#shopcarlist").show();
-	},function(){
-		$("#shopcarlist").hide();
-	});
-
-})
-</script>
-<script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
-<script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
-<script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
-<script type="text/javascript" src="js/widget/nav.js"></script>
-<script type="text/javascript" src="js/plugins/birthday/birthday.js"></script>
-<script type="text/javascript" src="js/plugins/citypicker/distpicker.data.js"></script>
-<script type="text/javascript" src="js/plugins/citypicker/distpicker.js"></script>
-<script type="text/javascript" src="js/plugins/upload/uploadPreview.js"></script>
-<script type="text/javascript" src="js/pages/main.js"></script>
-<script>
-            $(function() {               
-                $.ms_DatePicker({
-                    YearSelector: "#select_year2",
-                    MonthSelector: "#select_month2",
-                    DaySelector: "#select_day2"
-                });
-            });
-        </script>
-</body>
     <!--header-->
     <div id="account">
         <div class="py-container">
@@ -198,7 +173,7 @@ $(function(){
                     </div>
                 </div>
                 <!--右侧主内容-->
-                <div class="yui3-u-5-6">
+                <div class="yui3-u-5-6">{{userDetail}}
                     <div class="body userInfo">
                         <ul class="sui-nav nav-tabs nav-large nav-primary ">
                             <li class="active"><a href="#one" data-toggle="tab">基本资料</a></li>
@@ -210,26 +185,26 @@ $(function(){
                                     <div class="control-group">
                                         <label for="inputName" class="control-label">昵称：</label>
                                         <div class="controls">
-                                            <input type="text" id="inputName" name="email" placeholder="昵称">
+                                            <input type="text" id="inputName" name="nickName" placeholder="昵称" v-model="userDetail.nickName">
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label for="inputGender" class="control-label">性别：</label>
                                         <div class="controls">
                                             <label data-toggle="radio" class="radio-pretty inline">
-                                            <input type="radio" name="gender" value="1"><span>男</span>
-                                        </label>
+                                            <input type="radio" name="sex" value="1" v-model="userDetail.sex" checked="checked"><span>男</span>
+                                       		</label>
                                             <label data-toggle="radio" class="radio-pretty inline">
-                                            <input type="radio" name="gender" value="2"><span>女</span>
-                                        </label>
+                                            <input type="radio" name="sex" value="2" v-model="userDetail.sex"><span>女</span>
+                                        	</label>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label for="inputPassword" class="control-label">生日：</label>
                                         <div class="controls">
-                                            <select id="select_year2" rel="1990"></select>年
-                                            <select id="select_month2" rel="4"></select>月
-                                            <select id="select_day2" rel="3"></select>日
+                                            <select id="select_year2" v-model="year"></select>年
+                                            <select id="select_month2" v-model="month"></select>月
+                                            <select id="select_day2" v-model="day"></select>日
                                         </div>
                                     </div>
 
@@ -266,7 +241,7 @@ $(function(){
                                     <div class="control-group">
                                         <label for="sanwei" class="control-label"></label>
                                         <div class="controls">
-                                            <button type="submit" class="sui-btn btn-primary">立即注册</button>
+                                            <button type="button" class="sui-btn btn-primary" @click="updateInfo()">提交信息</button>
                                         </div>
                                     </div>
                                 </form>
@@ -276,10 +251,10 @@ $(function(){
                                 <div class="new-photo">
                                     <p>当前头像：</p>
                                     <div class="upload">
-                                        <img id="imgShow_WU_FILE_0" width="100" height="100" src="img/_/photo_icon.png" alt="">
-                                        <input type="file" id="up_img_WU_FILE_0" />
-                                    </div>
-
+                                        <img id="imgShow_WU_FILE_0" width="100" height="100" :src="userDetail.headPic" alt="">
+										<input type="file" id="file" /></br>
+										<button type="button" @click="upload(),cleanInput()" >上传</button>
+									</div>
                                 </div>
                             </div>
                         </div>
@@ -289,6 +264,10 @@ $(function(){
             </div>
         </div>
     </div>
+	</div>
+	</div>
+</div>
+</body>
     <!-- 底部栏位 -->
     <!--页面底部-->
 <div class="clearfix footer">
@@ -422,7 +401,31 @@ $(function(){
 	</div>
 </div>
 <!--页面底部END-->
+<script src="plugins/vue/vue.js"></script>
+<script src="plugins/axios/axios.js"></script>
+<script src="js/controller/userDetailController.js"></script>
+<script>
+	$(function() {
+		$.ms_DatePicker({
+			YearSelector: "#select_year2",
+			MonthSelector: "#select_month2",
+			DaySelector: "#select_day2"
+		});
+	});
+</script>
+<script type="text/javascript">
+	$(function(){
+		$("#service").hover(function(){
+			$(".service").show();
+		},function(){
+			$(".service").hide();
+		});
+		$("#shopcar").hover(function(){
+			$("#shopcarlist").show();
+		},function(){
+			$("#shopcarlist").hide();
+		});
 
-undefined
-
+	})
+</script>
 </html>

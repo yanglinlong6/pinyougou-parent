@@ -16,10 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping("/upload")
+@CrossOrigin(origins = "*",allowCredentials = "true")
 public class UploadController {
     @RequestMapping("/uploadFile")
     //支持跨域 只有这个两个的跨域请求上传图片才可以被允许
-    @CrossOrigin(origins = {"http://localhost:9102","http://localhost:9101"},allowCredentials = "true")
     public Result upload(@RequestParam(value = "file") MultipartFile file){
         try {
             FastDFSClient fastDFSClient = new FastDFSClient("classpath:config/fastdfs_client.conf");
