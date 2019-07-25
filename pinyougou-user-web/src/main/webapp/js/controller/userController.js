@@ -137,11 +137,6 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
-        },
-        findFootMark: function () {
-            axios.get('/user/findFootMark.shtml').then(resp => {
-                app.footMarkList = app.data.footMarkList;
-            })
         }
     },
     //钩子函数 初始化了事件和

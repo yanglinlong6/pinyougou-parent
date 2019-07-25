@@ -55,11 +55,11 @@
         },
         queryByPage: function (pageNo) {
             var number = parseInt(pageNo);
-            if(number>this.resultMap.totalPages){
-                number=this.resultMap.totalPages;
+            if (number > this.resultMap.totalPages) {
+                number = this.resultMap.totalPages;
             }
-            if(number<1){
-                number=1;
+            if (number < 1) {
+                number = 1;
             }
             this.searchMap.pageNo = number;
             this.search();
@@ -68,8 +68,8 @@
             this.pageLabels = [];
             //显示以当前页为中心的5个页码
             let firstPage = 1;
-            this.preDott=false;
-            this.nextDott=false;
+            this.preDott = false;
+            this.nextDott = false;
             let lastPage = this.resultMap.totalPages;//结束页码
 
             if (this.resultMap.totalPages > 5) {
@@ -77,18 +77,18 @@
                 if (this.searchMap.pageNo <= 3) {
                     firstPage = 1;
                     lastPage = 5;
-                    this.preDott=false;
-                    this.nextDott=true;
+                    this.preDott = false;
+                    this.nextDott = true;
                 } else if (this.searchMap.pageNo >= this.resultMap.totalPages - 2) {//如果当前的页码大于= 总页数-2    98 99 100
                     firstPage = this.resultMap.totalPages - 4;
                     lastPage = this.resultMap.totalPages;
-                    this.preDott=true;
-                    this.nextDott=false;
+                    this.preDott = true;
+                    this.nextDott = false;
                 } else {
                     firstPage = this.searchMap.pageNo - 2;
                     lastPage = this.searchMap.pageNo + 2;
-                    this.preDott=true;
-                    this.nextDott=true;
+                    this.preDott = true;
+                    this.nextDott = true;
 
                 }
             } else {
@@ -201,9 +201,34 @@
         //     axios.get('/item/findDetailsPage/' + id + '.shtml').then(resp=>{
         //         window.location.href = "http://localhost:9107/cart.html";
         //     })
-        // }
+        // },
+        // addFootMark: function (id) {
+        //     alert("发送请求")
+        //     axios.get('/itemSearch/addFootMark/' + id + '.shtml', { withCredentials: true }).then(resp => {
+        //         if (resp.data.success) {
+        //             console.log("添加足迹成功")
+        //         }
+        //     }).catch(error => {
+        //         console.log("添加足迹失败")
+        //     });
+        //     app.tiaozhuan();
+        // },
+        // tiaozhuan: function (id) {
+        //     // window.location.href = "http://localhost:9105/149187842867983.html";
+        //     axios.get('/item/tiaoZhaun.shtml?id=' + id).then(resp => {
+        //         var tbgoods = JSON.stringify(resp.data);
+        //         console.log(tbgoods);
+        //         window.location.href = "http://localhost:9105/" + tbgoods.id + ".html?id=" + tbgoods.id;
+        //     }).catch(error => {
+        //         console.log("跳转失败")
+        //     })
+        //
+        // },
+        tiaozhuan: function (id) {
+            // window.location.href = "http://localhost:9105/149187842867983.html";
+            window.location.href = "http://localhost:9105/" + id + ".html?id=" + id;
 
-
+        }
 
     },
     //钩子函数 初始化了事件和

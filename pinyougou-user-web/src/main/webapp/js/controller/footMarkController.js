@@ -4,20 +4,26 @@
         pages: 15,
         pageNo: 1,
         list: [],
+        footMarkList: [],
         entity: {},
-        status: ['未审核', '已审核', '审核未通过', '已关闭'],
+        loginName: '',
         ids: [],
         searchEntity: {}
     },
     methods: {
+        //获取登录名
+        getName: function () {
+            axios.get('/login/name.shtml').then(function (response) {
+                app.loginName = response.data;
+            }).catch(function (error) {
+                console.log("1231312131321");
+            });
+        },
         searchList: function (curPage) {
-            axios.post('/seckillGoods/search.shtml?pageNo=' + curPage, this.searchEntity).then(function (response) {
+            axios.post('/user/search.shtml?pageNo=' + curPage, this.searchEntity).then(function (response) {
                 //获取数据
                 app.list = response.data.list;
-                for (var i = 0; i < app.list.length; i++) {
-                    app.list[i].startTime = app.getTime(app.list[i].startTime)
-                    app.list[i].endTime = app.getTime(app.list[i].endTime)
-                }
+
                 //当前页
                 app.pageNo = curPage;
                 //总页数
@@ -27,7 +33,7 @@
         //查询所有品牌列表
         findAll: function () {
             console.log(app);
-            axios.get('/seckillGoods/findAll.shtml').then(function (response) {
+            axios.get('/user/findAll.shtml').then(function (response) {
                 console.log(response);
                 //注意：this 在axios中就不再是 vue实例了。
                 app.list = response.data;
@@ -38,7 +44,7 @@
         },
         findPage: function () {
             var that = this;
-            axios.get('/seckillGoods/findPage.shtml', {
+            axios.get('/user/findPage.shtml', {
                 params: {
                     pageNo: this.pageNo
                 }
@@ -55,17 +61,19 @@
         },
         //该方法只要不在生命周期的
         add: function () {
-            axios.post('/seckillGoods/add.shtml', this.entity).then(function (response) {
+            axios.post('/user/add/' + this.smsCode + '.shtml', this.entity).then(function (response) {
                 console.log(response);
+                console.log(response.data.success);
                 if (response.data.success) {
-                    app.searchList(1);
+                    // app.searchList(1);
+                    window.location.href = "home-index.html";
                 }
             }).catch(function (error) {
                 console.log("1231312131321");
             });
         },
         update: function () {
-            axios.post('/seckillGoods/update.shtml', this.entity).then(function (response) {
+            axios.post('/user/update.shtml', this.entity).then(function (response) {
                 console.log(response);
                 if (response.data.success) {
                     app.searchList(1);
@@ -82,14 +90,14 @@
             }
         },
         findOne: function (id) {
-            axios.get('/seckillGoods/findOne/' + id + '.shtml').then(function (response) {
+            axios.get('/user/findOne/' + id + '.shtml').then(function (response) {
                 app.entity = response.data;
             }).catch(function (error) {
                 console.log("1231312131321");
             });
         },
         dele: function () {
-            axios.post('/seckillGoods/delete.shtml', this.ids).then(function (response) {
+            axios.post('/user/delete.shtml', this.ids).then(function (response) {
                 console.log(response);
                 if (response.data.success) {
                     app.searchList(1);
@@ -98,30 +106,22 @@
                 console.log("1231312131321");
             });
         },
-        updateStatus: function (status) {
-            axios.post('/seckillGoods/updateStatus.shtml?status=' + status, this.ids).then(resp => {
-                if (resp.data.success) {
-                    app.searchList(1);
-                }
+        findFootMark: function () {
+            axios.get('/user/findFootMark.shtml').then(resp => {
+                app.footMarkList = resp.data.markList;
+                var s = JSON.stringify(resp.data.markList);
+                console.log(s);
+                // console.log(resp.data.markList);
+                // console.log(app.footMarkList)
             })
-        },
-        getTime: function (t) {
-            var _time = new Date(t);
-            var year = _time.getFullYear();
-            var month = _time.getMonth() + 1;
-            var date = _time.getDate();
-            var hour = _time.getHours();
-            var minute = _time.getMinutes();
-            var second = _time.getSeconds();
-            return year + "-" + month + "-" + date + "    " + hour + ":" + minute + ":" + second;
         }
-
-
     },
     //钩子函数 初始化了事件和
     created: function () {
 
-        this.searchList(1);
+        // this.searchList(1);
+        this.getName();
+        this.findFootMark();
     }
 
 })
