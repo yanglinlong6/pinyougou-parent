@@ -6,7 +6,7 @@
         list: [],
         entity: {},
         ids: [],
-        status: ['未审核', '已审核', '审核未通过', '已关闭'],
+        status: ['', '已支付', '未支付', '已关闭'],
         searchEntity: {}
     },
     methods: {

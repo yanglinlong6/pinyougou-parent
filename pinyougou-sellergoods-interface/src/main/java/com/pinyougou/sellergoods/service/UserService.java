@@ -1,5 +1,7 @@
 package com.pinyougou.sellergoods.service;
 import java.util.List;
+import java.util.Map;
+
 import com.pinyougou.pojo.TbUser;
 
 import com.github.pagehelper.PageInfo;
@@ -30,4 +32,6 @@ public interface UserService extends CoreService<TbUser> {
 	PageInfo<TbUser> findPage(Integer pageNo, Integer pageSize, TbUser User);
 
     void updateStatus(Long[] ids, String status);
+
+	Map<String, Integer> findUserNum();
 }
