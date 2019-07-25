@@ -18,6 +18,7 @@
             </map>
         </property>
         <property name="messageListener" ref="messageListener"></property>
+
     </bean>
 
 </beans>

@@ -1,6 +1,5 @@
 package com.pinyougou.sellergoods.service;
 
-import java.util.Date;
 import java.util.List;
 import com.pinyougou.pojo.TbGoods;
 
@@ -8,7 +7,6 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.core.service.CoreService;
 import com.pinyougou.pojo.TbItem;
 import entity.Goods;
-import entity.Result;
 
 /**
  * 服务层接口
@@ -50,5 +48,5 @@ public interface GoodsService extends CoreService<TbGoods> {
      */
     List<TbItem> findTbItemListByIds(Long[] ids);
     
-    void setKill(String sellerId, Long[] ids);
+    void setKill(String startTime, String endTime, String sellerId, Long[] ids);
 }

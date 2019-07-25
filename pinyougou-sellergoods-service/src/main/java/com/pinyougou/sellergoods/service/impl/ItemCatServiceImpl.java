@@ -3,6 +3,7 @@ package com.pinyougou.sellergoods.service.impl;
 import java.util.Arrays;
 import java.util.List;
 
+import com.pinyougou.pojo.TbBrand;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -97,5 +98,28 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat> implements It
         example.createCriteria().andIn("id", Arrays.asList(ids));
         itemCatMapper.updateByExampleSelective(itemCat, example);
     }
-    
+
+    @Override
+    public void updateStatus(Long[] ids) {
+        TbItemCat cat = new TbItemCat();
+        cat.setStatus("1");
+
+        Example exmaple = new Example(TbBrand.class);
+        Example.Criteria criteria = exmaple.createCriteria();
+        criteria.andIn("id",Arrays.asList(ids));
+        itemCatMapper.updateByExampleSelective(cat,exmaple);
+
+    }
+
+
+
+
+    @Override
+    public void insertAll(List<TbItemCat> itemCats) {
+        for (TbItemCat itemCat : itemCats) {
+            itemCat.setStatus("0");
+            itemCatMapper.insert(itemCat);
+        }
+    }
+
 }

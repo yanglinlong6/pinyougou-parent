@@ -8,8 +8,8 @@
         ids: [],
         status: ['未审核', '已审核', '审核未通过', '已关闭'],
         itemCatList: [],
-        startKillTime: "",
-        endKillTime: "",
+        startTime: "",
+        endTime: "",
         searchEntity: {}
     },
     methods: {
@@ -111,7 +111,7 @@
             });
         },
         setKill: function () {
-            axios.post('/goods/setKill.shtml', this.ids).then(resp => {
+            axios.post('/goods/setKill.shtml?startTime=' + this.startTime + '&endTime=' + this.endTime, this.ids).then(resp => {
                 if (resp.data.success) {
                     window.location.href = "seckill_goods.html"
                 }

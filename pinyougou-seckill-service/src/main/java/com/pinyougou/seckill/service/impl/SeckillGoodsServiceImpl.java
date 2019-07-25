@@ -83,7 +83,6 @@ public class SeckillGoodsServiceImpl extends CoreServiceImpl<TbSeckillGoods> imp
                 criteria.andLike("introduction", "%" + seckillGoods.getIntroduction() + "%");
                 //criteria.andIntroductionLike("%"+seckillGoods.getIntroduction()+"%");
             }
-
         }
         List<TbSeckillGoods> all = seckillGoodsMapper.selectByExample(example);
         PageInfo<TbSeckillGoods> info = new PageInfo<TbSeckillGoods>(all);

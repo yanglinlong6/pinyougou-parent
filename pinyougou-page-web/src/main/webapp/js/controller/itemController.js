@@ -68,6 +68,15 @@ var app = new Vue({
                         alert(response.data.message);
                     }
                 })
+        },
+        addFootMark: function (id) {
+            axios.get('/item/addFootMark/' + id + '.shtml').then(resp => {
+                if (response.data.success) {
+                    console.log("添加足迹成功")
+                }
+            }).catch(error => {
+                console.log("添加足迹失败")
+            })
         }
     },
     created: function () {

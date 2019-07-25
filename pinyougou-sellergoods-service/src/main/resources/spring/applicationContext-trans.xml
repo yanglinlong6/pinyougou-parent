@@ -32,4 +32,5 @@
     <import resource="applicationContext-dao.xml"></import>
     <import resource="applicationContext-service.xml"></import>
     <import resource="applicationContext-redis.xml"></import>
+    <import resource="applicationContext-mq-sms-producer.xml"></import>
 </beans>

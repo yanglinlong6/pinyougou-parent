@@ -56,6 +56,12 @@
                         <button type="button" class="btn btn-default" title="审核通过" @click="updateStatus(1)"><i
                                 class="fa fa-check"></i> 审核通过
                         </button>
+                        <td>
+                            <input type="file" id="file"/>
+                            <button type="button" class="btn btn-default" title="导出" @click="upload()">
+                                导入
+                            </button>
+                        </td>
                         <button type="button" class="btn btn-default" title="驳回" @click="updateStatus(2)"><i
                                 class="fa fa-ban"></i> 驳回
                         </button>

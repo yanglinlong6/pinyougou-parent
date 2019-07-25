@@ -1,7 +1,9 @@
 package com.pinyougou.sellergoods.service.impl;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.pinyougou.pojo.TbTypeTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +128,14 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
         Example example = new Example(TbTypeTemplate.class);
         example.createCriteria().andIn("id", Arrays.asList(ids));
         userMapper.updateByExampleSelective(user, example);
+    }
+    
+    @Override
+    public Map<String, Integer> findUserNum() {
+        Map<String, Integer> map = new HashMap<>();
+        Integer userTotalNum = userMapper.findUserNum();
+        map.put("userTotalNum", userTotalNum);
+        return map;
     }
     
 }

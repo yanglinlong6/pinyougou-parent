@@ -4,11 +4,13 @@ package com.pinyougou.user.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.common.util.PhoneFormatCheckUtils;
+import com.pinyougou.pojo.TbOrder;
 import com.pinyougou.pojo.TbUser;
 import com.pinyougou.user.service.UserService;
 import entity.Error;
 import entity.Result;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * controller
@@ -148,5 +151,44 @@ public class UserController {
             e.printStackTrace();
             return new Result(true, "验证码发送失败");
         }
+    }
+
+    @RequestMapping(path = "/updateDetail")
+    /**
+    *@Description //更新用户个人信息
+    *@param  []
+    *@return entity.Result
+    *@time 2019-7-24 10:27
+    */
+    public Result updateDetail(@RequestBody TbUser tbUser){
+        try {
+            tbUser.setUpdated(new Date());
+            userService.updateByPrimaryKeySelective(tbUser);
+            return new Result(true,"更新成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"更新失败");
+
+        }
+    }
+
+    @RequestMapping(path = "/findByUserId")
+    /**
+    *@Description //用户的原始信息
+    *@param  []
+    *@return com.pinyougou.pojo.TbUser
+    *@time 2019-7-24 21:17
+    */
+    public TbUser findByUserId(){
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        TbUser tbUser = new TbUser();
+        tbUser.setUsername(userId);
+        return userService.selectOne(tbUser);
+    }
+
+    @RequestMapping("/findFootMark")
+    public Map findFootMark() {
+        return userService.findFootMark();
+
     }
 }

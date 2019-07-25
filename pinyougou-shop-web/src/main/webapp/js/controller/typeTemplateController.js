@@ -91,6 +91,16 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
+        },
+        updateStatus:function () {
+            axios.post('/typeTemplate/updateStatus.shtml',this.ids).then(function (response) {
+                console.log(response);
+                if(response.data.success){
+                    app.searchList(1);
+                }
+            }).catch(function (error) {
+                console.log("1231312131321");
+            });
         }
 
 

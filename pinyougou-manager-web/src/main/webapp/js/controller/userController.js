@@ -7,7 +7,8 @@
         entity: {},
         ids: [],
         status: ['', '正常', '已冻结'],
-        searchEntity: {}
+        searchEntity: {},
+        userNum: []
     },
     methods: {
         updateStatus: function (status) {
@@ -112,6 +113,11 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
+        },
+        findUserNum: function () {
+            axios.get('/user/findUserNum.shtml').then(resp => {
+                app.userNum = resp.data;
+            })
         }
 
 
@@ -120,7 +126,7 @@
     created: function () {
 
         this.searchList(1);
-
+        this.findUserNum();
     }
 
 })
