@@ -129,6 +129,7 @@ public class SpecificationServiceImpl extends CoreServiceImpl<TbSpecification> i
         }
     }
 
+
     @Override
     public void updateStatus(Long[] ids) {
         TbSpecification tbSpecification = new TbSpecification();

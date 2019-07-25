@@ -84,8 +84,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                {{ids}}
-
                 <tr v-for="entity in list">
                     {{entity}}
                     <td><input type="checkbox" :value="entity.id" v-model="ids"></td>

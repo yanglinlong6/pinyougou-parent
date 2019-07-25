@@ -101,6 +101,7 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand> implements BrandS
         }
     }
 
+
     @Override
     public void updateStatus(Long[] ids) {
         TbBrand tbBrand = new TbBrand();

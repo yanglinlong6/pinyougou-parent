@@ -39,5 +39,6 @@ public interface SpecificationService extends CoreService<TbSpecification> {
 
 	void update(Specification specification);
 
+
     void updateStatus(Long[] ids);
 }

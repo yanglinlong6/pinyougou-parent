@@ -33,5 +33,6 @@ public interface TypeTemplateService extends CoreService<TbTypeTemplate> {
 
 	List<Map> findSpecList(Long id);
 
+
     void updateStatus(Long[] ids);
 }
