@@ -30,10 +30,18 @@ public class TbBrand implements Serializable {
     @Column(name = "status")
     private String status;
 
+    /**
+     *
+     * @return status
+     */
     public String getStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(String status) {
         this.status = status;
     }

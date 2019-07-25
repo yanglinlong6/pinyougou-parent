@@ -134,6 +134,7 @@ public class SpecificationServiceImpl extends CoreServiceImpl<TbSpecification> i
         TbSpecification tbSpecification = new TbSpecification();
         tbSpecification.setStatus("1");
 
+
         Example exmaple = new Example(TbBrand.class);
         Example.Criteria criteria = exmaple.createCriteria();
         criteria.andIn("id",Arrays.asList(ids));

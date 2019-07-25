@@ -4,8 +4,9 @@
         pages:15,
         pageNo:1,
         list:[],
-        entity:{},
         ids:[],
+        entity:{specification:{},optionList:[{},{},{}]},
+        status:['未申请','申请中','已审核','已驳回'],
         searchEntity:{}
     },
     methods: {

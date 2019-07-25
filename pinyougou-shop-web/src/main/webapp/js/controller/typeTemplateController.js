@@ -6,6 +6,7 @@
         list:[],
         entity:{},
         ids:[],
+        status:['未申请','申请中','已审核','已驳回'],
         searchEntity:{}
     },
     methods: {
@@ -101,6 +102,20 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
+        },
+        jsonToString:function (list,key) {
+            //1.将字符串转成JSON对象
+            var jsonObj = JSON.parse(list); //[{}]
+            //2.循环遍历[{}]
+            var str="";
+            for(var i=0;i<jsonObj.length;i++){
+                str+=jsonObj[i][key]+",";//{id,text}
+            }
+            if(str.length>0){
+                str=str.substring(0,str.length-1)
+            }
+            //3.获取里面的text文本的值 通过逗号分隔 返回
+            return str;
         }
 
 
