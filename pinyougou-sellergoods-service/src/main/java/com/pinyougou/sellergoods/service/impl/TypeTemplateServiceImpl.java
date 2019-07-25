@@ -1,13 +1,14 @@
 package com.pinyougou.sellergoods.service.impl;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.pinyougou.mapper.TbBrandMapper;
+import com.pinyougou.mapper.TbSpecificationMapper;
 import com.pinyougou.mapper.TbSpecificationOptionMapper;
-import com.pinyougou.pojo.TbBrand;
-import com.pinyougou.pojo.TbItemCat;
-import com.pinyougou.pojo.TbSpecificationOption;
+import com.pinyougou.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -20,7 +21,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import com.pinyougou.mapper.TbTypeTemplateMapper;
-import com.pinyougou.pojo.TbTypeTemplate;
 
 import com.pinyougou.sellergoods.service.TypeTemplateService;
 
@@ -133,4 +133,153 @@ public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate> imp
         typeTemplateMapper.updateByExampleSelective(template,exmaple);
 
     }
+
+    @Override
+    public void insertAll(List<Map<String, String>> forExcel) {
+        for (Map<String, String> template : forExcel) {
+            TbTypeTemplate insert = new TbTypeTemplate();
+            insert.setName(template.get("name"));
+            insert.setSpecIds(getSpecIds(template.get("specIds")));
+            insert.setBrandIds(getBrandIds(template.get("brandIds")));
+            insert.setCustomAttributeItems(getCustomAttributeItems(template.get("customAttributeItems")));
+            insert.setStatus("0");
+            typeTemplateMapper.insert(insert);
+        }
+    }
+
+    @Autowired
+    private TbSpecificationMapper tbSpecificationMapper;
+
+    private String getSpecIds(String specIds){
+        StringBuilder builder = new StringBuilder();
+        if (specIds.contains(",")){
+            String[] split = specIds.split(",");
+            Long[] ids = new Long[split.length];
+            for (int i = 0; i < split.length; i++) {
+                ids[i] = Long.valueOf(split[i]);
+            }
+
+            Example example = new Example(TbSpecification.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andIn("id",Arrays.asList(ids));
+            List<TbSpecification> tbSpecifications = tbSpecificationMapper.selectByExample(example);
+
+
+            builder.append("[");
+            for (TbSpecification tbSpecification : tbSpecifications) {
+                builder.append("{").
+                        append("\"id\"").
+                        append(":").
+                        append(tbSpecification.getId()).
+                        append(",").
+                        append("\"text\"").
+                        append(":").
+                        append("\"").
+                        append(tbSpecification.getSpecName()).
+                        append("\"").
+                        append("}").
+                        append(",");
+            }
+            builder.replace(builder.length()-1, builder.length(), "]");
+        }else{
+            TbSpecification tbSpecification = tbSpecificationMapper.selectByPrimaryKey(Long.valueOf(specIds));
+            builder.append("[");
+            builder.append("{").
+                    append("\"id\"").
+                    append(":").
+                    append(tbSpecification.getId()).
+                    append(",").
+                    append("\"text\"").
+                    append(":").
+                    append("\"").
+                    append(tbSpecification.getSpecName()).
+                    append("\"").
+                    append("}").
+                    append("]");
+        }
+        return builder.toString();
+    }
+
+    @Autowired
+    private TbBrandMapper tbBrandMapper;
+
+    private String getBrandIds(String brandIds){
+        StringBuilder builder = new StringBuilder();
+        if (brandIds.contains(",")){
+            String[] split = brandIds.split(",");
+            Long[] ids = new Long[split.length];
+            for (int i = 0; i < split.length; i++) {
+                ids[i] = Long.valueOf(split[i]);
+            }
+
+            Example example = new Example(TbBrand.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andIn("id",Arrays.asList(ids));
+            List<TbBrand> tbBrands = tbBrandMapper.selectByExample(example);
+
+            builder.append("[");
+            for (TbBrand tbBrand : tbBrands) {
+                builder.append("{").
+                        append("\"id\"").
+                        append(":").
+                        append(tbBrand.getId()).
+                        append(",").
+                        append("\"text\"").
+                        append(":").
+                        append("\"").
+                        append(tbBrand.getName()).
+                        append("\"").
+                        append("}").
+                        append(",");
+            }
+            builder.replace(builder.length()-1, builder.length(), "]");
+        }else{
+            TbBrand tbBrand = tbBrandMapper.selectByPrimaryKey(Long.valueOf(brandIds));
+            builder.append("[");
+            builder.append("{").
+                    append("\"id\"").
+                    append(":").
+                    append(tbBrand.getId()).
+                    append(",").
+                    append("\"text\"").
+                    append(":").
+                    append("\"").
+                    append(tbBrand.getName()).
+                    append("\"").
+                    append("}").
+                    append("]");
+        }
+        return builder.toString();
+    }
+
+    private String getCustomAttributeItems(String customAttributeItems){
+        StringBuilder builder = new StringBuilder();
+        if (customAttributeItems.contains(",")){
+            String[] split = customAttributeItems.split(",");
+            builder.append("[");
+            for (String str : split) {
+                builder.append("{").
+                        append("\"text\"").
+                        append(":").
+                        append("\"").
+                        append(str).
+                        append("\"").
+                        append("}").
+                        append(",");
+            }
+            builder.replace(builder.length()-1, builder.length(), "]");
+        }else{
+            builder.append("[");
+            builder.append("{").
+                    append("\"text\"").
+                    append(":").
+                    append("\"").
+                    append(customAttributeItems).
+                    append("\"").
+                    append("}").
+                    append("]");
+        }
+        return builder.toString();
+    }
+
 }

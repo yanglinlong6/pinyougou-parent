@@ -1,5 +1,8 @@
 package com.pinyougou.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,113 +14,115 @@ public class TbSeckillGoods implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     /**
      * spu ID
      */
     @Column(name = "goods_id")
     private Long goodsId;
-
+    
     /**
      * sku ID
      */
     @Column(name = "item_id")
     private Long itemId;
-
+    
     /**
      * 标题
      */
     @Column(name = "title")
     private String title;
-
+    
     /**
      * 商品图片
      */
     @Column(name = "small_pic")
     private String smallPic;
-
+    
     /**
      * 原价格
      */
     @Column(name = "price")
     private BigDecimal price;
-
+    
     /**
      * 秒杀价格
      */
     @Column(name = "cost_price")
     private BigDecimal costPrice;
-
+    
     /**
      * 商家ID
      */
     @Column(name = "seller_id")
     private String sellerId;
-
+    
     /**
      * 添加日期
      */
     @Column(name = "create_time")
     private Date createTime;
-
+    
     /**
      * 审核日期
      */
     @Column(name = "check_time")
     private Date checkTime;
-
+    
     /**
      * 审核状态
      */
     @Column(name = "status")
     private String status;
-
+    
     /**
      * 开始时间
      */
     @Column(name = "start_time")
+    // @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
-
+    
     /**
      * 结束时间
      */
     @Column(name = "end_time")
+    // @DateTimeFormat(pattern = "yyyy-MM-dd ")
     private Date endTime;
-
+    
     /**
-     * 秒杀商品库存数量 
+     * 秒杀商品库存数量
      */
     @Column(name = "num")
     private Integer num;
-
+    
     /**
      * 剩余库存数
      */
     @Column(name = "stock_count")
     private Integer stockCount;
-
+    
     /**
      * 描述
      */
     @Column(name = "introduction")
     private String introduction;
-
+    
     private static final long serialVersionUID = 1L;
-
+    
     /**
      * @return id
      */
     public Long getId() {
         return id;
     }
-
+    
     /**
      * @param id
      */
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     /**
      * 获取spu ID
      *
@@ -126,7 +131,7 @@ public class TbSeckillGoods implements Serializable {
     public Long getGoodsId() {
         return goodsId;
     }
-
+    
     /**
      * 设置spu ID
      *
@@ -135,7 +140,7 @@ public class TbSeckillGoods implements Serializable {
     public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
     }
-
+    
     /**
      * 获取sku ID
      *
@@ -144,7 +149,7 @@ public class TbSeckillGoods implements Serializable {
     public Long getItemId() {
         return itemId;
     }
-
+    
     /**
      * 设置sku ID
      *
@@ -153,7 +158,7 @@ public class TbSeckillGoods implements Serializable {
     public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
-
+    
     /**
      * 获取标题
      *
@@ -162,7 +167,7 @@ public class TbSeckillGoods implements Serializable {
     public String getTitle() {
         return title;
     }
-
+    
     /**
      * 设置标题
      *
@@ -171,7 +176,7 @@ public class TbSeckillGoods implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
-
+    
     /**
      * 获取商品图片
      *
@@ -180,7 +185,7 @@ public class TbSeckillGoods implements Serializable {
     public String getSmallPic() {
         return smallPic;
     }
-
+    
     /**
      * 设置商品图片
      *
@@ -189,7 +194,7 @@ public class TbSeckillGoods implements Serializable {
     public void setSmallPic(String smallPic) {
         this.smallPic = smallPic;
     }
-
+    
     /**
      * 获取原价格
      *
@@ -198,7 +203,7 @@ public class TbSeckillGoods implements Serializable {
     public BigDecimal getPrice() {
         return price;
     }
-
+    
     /**
      * 设置原价格
      *
@@ -207,7 +212,7 @@ public class TbSeckillGoods implements Serializable {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-
+    
     /**
      * 获取秒杀价格
      *
@@ -216,7 +221,7 @@ public class TbSeckillGoods implements Serializable {
     public BigDecimal getCostPrice() {
         return costPrice;
     }
-
+    
     /**
      * 设置秒杀价格
      *
@@ -225,7 +230,7 @@ public class TbSeckillGoods implements Serializable {
     public void setCostPrice(BigDecimal costPrice) {
         this.costPrice = costPrice;
     }
-
+    
     /**
      * 获取商家ID
      *
@@ -234,7 +239,7 @@ public class TbSeckillGoods implements Serializable {
     public String getSellerId() {
         return sellerId;
     }
-
+    
     /**
      * 设置商家ID
      *
@@ -243,7 +248,7 @@ public class TbSeckillGoods implements Serializable {
     public void setSellerId(String sellerId) {
         this.sellerId = sellerId;
     }
-
+    
     /**
      * 获取添加日期
      *
@@ -252,7 +257,7 @@ public class TbSeckillGoods implements Serializable {
     public Date getCreateTime() {
         return createTime;
     }
-
+    
     /**
      * 设置添加日期
      *
@@ -261,7 +266,7 @@ public class TbSeckillGoods implements Serializable {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
-
+    
     /**
      * 获取审核日期
      *
@@ -270,7 +275,7 @@ public class TbSeckillGoods implements Serializable {
     public Date getCheckTime() {
         return checkTime;
     }
-
+    
     /**
      * 设置审核日期
      *
@@ -279,7 +284,7 @@ public class TbSeckillGoods implements Serializable {
     public void setCheckTime(Date checkTime) {
         this.checkTime = checkTime;
     }
-
+    
     /**
      * 获取审核状态
      *
@@ -288,7 +293,7 @@ public class TbSeckillGoods implements Serializable {
     public String getStatus() {
         return status;
     }
-
+    
     /**
      * 设置审核状态
      *
@@ -297,7 +302,7 @@ public class TbSeckillGoods implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
-
+    
     /**
      * 获取开始时间
      *
@@ -306,7 +311,7 @@ public class TbSeckillGoods implements Serializable {
     public Date getStartTime() {
         return startTime;
     }
-
+    
     /**
      * 设置开始时间
      *
@@ -315,7 +320,7 @@ public class TbSeckillGoods implements Serializable {
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
-
+    
     /**
      * 获取结束时间
      *
@@ -324,7 +329,7 @@ public class TbSeckillGoods implements Serializable {
     public Date getEndTime() {
         return endTime;
     }
-
+    
     /**
      * 设置结束时间
      *
@@ -333,25 +338,25 @@ public class TbSeckillGoods implements Serializable {
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
-
+    
     /**
-     * 获取秒杀商品库存数量 
+     * 获取秒杀商品库存数量
      *
-     * @return num - 秒杀商品库存数量 
+     * @return num - 秒杀商品库存数量
      */
     public Integer getNum() {
         return num;
     }
-
+    
     /**
-     * 设置秒杀商品库存数量 
+     * 设置秒杀商品库存数量
      *
-     * @param num 秒杀商品库存数量 
+     * @param num 秒杀商品库存数量
      */
     public void setNum(Integer num) {
         this.num = num;
     }
-
+    
     /**
      * 获取剩余库存数
      *
@@ -360,7 +365,7 @@ public class TbSeckillGoods implements Serializable {
     public Integer getStockCount() {
         return stockCount;
     }
-
+    
     /**
      * 设置剩余库存数
      *
@@ -369,7 +374,7 @@ public class TbSeckillGoods implements Serializable {
     public void setStockCount(Integer stockCount) {
         this.stockCount = stockCount;
     }
-
+    
     /**
      * 获取描述
      *
@@ -378,7 +383,7 @@ public class TbSeckillGoods implements Serializable {
     public String getIntroduction() {
         return introduction;
     }
-
+    
     /**
      * 设置描述
      *

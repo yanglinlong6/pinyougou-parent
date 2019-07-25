@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.core.service.CoreService;
 import com.pinyougou.pojo.TbUser;
 
+import java.util.Map;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -32,4 +34,8 @@ public interface UserService extends CoreService<TbUser> {
 	public void createSmsCode(String phone);
 
 	boolean checkSmsCode(String phone, String code);
+
+    Map findFootMark();
+
+
 }

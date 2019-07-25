@@ -60,19 +60,22 @@ public class PayController {
                 count++;
 
                 if (count >= 16) {
-                    result = new Result(false, "支付超时");
+                    result=new Result(false,"支付超时");
                     //关闭微信订单
                     Map map = weixinPayService.closePay(out_trade_no);
-                    if ("ORDERPAID".equals(map.get("err_code"))) {
-                        //已经支付则更新入库
-                        orderService.updateOrderStatus(resultMap.get("transaction_id"), userId);
-                    } else if ("SUCCESS".equals(resultMap.get("result_code")) || "ORDERCLOSED".equals(resultMap.get("err_code"))) {
+
+                    if ("SUCCESS".equals(map.get("result_code"))|| "ORDERCLOSED".equals(map.get("err_code"))){
                         //删除预订单
                         orderService.deleteOrder(userId);
-                    } else {
-                        System.out.println("由于微信端错误");
                     }
 
+                    if ("ORDERPAID".equals(map.get("err_code"))){
+                        //已经支付则更新入库
+                        orderService.updateOrderStatus(resultMap.get("transaction_id"),userId);
+                        return new Result(true,"订单已支付");
+                    }else{
+                        System.out.println("由于微信端错误 ---- ");
+                    }
                     break;
                 }
 

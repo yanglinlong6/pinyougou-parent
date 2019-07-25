@@ -1,4 +1,5 @@
 package com.pinyougou.sellergoods.service;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -35,4 +36,9 @@ public interface TypeTemplateService extends CoreService<TbTypeTemplate> {
 
 
     void updateStatus(Long[] ids);
+
+
+	void insertAll(List<Map<String, String>> forExcel);
+
+
 }

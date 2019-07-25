@@ -50,6 +50,7 @@
         <module>pinyougou-seckill-interface</module>
         <module>pinyougou-seckill-service</module>
         <module>pinyougou-seckill-web</module>
+        <module>itheima-fahuo</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
