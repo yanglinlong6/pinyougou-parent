@@ -196,7 +196,13 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
-        }
+        },
+        // findDetailsPage:function (id) {
+        //     axios.get('/item/findDetailsPage/' + id + '.shtml').then(resp=>{
+        //         window.location.href = "http://localhost:9107/cart.html";
+        //     })
+        // }
+
 
 
     },

@@ -1,5 +1,6 @@
 package com.pinyougou.shop.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.pinyougou.sellergoods.service.SeckillGoodsService;
@@ -117,4 +118,16 @@ public class OrderController {
         return orderService.findPage(pageNo, pageSize, order);
     }
     
+    @RequestMapping("/deliverGoods")
+    public Result deliverGoods(@RequestBody Long[] ids) {
+        try {
+            orderService.deliverGoods(ids);
+            System.out.println(Arrays.asList(ids));
+            return new Result(true, "发货成功");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "发货失败");
+        }
+    }
 }

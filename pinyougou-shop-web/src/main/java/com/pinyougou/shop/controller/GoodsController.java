@@ -6,6 +6,7 @@ import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.sellergoods.service.GoodsService;
 import entity.Goods;
 import entity.Result;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -119,11 +120,15 @@ public class GoodsController {
     }
     
     @RequestMapping("/setKill")
-    public Result setKill(@RequestBody Long[] ids) {
+    public Result setKill(@RequestBody Long[] ids,
+        @RequestParam(value = "startTime", defaultValue = "2019-02-03", required = true) String startTime,
+        @RequestParam(value = "endTime", defaultValue = "2019-02-04", required = true) String endTime) {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         
         try {
-            goodsService.setKill(sellerId, ids);
+            System.out.println(startTime);
+            System.out.println(endTime);
+            goodsService.setKill(startTime, endTime, sellerId, ids);
             return new Result(true, "设置成功");
         }
         catch (Exception e) {

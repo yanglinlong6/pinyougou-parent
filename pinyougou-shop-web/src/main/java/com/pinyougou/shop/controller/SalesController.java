@@ -1,7 +1,7 @@
 package com.pinyougou.shop.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.pinyougou.sellergoods.service.OrderService;
+import com.pinyougou.sellergoods.service.SalesService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +18,7 @@ import java.util.*;
 @RequestMapping("/sales")
 public class SalesController {
     @Reference
-    private OrderService orderService;
+    private SalesService salesService;
 
     /**
      * 横坐标--时间集合
@@ -33,7 +33,7 @@ public class SalesController {
         //1获取当前商家
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         //2获取service层传递过来的map 但是此时key为没有顺序的
-        Map<String, Double> salesReport = orderService.getSalesReport(sellerId, beginTime, endTime);
+        Map<String, Double> salesReport = salesService.getSalesReport(sellerId, beginTime, endTime);
         //3所以需要将key进行排序--定义方法
         salesReport=sortMapByKey(salesReport);
         List<String> keyList=new ArrayList<>(); //定义存储的时间集合-横坐标
@@ -49,14 +49,13 @@ public class SalesController {
     }
 
     /**
-     * 使用TreeMap
+     * 使用TreeMap进行排序
      * @param salesReport
      * @return
      */
     private Map<String, Double> sortMapByKey(Map<String, Double> salesReport) {
 
         if (salesReport==null||salesReport.isEmpty()){
-
             return null;
         }
         /**

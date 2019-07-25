@@ -5,7 +5,9 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.common.pojo.MessageInfo;
+import com.pinyougou.common.util.ImportExcel;
 import com.pinyougou.page.service.ItemPageService;
+import com.pinyougou.pojo.TbBrand;
 import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.search.service.ItemSearchService;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -160,6 +163,21 @@ public class GoodsController {
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "更新失败");
+        }
+    }
+
+
+    @Autowired
+    ImportExcel importExcel;
+
+    @RequestMapping("/importExcel")
+    public void importExcel(HttpServletResponse response){
+        try {
+            System.out.println("执行导出请求");
+            List<TbGoods> tbGoods = goodsService.selectAll();
+            importExcel.importExcel(tbGoods, TbGoods.class, "TbGoods.xls",response);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -109,4 +109,17 @@ public class ItemCatController {
 	     return itemCatService.findByParentId(parentId);
 
 	}
+
+	@RequestMapping("/updateStatus")
+	public Result updateStatus(@RequestBody Long[] ids){
+		try {
+			long Status=1;
+			itemCatService.updateStatus(ids);
+			return new Result(true, "删除成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "删除失败");
+		}
+
+	}
 }

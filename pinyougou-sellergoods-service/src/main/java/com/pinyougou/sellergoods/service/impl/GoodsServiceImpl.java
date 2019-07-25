@@ -1,6 +1,7 @@
 package com.pinyougou.sellergoods.service.impl;
 
-import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -8,11 +9,8 @@ import java.util.Map;
 
 import com.pinyougou.mapper.*;
 import com.pinyougou.pojo.*;
-import com.pinyougou.sellergoods.service.GoodsDescService;
 import com.pinyougou.sellergoods.service.SeckillGoodsService;
-import com.sun.tools.internal.xjc.model.nav.EagerNClass;
 import entity.Goods;
-import entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -21,7 +19,6 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import com.pinyougou.core.service.CoreServiceImpl;
 
-import org.springframework.web.bind.annotation.RequestMapping;
 import tk.mybatis.mapper.entity.Example;
 
 import com.pinyougou.sellergoods.service.GoodsService;
@@ -274,7 +271,7 @@ public class GoodsServiceImpl extends CoreServiceImpl<TbGoods> implements GoodsS
     }
     
     @Override
-    public void setKill(String sellerId, Long[] ids) {
+    public void setKill(String startTime, String endTime, String sellerId, Long[] ids) {
         for (Long id : ids) {
             System.out.println(id);
             TbSeckillGoods seckillGoods = new TbSeckillGoods();
@@ -283,7 +280,8 @@ public class GoodsServiceImpl extends CoreServiceImpl<TbGoods> implements GoodsS
             Long itemId = tbGoods.getDefaultItemId();
             seckillGoods.setItemId(itemId);
             TbItem tbItem = itemMapper.selectByPrimaryKey(itemId);
-            seckillGoods.setTitle(tbItem.getTitle());
+            seckillGoods.setTitle(tbGoods.getGoodsName());
+            // seckillGoods.setTitle(tbItem.getTitle());
             seckillGoods.setSmallPic(tbGoods.getSmallPic());
             seckillGoods.setPrice(tbGoods.getPrice());
             seckillGoods.setCostPrice(tbItem.getCostPirce());
@@ -291,8 +289,21 @@ public class GoodsServiceImpl extends CoreServiceImpl<TbGoods> implements GoodsS
             seckillGoods.setCreateTime(new Date());
             seckillGoods.setCheckTime(new Date());
             seckillGoods.setStatus("0");
-            seckillGoods.setStartTime(new Date());
-            seckillGoods.setEndTime(new Date());
+            
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Date starttime = null;
+            Date endtime = null;
+            try {
+                starttime = df.parse(startTime);
+                endtime = df.parse(endTime);
+            }
+            catch (ParseException e) {
+                e.printStackTrace();
+            }
+            System.out.println(starttime);
+            System.out.println(endtime);
+            seckillGoods.setStartTime(starttime);
+            seckillGoods.setEndTime(endtime);
             seckillGoods.setNum(tbItem.getNum());
             seckillGoods.setStockCount(tbItem.getStockCount());
             TbGoodsDesc goodsDesc = goodsDescMapper.selectByPrimaryKey(id);

@@ -5,7 +5,7 @@
         pageNo: 1,
         list: [],
         entity: {},
-        status: ['未审核', '已审核', '审核未通过', '已关闭'],
+        status: ['', '已支付', '未支付'],
         ids: [],
         searchEntity: {}
     },
@@ -106,14 +106,14 @@
             })
         },
         getTime: function (t) {
-            var _time = new Date(t);
-            var year = _time.getFullYear();
-            var month = _time.getMonth() + 1;
-            var date = _time.getDate();
-            var hour = _time.getHours();
-            var minute = _time.getMinutes();
-            var second = _time.getSeconds();
-            return year + "-" + month + "-" + date + "    " + hour + ":" + minute + ":" + second;
+                var _time = new Date(t);
+                var year = _time.getFullYear();
+                var month = _time.getMonth() + 1;
+                var date = _time.getDate();
+                var hour = _time.getHours();
+                var minute = _time.getMinutes();
+                var second = _time.getSeconds();
+                return year + "-" + month + "-" + date + "    " + hour + ":" + minute + ":" + second;
         }
 
 

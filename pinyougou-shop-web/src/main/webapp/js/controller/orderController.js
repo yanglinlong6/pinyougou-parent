@@ -7,15 +7,30 @@
         entity: {},
         ids: [],
         payType: ['', '在线支付', '货到付款'],
-        status: ['未审核', '已审核', '审核未通过', '已关闭'],
+        status: ['', '未付款', '已付款', '未发货', '已发货', '交易成功', '交易关闭', '待评价'],
         searchEntity: {}
     },
     methods: {
+        deliverGoods: function () {
+            axios.post('/order/deliverGoods.shtml', this.ids).then(resp => {
+                if (resp.data.success) {
+                    app.searchList(1);
+                    // alert("已经发货成功")
+                }
+            }).catch(error => {
+                console.log("1231312131321");
+            })
+        },
         searchList: function (curPage) {
             axios.post('/order/search.shtml?pageNo=' + curPage, this.searchEntity).then(function (response) {
                 //获取数据
                 app.list = response.data.list;
-
+                for (var i = 0; i < app.list.length; i++) {
+                    if (app.list[i].consignTime !== undefined) {
+                        app.list[i].consignTime = app.getTime(app.list[i].consignTime)
+                    }
+                    // app.list[i].consignTime = app.getTime(app.list[i].consignTime)
+                }
                 //当前页
                 app.pageNo = curPage;
                 //总页数
@@ -95,8 +110,17 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
+        },
+        getTime: function (t) {
+            var _time = new Date(t);
+            var year = _time.getFullYear();
+            var month = _time.getMonth() + 1;
+            var date = _time.getDate();
+            var hour = _time.getHours();
+            var minute = _time.getMinutes();
+            var second = _time.getSeconds();
+            return year + "-" + month + "-" + date + "    " + hour + ":" + minute + ":" + second;
         }
-
 
     },
     //钩子函数 初始化了事件和
