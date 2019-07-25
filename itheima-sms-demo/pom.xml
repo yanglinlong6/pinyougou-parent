@@ -34,7 +34,7 @@
         <!--引入dao-->
         <dependency>
             <groupId>com.pinyougou</groupId>
-            <artifactId>pingyougou_dao</artifactId>
+            <artifactId>pinyougou-dao</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

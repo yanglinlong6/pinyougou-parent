@@ -198,7 +198,7 @@ public class UserController {
     }
 
     @RequestMapping("/findFootMark")
-    public Map findFootMark() {
+    public Map<String, Object> findFootMark() {
         return userService.findFootMark();
 
     }

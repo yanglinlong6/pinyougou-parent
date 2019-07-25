@@ -1,7 +1,6 @@
 var app = new Vue({
     el:"#app",
     data:{
-        address:{notes:""},
         userDetail:{headPic:""},
         year:"",
         month:"",
@@ -46,8 +45,105 @@ var app = new Vue({
         getOriginInfo:function () {
             axios.get("/user/findByUserId.shtml").then(function (response) {
                 app.userDetail = response.data
+                var timeStr = app.userDetail.birthday.toLocaleString();
+                var splits = timeStr.split("-");
+                splits[2] = splits[2].substring(0,2)
+               /* var a = $("#select_year2").html()
+                alert( $("#select_year2").html())*/
+               /* $("#select_year2 option[value=1993]").attr("selected","selected")
+                $("#select_month2 option[value=6]").attr("selected","selected")*/
+                /*$("#select_month2").attr("value",11)*/
+                app.year = splits[0]
+                if (splits[1].startsWith(0)) {
+                    splits[1] = splits[1].replace("0","")
+                }
+                app.month = splits[1]
+                var month = splits[1]
+                if (splits[2].startsWith(0)) {
+                    splits[2] = splits[2].replace("0","")
+                }
+                app.day = splits[2]
+
+                var dayCount = 0;
+                switch (parseInt(app.month)) {
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        dayCount = 31;
+                        break;
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        dayCount = 30;
+                        break;
+                    case 2:
+                        dayCount = 28;
+                        if ((app.year % 4 == 0) && (app.year % 100 != 0) || (app.year % 400 == 0)) {
+                            dayCount = 29;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                var dayStr=""
+                for (var i = 1; i <= dayCount; i++) {
+                    var sed = app.day==i?"selected":"";
+                     dayStr =dayStr+ "<option value=\"" + i + "\" "+sed+">" + i + "</option>";
+
+
+                }
+                $("#select_day2").html(dayStr);
             })
+        },
+        /*buildDay:function () {
+            if ( $("#select_year2").val() == 0 || $("#select_month2").val() == 0) {
+                // 未选择年份或者月份
+                $DaySelector.html(str);
+            } else {
+                $DaySelector.html(str);
+                var year = parseInt($("#select_year2").val());
+                var month = parseInt($MonthSelector.val());
+                var dayCount = 0;
+                switch (month) {
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        dayCount = 31;
+                        break;
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        dayCount = 30;
+                        break;
+                    case 2:
+                        dayCount = 28;
+                        if ((year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0)) {
+                            dayCount = 29;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                var daySel = $DaySelector.attr("rel");
+                for (var i = 1; i <= dayCount; i++) {
+                    var sed = daySel==i?"selected":"";
+                    var dayStr = "<option value=\"" + i + "\" "+sed+">" + i + "</option>";
+                    $DaySelector.append(dayStr);
+                }
+            }
         }
+*/
     },
     created:function () {
         this.getOriginInfo();

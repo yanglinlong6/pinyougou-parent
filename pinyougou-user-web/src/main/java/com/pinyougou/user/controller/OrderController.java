@@ -18,6 +18,7 @@ public class OrderController {
     @RequestMapping(path = "/getAllOrder")
     public List<TbOrder> getAllOrder(){
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-        return orderService.getAllOrder(userId);
+        List<TbOrder> tbOrderList = orderService.getAllOrder(userId);
+        return tbOrderList;
     }
 }

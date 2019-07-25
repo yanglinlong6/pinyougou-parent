@@ -48,11 +48,11 @@
 
     <!--第二步：springmvc.xml配置类型转换器-->
     <!--<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">-->
-        <!--<property name="converters">-->
-            <!--<set>-->
-                <!--<bean class="com.pinyougou.manager.converter.StringToDateConverter"></bean>-->
-            <!--</set>-->
-        <!--</property>-->
+    <!--<property name="converters">-->
+    <!--<set>-->
+    <!--<bean class="com.pinyougou.manager.converter.StringToDateConverter"></bean>-->
+    <!--</set>-->
+    <!--</property>-->
     <!--</bean>-->
     <import resource="spring-security.xml"></import>
     <import resource="spring-producer.xml"></import>
@@ -62,7 +62,7 @@
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="307200000"/>
-        <property name="maxInMemorySize" value="4096" />
+        <property name="maxInMemorySize" value="4096"/>
     </bean>
 
 

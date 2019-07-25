@@ -62,6 +62,9 @@ public class TbOrderItem implements Serializable {
     @Column(name = "seller_id")
     private String sellerId;
 
+    @Transient
+    private String spec;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -234,5 +237,13 @@ public class TbOrderItem implements Serializable {
      */
     public void setSellerId(String sellerId) {
         this.sellerId = sellerId;
+    }
+
+    public String getSpec() {
+        return spec;
+    }
+
+    public void setSpec(String spec) {
+        this.spec = spec;
     }
 }

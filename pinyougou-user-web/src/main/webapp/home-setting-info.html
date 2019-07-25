@@ -15,12 +15,12 @@
 	<script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
 	<script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
 	<script type="text/javascript" src="js/widget/nav.js"></script>
-	<script type="text/javascript" src="js/plugins/birthday/birthday.js"></script>
+
 	<script type="text/javascript" src="js/plugins/citypicker/distpicker.data.js"></script>
 	<script type="text/javascript" src="js/plugins/citypicker/distpicker.js"></script>
 	<script type="text/javascript" src="js/plugins/upload/uploadPreview.js"></script>
 	<script type="text/javascript" src="js/pages/main.js"></script>
-
+	<script type="text/javascript" src="js/plugins/birthday/birthday.js"></script>
 </head>
 
 <body>
@@ -192,19 +192,19 @@
                                         <label for="inputGender" class="control-label">性别：</label>
                                         <div class="controls">
                                             <label data-toggle="radio" class="radio-pretty inline">
-                                            <input type="radio" name="sex" value="1" v-model="userDetail.sex" checked="checked"><span>男</span>
+                                            <input type="radio" name="sex" value="1" v-model="userDetail.sex" :checked="userDetail.sex==1?'checked':''"><span>男</span>
                                        		</label>
                                             <label data-toggle="radio" class="radio-pretty inline">
-                                            <input type="radio" name="sex" value="2" v-model="userDetail.sex"><span>女</span>
+                                            <input type="radio" name="sex" value="2" v-model="userDetail.sex" :checked="userDetail.sex==2?'checked':''"><span>女</span>
                                         	</label>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label for="inputPassword" class="control-label">生日：</label>
-                                        <div class="controls">
+                                        <div class="controls">{{year}}{{month}}{{day}}
                                             <select id="select_year2" v-model="year"></select>年
-                                            <select id="select_month2" v-model="month"></select>月
-                                            <select id="select_day2" v-model="day"></select>日
+                                            <select id="select_month2" v-model="month" ></select>月
+                                            <select id="select_day2"  v-model="day"></select>日
                                         </div>
                                     </div>
 
@@ -404,6 +404,7 @@
 <script src="plugins/vue/vue.js"></script>
 <script src="plugins/axios/axios.js"></script>
 <script src="js/controller/userDetailController.js"></script>
+
 <script>
 	$(function() {
 		$.ms_DatePicker({

@@ -98,6 +98,7 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat> implements It
         itemCatMapper.updateByExampleSelective(itemCat, example);
     }
 
+
     @Override
     public void updateStatus(Long[] ids) {
         TbItemCat cat = new TbItemCat();
