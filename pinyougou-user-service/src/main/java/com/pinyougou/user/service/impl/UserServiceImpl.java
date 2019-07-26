@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.core.service.CoreServiceImpl;
+import com.pinyougou.mapper.TbItemMapper;
 import com.pinyougou.mapper.TbUserMapper;
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbUser;
 import com.pinyougou.user.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +18,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.*;
 import java.lang.reflect.MalformedParameterizedTypeException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +47,9 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
     @Value("${sign_name}")
     private String signName;
     
+    @Autowired
+    private TbItemMapper itemMapper;
+
     @Autowired
     public UserServiceImpl(TbUserMapper userMapper) {
         super(userMapper, TbUser.class);
@@ -164,8 +171,21 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
     }
     
     @Override
-    public Map findFootMark() {
-        return null;
+    public Map<String, Object> findFootMark() {
+        List list = redisTemplate.boundHashOps("FOOTMARK_REDIS_KEY").values();
+        Map<String, Object> map = new HashMap<>();
+        List<TbItem> markList = new ArrayList<>();
+        for (Object o : list) {
+            TbItem item = new TbItem();
+            item.setId((Long)o);
+            TbItem tbItem = itemMapper.selectByPrimaryKey(item);
+            System.out.println(tbItem);
+            markList.add(tbItem);
+        }
+        map.put("markList", markList);
+        System.out.println(list);
+        System.out.println(map);
+        return map;
         
     }
 }

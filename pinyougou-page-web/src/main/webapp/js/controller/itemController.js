@@ -2,6 +2,7 @@ var app = new Vue({
     el: "#app",
     data: {
         num: 1,
+        itemId: '',
         sku: skuList[0],
         //{"网络":"移动3G"}
         specificationItems: JSON.parse(JSON.stringify(skuList[0].spec))   //用于存储当前点击到的规格的数据
@@ -70,8 +71,9 @@ var app = new Vue({
                 })
         },
         addFootMark: function (id) {
-            axios.get('/item/addFootMark/' + id + '.shtml').then(resp => {
-                if (response.data.success) {
+            axios.post('http://localhost:9104/itemSearch/addFootMark.shtml?id=' + id, { withCredentials: true }).then(resp => {
+                alert("发送请求")
+                if (resp.data.success) {
                     console.log("添加足迹成功")
                 }
             }).catch(error => {
@@ -80,6 +82,11 @@ var app = new Vue({
         }
     },
     created: function () {
+        let urlParamObject = this.getUrlParam();
+        if (urlParamObject.id) {
+            this.itemId = urlParamObject.id;
+        }
+        this.addFootMark(this.itemId);
 
     }
 });

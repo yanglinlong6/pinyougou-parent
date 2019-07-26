@@ -1,5 +1,6 @@
 package com.pinyougou.cart.service;
 
+import com.pinyougou.pojo.TbItem;
 import entity.Cart;
 
 import java.util.List; /**
@@ -41,4 +42,10 @@ public interface CartService {
      * @return
      */
     List<Cart> mergeCartList(List<Cart> cookieCartList, List<Cart> redisList);
+
+
+    void addGoodsToCollectionList(Long itemId,String name);
+
+    List<TbItem> selectCollect();
+
 }

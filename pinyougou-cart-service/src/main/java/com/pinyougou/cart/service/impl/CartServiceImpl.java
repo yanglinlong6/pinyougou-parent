@@ -136,6 +136,28 @@ public class CartServiceImpl implements CartService {
         return redisList;
     }
 
+    /**
+     * 添加我的收藏
+     * @param itemId
+     */
+    @Override
+    public void addGoodsToCollectionList(Long itemId,String name) {
+
+        //通过id查询商品
+        TbItem tbItem = itemMapper.selectByPrimaryKey(itemId);
+        // 存入redis
+        redisTemplate.boundHashOps("userCollect").put(itemId,tbItem);
+    }
+
+    /**
+     * 查询
+     * @return
+     */
+    @Override
+    public List<TbItem> selectCollect() {
+        return redisTemplate.boundHashOps("userCollect").values();
+    }
+
     private TbOrderItem searchItemByItemId(List<TbOrderItem> orderItemList, Long itemId) {
         for (TbOrderItem orderItem : orderItemList) {
 

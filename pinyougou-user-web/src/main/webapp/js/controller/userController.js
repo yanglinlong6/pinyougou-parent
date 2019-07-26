@@ -4,13 +4,14 @@
         pages: 15,
         pageNo: 1,
         list: [],
-        footMarkList: [],
         entity: {},
         loginName: '',
         ids: [],
         smsCode: '',
         repwd: '',
-        searchEntity: {}
+        searchEntity: {},
+        userOrderList:[],
+        statusList:["","未付款","已付款","未发货","已发货","交易成功","交易关闭","待评价"],
     },
     methods: {
         //获取登录名
@@ -138,15 +139,24 @@
                 console.log("1231312131321");
             });
         },
+        findAllOrder:function () {
+            axios.get("/order/getAllOrder.shtml").then(function (response) {
+                app.userOrderList = response.data;
+            })
+        },
         findFootMark: function () {
             axios.get('/user/findFootMark.shtml').then(resp => {
                 app.footMarkList = app.data.footMarkList;
             })
+        },
+        payNow:function (orderId) {
+            axios.get("/")
         }
     },
     //钩子函数 初始化了事件和
     created: function () {
 
+        this.findAllOrder();
         // this.searchList(1);
         this.getName();
     }

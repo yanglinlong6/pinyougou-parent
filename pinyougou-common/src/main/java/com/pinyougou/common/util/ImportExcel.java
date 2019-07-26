@@ -1,6 +1,9 @@
 package com.pinyougou.common.util;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -9,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -62,6 +66,7 @@ public class ImportExcel {
         outputStream.close();
     }
 
+
     /**
      * @param file  Excle文件 注意 此处未做判断
      * @param type  数据库对应的POJO对象
@@ -84,11 +89,15 @@ public class ImportExcel {
         for (Method method : methods) {
             if (method.getName().matches("set\\w+")) {
                 methodMap.put(method.getName().replace("set", "").toLowerCase(), method);
-            }
-            ;
+            };
         }
 
-        Workbook workbook = new XSSFWorkbook(file);
+        Workbook workbook;
+        try{
+            workbook  = new XSSFWorkbook(file);
+        }catch (Exception e){
+            workbook = new HSSFWorkbook(new FileInputStream(file));
+        }
         Sheet sheet = workbook.getSheetAt(0);
         ArrayList<String> excelFiledList = new ArrayList<>();
         ArrayList<T> resultList = new ArrayList<>();
@@ -96,13 +105,13 @@ public class ImportExcel {
             int cellNum = cells.getLastCellNum();
             if (cells.getRowNum() == 0) {
                 for (int i = 0; i < cellNum; i++) {
-                    String value = cells.getCell(i).getStringCellValue();
+                    String value = cellValue(cells.getCell(i));
                     excelFiledList.add(value);
                 }
             } else {
                 T t = type.newInstance();
                 for (int i = 0; i < cellNum; i++) {
-                    String value = cells.getCell(i).getStringCellValue();
+                    String value = cellValue(cells.getCell(i));
 
                     Method method = methodMap.get(
                             excelFiledList.get(i).toLowerCase()
@@ -121,7 +130,7 @@ public class ImportExcel {
 
     /**
      *
-     * @param fo  用户上传的excel对象
+     * @param file  用户上传的excel对象
      * @return 返回复合对象
      * @throws IOException
      * @throws InvalidFormatException
@@ -129,27 +138,49 @@ public class ImportExcel {
      *  即数据格式合法 与pojo对应的字段合法
      *
      */
-    public List<Map<String,String>> importDataForExcel(File fo) throws IOException, InvalidFormatException {
+    public List<Map<String,String>> importDataForExcel(File file) throws IOException, InvalidFormatException {
         List<Map<String, String>> resultList = new ArrayList<>();
-        Workbook workbook = new XSSFWorkbook(fo);
+        Workbook workbook;
+
+        try{
+            workbook  = new XSSFWorkbook(file);
+        }catch (Exception e){
+            workbook = new HSSFWorkbook(new FileInputStream(file));
+        }
         Sheet sheet = workbook.getSheetAt(0);
         List<String> excelFiledList = new ArrayList<>();
         for (Row cells : sheet) {
             int cellNum = cells.getLastCellNum();
             if (cells.getRowNum() == 0) {
                 for (int i = 0; i < cellNum; i++) {
-                    String value = cells.getCell(i).getStringCellValue();
+                    String value = cellValue(cells.getCell(i));
                     excelFiledList.add(value);
                 }
             } else {
                 Map<String, String> map = new HashMap<>();
                 for (int i = 0; i < cellNum; i++) {
-                    String value = cells.getCell(i).getStringCellValue();
+                    String value = cellValue(cells.getCell(i));
                     map.put(excelFiledList.get(i),value );
                 }
                 resultList.add(map);
             }
         }
         return resultList;
+    }
+
+    /**
+     * @param cell 单元格对象
+     * @return cell单元格获取的值转换为字符串
+     * 对公共方法提供协助:
+     *      将单元格中的内容获取并且转换为字符串
+     */
+    private String cellValue(Cell cell){
+        String value;
+        try{
+            value = cell.getStringCellValue();
+        }catch (Exception e){
+            value = String.valueOf((long)cell.getNumericCellValue());
+        }
+        return value;
     }
 }

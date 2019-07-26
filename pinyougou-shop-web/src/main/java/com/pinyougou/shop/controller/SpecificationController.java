@@ -97,8 +97,7 @@ public class SpecificationController {
 			return new Result(false, "删除失败");
 		}
 	}
-	
-	
+
 
 	@RequestMapping("/search")
     public PageInfo<TbSpecification> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,

@@ -290,4 +290,6 @@ public class TbAddress implements Serializable {
     public void setAlias(String alias) {
         this.alias = alias;
     }
+
+
 }

@@ -33,6 +33,25 @@ public class CartController {
     @Reference
     private CartService cartService;
 
+
+    /**
+     * 添加我的收藏
+     * @param itemId
+
+     * @return
+     */
+    @RequestMapping("/addGoodsToCollectionList")
+    public Result addGoodsToCollectionList(Long itemId) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            cartService.addGoodsToCollectionList(itemId, name);
+            return new Result(true, "成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"失败");
+        }
+    }
+
     /**
      * @param itemId 要添加的商品SKU的ID
      * @param num    购买的数量

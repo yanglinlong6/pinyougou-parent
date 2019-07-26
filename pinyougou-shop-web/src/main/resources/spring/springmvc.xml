@@ -8,7 +8,7 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <!-- context mvc tx aop cache dubbo security elatissearch -->
     <!--注解驱动并设置统一日期的输出格式-->
-    <mvc:annotation-driven conversion-service="conversionService">
+    <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">
             <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
                 <property name="supportedMediaTypes" value="application/json"/>
@@ -24,15 +24,6 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-
-    <!--第二步：springmvc.xml配置类型转换器-->
-    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
-        <property name="converters">
-            <set>
-                <bean class="com.pinyougou.shop.converter.StringToDateConverter"></bean>
-            </set>
-        </property>
-    </bean>
     <!--配置应用名 服务消费方-->
     <dubbo:application name="pinyougou-shop-web">
         <dubbo:parameter key="qos.port" value="45965"></dubbo:parameter>

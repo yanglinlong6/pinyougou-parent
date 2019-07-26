@@ -1,8 +1,10 @@
 package com.pinyougou.user.service.impl;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import com.pinyougou.mapper.TbAreasMapper;
 import com.pinyougou.user.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -12,6 +14,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import com.pinyougou.core.service.CoreServiceImpl;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import com.pinyougou.mapper.TbAddressMapper;
@@ -33,9 +36,10 @@ public class AddressServiceImpl extends CoreServiceImpl<TbAddress> implements Ad
     public AddressServiceImpl(TbAddressMapper addressMapper) {
         super(addressMapper, TbAddress.class);
         this.addressMapper = addressMapper;
-        System.out.println("hello my name is leilvlong");
-        System.out.println("test commit");
     }
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     @Override
@@ -110,4 +114,44 @@ public class AddressServiceImpl extends CoreServiceImpl<TbAddress> implements Ad
         return pageInfo;
     }
 
+
+    @Override
+    public int insert(TbAddress record) {
+        record.setAddress(record.getProvinceId()+record.getCityId()+record.getTownId()+record.getAddress());
+        //将省市替换成Id
+        String provinceId = (String) redisTemplate.boundHashOps("Province").get(record.getProvinceId());
+        record.setProvinceId(provinceId);
+        String cityId = (String) redisTemplate.boundHashOps("City").get(record.getCityId());
+        record.setCityId(cityId);
+        String townId = (String) redisTemplate.boundHashOps("Area").get(record.getTownId());
+        record.setTownId(townId);
+        //创建时间
+        record.setCreateDate(new Date());
+        return super.insert(record);
+    }
+
+
+    @Override
+    public List<TbAddress> findByUserId(String userId) {
+        Example example = new Example(TbAddress.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId",userId);
+        List<TbAddress> tbAddresses = addressMapper.selectByExample(example);
+
+        return tbAddresses;
+    }
+
+    @Override
+    public TbAddress selectByPrimaryKey(Object key) {
+        TbAddress tbAddress = addressMapper.selectByPrimaryKey(key);
+        //将ID替换成名称
+        String province = (String) redisTemplate.boundHashOps("ProvinceNum").get(tbAddress.getProvinceId());
+        tbAddress.setProvinceId(province);
+        String cityId = (String) redisTemplate.boundHashOps("CityNum").get(tbAddress.getCityId());
+        tbAddress.setCityId(cityId);
+        String townId = (String) redisTemplate.boundHashOps("AreaNum").get(tbAddress.getTownId());
+        tbAddress.setTownId(townId);
+
+        return tbAddress;
+    }
 }

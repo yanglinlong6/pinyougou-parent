@@ -31,5 +31,5 @@ public interface ContentService extends CoreService<TbContent> {
 	 */
 	PageInfo<TbContent> findPage(Integer pageNo, Integer pageSize, TbContent Content);
 
-	public List<TbContent> findByCategoryId(Long categoryId);
+	List<TbContent> findByCategoryId(Long categoryId);
 }

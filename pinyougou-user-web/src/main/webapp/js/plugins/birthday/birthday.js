@@ -24,7 +24,9 @@ ms_DatePicker: function (options) {
             // 年份列表
             var yearNow = new Date().getFullYear();
 			var yearSel = $YearSelector.attr("rel");
+
             for (var i = yearNow; i >= 1900; i--) {
+
 				var sed = yearSel==i?"selected":"";
 				var yearStr = "<option value=\"" + i + "\" " + sed+">" + i + "</option>";
                 $YearSelector.append(yearStr);
@@ -82,6 +84,8 @@ ms_DatePicker: function (options) {
                     }
                 }
             }
+
+
             $MonthSelector.change(function () {
                 BuildDay();
             });

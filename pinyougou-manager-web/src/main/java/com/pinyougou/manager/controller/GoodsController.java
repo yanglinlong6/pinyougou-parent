@@ -10,8 +10,10 @@ import com.pinyougou.page.service.ItemPageService;
 import com.pinyougou.pojo.TbBrand;
 import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbItem;
+import com.pinyougou.pojo.TbOrder;
 import com.pinyougou.search.service.ItemSearchService;
 import com.pinyougou.sellergoods.service.GoodsService;
+import com.pinyougou.sellergoods.service.OrderService;
 import entity.Goods;
 import entity.Result;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -180,4 +182,20 @@ public class GoodsController {
             e.printStackTrace();
         }
     }
+
+
+    @Reference
+    private OrderService orderService;
+
+    @RequestMapping("/importExcelForOrder")
+    public void importExcelForOrder(HttpServletResponse response){
+        try {
+            System.out.println("执行导出请求");
+            List<TbOrder> tbOrders = orderService.selectAll();
+            importExcel.importExcel(tbOrders, TbOrder.class, "TbOrder.xls",response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ import com.pinyougou.pojo.TbSeller;
 import com.pinyougou.sellergoods.service.SellerService;
 import entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -111,5 +112,11 @@ public class SellerController {
                                       @RequestBody TbSeller seller) {
         return sellerService.findPage(pageNo, pageSize, seller);
     }
-	
+
+	@RequestMapping("/getName")
+	public String getLoginName() {
+		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+		System.out.println("55555"+name);
+		return name;
+	}
 }

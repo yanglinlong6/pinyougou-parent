@@ -40,12 +40,13 @@
                     收货人：<input type="text" v-model="searchEntity.receiver">
                     交易流水：<input type="text" v-model="searchEntity.transactionId">
                 </div>
-                <button class="btn btn-default" @click="searchList(1)">查询</button>
-                <!--工具栏/-->
-                <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
-                        class="fa fa-refresh"></i> 刷新
-                </button>
+
             </div>
+            <button class="btn btn-default" @click="searchList(1)">查询</button>
+            <!--工具栏/-->
+            <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                    class="fa fa-refresh"></i> 刷新
+            </button>
 
             <!--数据列表-->
             <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
