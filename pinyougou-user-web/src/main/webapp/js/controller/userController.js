@@ -140,7 +140,7 @@
             });
         },
         findAllOrder:function () {
-            axios.get("/order/getAllOrder.shtml").then(function (response) {
+            axios.get("/order/getOrderByStatus.shtml").then(function (response) {
                 app.userOrderList = response.data;
             })
         },
@@ -149,9 +149,6 @@
                 app.footMarkList = app.data.footMarkList;
             })
         },
-        payNow:function (orderId) {
-            axios.get("/")
-        }
     },
     //钩子函数 初始化了事件和
     created: function () {

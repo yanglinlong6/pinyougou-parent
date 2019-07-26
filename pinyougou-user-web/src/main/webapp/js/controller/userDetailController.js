@@ -9,7 +9,6 @@ var app = new Vue({
     methods:{
         updateInfo:function () {
             var date = this.year+"-"+this.month+"-"+this.day;
-            alert(date)
             axios.post("/user/updateDetail.shtml?date="+date,this.userDetail).then(function (response) {
                 alert(response.data.message)
             })

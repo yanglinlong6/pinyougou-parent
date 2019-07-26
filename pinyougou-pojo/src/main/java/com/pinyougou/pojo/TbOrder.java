@@ -1,5 +1,7 @@
 package com.pinyougou.pojo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.pinyougou.common.util.DateUtil;
 
 import javax.persistence.Column;
@@ -18,6 +20,7 @@ public class TbOrder implements Serializable {
      */
     @Id
     @Column(name = "order_id")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long orderId;
 
     /**

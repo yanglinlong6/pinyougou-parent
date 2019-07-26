@@ -36,11 +36,11 @@ public interface OrderService extends CoreService<TbOrder> {
 
     void updateOrderStatus(String out_trade_no, String transaction_id);
 
-    /**
-     *@Description //用户所有订单，及订单的详情
-     *@param  [userId]
-     *@return java.util.List<com.pinyougou.pojo.TbOrder>
-     *@time 2019-7-24 22:06
-     */
-    List<TbOrder> getAllOrder(String userId);
+	/**
+	 *@Description //用户所有订单，及订单的详情
+	 *@param  userId
+	 *@return java.util.List<com.pinyougou.pojo.TbOrder>
+	 *@time 2019-7-24 22:06
+	 */
+	List<TbOrder> getOrderByStatus(String userId, String status);
 }

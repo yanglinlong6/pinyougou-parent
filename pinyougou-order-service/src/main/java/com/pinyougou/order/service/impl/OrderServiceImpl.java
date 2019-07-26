@@ -246,9 +246,10 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
      *@return java.util.List<com.pinyougou.pojo.TbOrder>
      *@time 2019-7-24 22:06
      */
-    public List<TbOrder> getAllOrder(String userId) {
+    public List<TbOrder> getOrderByStatus(String userId,String status) {
         TbOrder tbOrder = new TbOrder();
         tbOrder.setUserId(userId);
+        tbOrder.setStatus(status);
         //找出所有订单
         List<TbOrder> tbOrderList = tbOrderMapper.select(tbOrder);
         //遍历订单，找出订单所有的商品信息
