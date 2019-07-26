@@ -8,9 +8,9 @@ var app = new Vue({
     },
     methods:{
         updateInfo:function () {
-            var date = new Date(this.year+"/"+this.month+"/"+this.day);
-            this.userDetail.birthday = date;
-            axios.post("/user/updateDetail.shtml",this.userDetail).then(function (response) {
+            var date = this.year+"-"+this.month+"-"+this.day;
+            alert(date)
+            axios.post("/user/updateDetail.shtml?date="+date,this.userDetail).then(function (response) {
                 alert(response.data.message)
             })
         },

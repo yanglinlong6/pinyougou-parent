@@ -2,8 +2,10 @@ package com.pinyougou.user.service;
 
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.core.service.CoreService;
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbUser;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +38,5 @@ public interface UserService extends CoreService<TbUser> {
 	boolean checkSmsCode(String phone, String code);
 
     Map<String, Object> findFootMark();
-
 
 }
