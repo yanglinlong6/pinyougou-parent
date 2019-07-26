@@ -146,9 +146,9 @@
                 app.footMarkList = app.data.footMarkList;
             })
         },
-        selectCollect:function () {
+        selectCollect:function () {//查询所有收藏商品
             axios.get("/user/selectCollect.shtml").then(function (response) {
-               // alert(response.data)
+                //alert(response.data)
                 app.list = response.data;
             })
         }

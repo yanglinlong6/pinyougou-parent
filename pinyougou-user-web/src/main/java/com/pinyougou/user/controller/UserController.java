@@ -36,11 +36,14 @@ public class UserController {
     @Reference
     private CartService cartService;
 
-
+    /**
+     * 查询用户收藏
+     * @return
+     */
     @RequestMapping("/selectCollect")
     public List<TbItem> selectCollect() {
-
-        return cartService.selectCollect();
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return cartService.selectCollect(name);
     }
 
     /**
