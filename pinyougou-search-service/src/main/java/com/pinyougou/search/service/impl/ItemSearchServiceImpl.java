@@ -3,10 +3,8 @@ package com.pinyougou.search.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.pinyougou.pojo.TbItem;
-import com.pinyougou.pojo.TbItemCat;
 import com.pinyougou.search.dao.ItemDao;
 import com.pinyougou.search.service.ItemSearchService;
-import javafx.util.BuilderFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -255,9 +253,6 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     @Override
     public void deleteByIds(Long[] ids) {
         DeleteQuery query = new DeleteQuery();
-        // 删除多个goodsid
-        query.setQuery(QueryBuilders.termQuery("goodsId", ids));
-        // 根据删除条件 索引名 和类型
         //删除多个goodsid
         query.setQuery(QueryBuilders.termsQuery("goodsId", ids));
         //根据删除条件 索引名 和类型

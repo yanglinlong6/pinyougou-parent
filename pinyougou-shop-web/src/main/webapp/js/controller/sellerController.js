@@ -6,7 +6,8 @@
         list:[],
         entity:{},
         ids:[],
-        searchEntity:{}
+        searchEntity:{},
+        userName:'A'
     },
     methods: {
         searchList:function (curPage) {
@@ -92,6 +93,14 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
+        },
+
+        //获取登录名
+        loadUserName:function () {
+            axios.post('/seller/getName.shtml').then(function (response) {
+                //获取数据
+                app.userName = response.data;
+            })
         }
 
 
@@ -101,7 +110,7 @@
     created: function () {
       
         this.searchList(1);
-
+        this.loadUserName();
     }
 
 })
