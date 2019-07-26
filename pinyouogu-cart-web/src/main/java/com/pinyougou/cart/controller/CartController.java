@@ -44,6 +44,10 @@ public class CartController {
     public Result addGoodsToCollectionList(Long itemId) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
+            if ("anonymousUser".equals(name)) {// 未登录
+                return new Result(false, "请登录");
+            }
+            //已登录
             cartService.addGoodsToCollectionList(itemId, name);
             return new Result(true, "成功");
         } catch (Exception e) {

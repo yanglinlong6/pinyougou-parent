@@ -24,19 +24,15 @@ public class SalesController {
 
 
     /**
-     * 销售饼状图的数据  显示一级分类的销售情况
-     * 横坐标为一级分类名称
-     * 纵坐标对应一级分类名称对应的金额
+     * 1累计销售数量图
+     * key：一级分类商品的名称
+     * value：一级分类对应下面所有商品卖出的总个数
      * @return
      */
     @RequestMapping("/findSalesReports")
-    public Map<String, List<Double>> findSalesReports(){
-        Map<String,Double> map=salesService.findSalesReports();
-        List<String> keyList=new ArrayList<>();
+    public Map<String, Float> findSalesReports01(){
 
-
-
-        return null;
+        return salesService.findSalesReports01();
 
     }
 

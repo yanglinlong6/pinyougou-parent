@@ -6,9 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.pinyougou.common.util.IdWorker;
-import com.pinyougou.mapper.TbItemMapper;
-import com.pinyougou.mapper.TbOrderItemMapper;
-import com.pinyougou.mapper.TbPayLogMapper;
+import com.pinyougou.mapper.*;
 import com.pinyougou.order.service.OrderService;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbOrderItem;
@@ -25,7 +23,6 @@ import com.pinyougou.core.service.CoreServiceImpl;
 import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
-import com.pinyougou.mapper.TbOrderMapper;
 import com.pinyougou.pojo.TbOrder;
 
 
@@ -201,6 +198,8 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
         payLogMapper.insert(payLog);
         redisTemplate.boundHashOps("payLog").put(order.getUserId(), payLog);
         redisTemplate.boundHashOps("CART_REDIS_KEY").delete(order.getUserId());
+
+
     }
 
     @Override
@@ -228,5 +227,48 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
             orderMapper.updateByPrimaryKey(tbOrder);
         }
         redisTemplate.boundHashOps("payLog").delete(payLog.getUserId());
+    }
+
+
+    @Autowired
+    private TbOrderMapper tbOrderMapper;
+
+    @Autowired
+    private TbSellerMapper tbSellerMapper;
+
+    @Autowired
+    private TbOrderItemMapper tbOrderItemMapper;
+
+    @Override
+    /**
+     *@Description //用户所有订单，及订单的详情
+     *@param  [userId]
+     *@return java.util.List<com.pinyougou.pojo.TbOrder>
+     *@time 2019-7-24 22:06
+     */
+    public List<TbOrder> getOrderByStatus(String userId,String status) {
+        TbOrder tbOrder = new TbOrder();
+        tbOrder.setUserId(userId);
+        tbOrder.setStatus(status);
+        //找出所有订单
+        List<TbOrder> tbOrderList = tbOrderMapper.select(tbOrder);
+        //遍历订单，找出订单所有的商品信息
+        for (TbOrder order : tbOrderList) {
+            //设置店铺名称
+            order.setSellerNickName(tbSellerMapper.selectByPrimaryKey(order.getSellerId()).getNickName());
+            Long orderId = order.getOrderId();
+            TbOrderItem tbOrderItem = new TbOrderItem();
+            tbOrderItem.setOrderId(orderId);
+            List<TbOrderItem> tbOrderItemList = tbOrderItemMapper.select(tbOrderItem);
+            for (TbOrderItem orderItem : tbOrderItemList) {
+                TbItem tbItem = itemMapper.selectByPrimaryKey(orderItem.getItemId());
+                orderItem.setSpec(tbItem.getSpec().replace("{","")
+                        .replace("}","")
+                        .replace("\"",""));//设置规格属性
+            }
+            order.setOrderItemList(tbOrderItemList);
+        }
+
+        return tbOrderList;
     }
 }
