@@ -11,7 +11,8 @@ var app = new Vue({
         order: { paymentType: '1' },
         entity: {},
         ids: [],
-        searchEntity: {}
+        searchEntity: {},
+        flagLogin:false
     },
     methods: {
         //查询所有的购物车的列表数据
@@ -80,7 +81,18 @@ var app = new Vue({
                     alert(response.data.message);
                 }
             })
+        },
+        addGoodsToCollectionList:function (itemId){
+            axios.get('/cart/addGoodsToCollectionList.shtml?itemId=' + itemId).then(
+                function (response) {
+                    if (response.data.success){
+                        window.location.href='http://localhost:9106/home-person-collect.html?itemId='+itemId
+                    }
+
+                }
+            )
         }
+
     },
     created: function () {
         this.findCartList();

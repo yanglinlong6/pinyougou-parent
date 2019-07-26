@@ -4,20 +4,57 @@
         pages: 15,
         pageNo: 1,
         list: [],
-        entity: {},
-        status: ['未审核', '已审核', '审核未通过', '已关闭'],
+        entity: { parentId: 0 },
         ids: [],
-        searchEntity: {}
+        entity_1: {},//变量1
+        entity_2: {},//变量2
+        searchEntity: {},
+        grade: 1,//面包屑级别的设置
+        status: ['未审核', '已审核', '审核未通过', '已关闭'], //定义商品的状态数组
     },
     methods: {
+        //新增规格审核的需求：
+        updateStatus: function (status) {
+            //注意 没有使用restful风格
+            axios.post('/itemCat/updateStatus.shtml?status=' + status, this.ids).then(function (response) {
+                console.log(response);
+                if (response.data.success) {
+                    app.searchList(1);
+                }
+            }).catch(function (error) {
+                console.log("1231312131321");
+            });
+        },
+        selectList: function (p_entity) {
+            //如果当前的等级是1
+            if (this.grade == 1) {
+                this.entity_1 = {};
+                this.entity_2 = {};
+            }
+            if (this.grade == 2) {
+                this.entity_1 = p_entity;
+                this.entity_2 = {};
+            }
+
+            if (this.grade == 3) {
+                this.entity_2 = p_entity;
+            }
+            this.findByParentId(p_entity.id);
+        },
+        findByParentId: function (parentId) {
+            axios.get('/itemCat/findByParentId/' + parentId + '.shtml').then(function (response) {
+                app.list = response.data;
+                //记录下来
+                app.entity.parentId = parentId;
+            }).catch(function (error) {
+                console.log("1231312131321");
+            })
+        },
         searchList: function (curPage) {
-            axios.post('/seckillGoods/search.shtml?pageNo=' + curPage, this.searchEntity).then(function (response) {
+            axios.post('/itemCat/search.shtml?pageNo=' + curPage, this.searchEntity).then(function (response) {
                 //获取数据
                 app.list = response.data.list;
-                for (var i = 0; i < app.list.length; i++) {
-                    app.list[i].startTime = app.getTime(app.list[i].startTime)
-                    app.list[i].endTime = app.getTime(app.list[i].endTime)
-                }
+
                 //当前页
                 app.pageNo = curPage;
                 //总页数
@@ -27,7 +64,7 @@
         //查询所有品牌列表
         findAll: function () {
             console.log(app);
-            axios.get('/seckillGoods/findAll.shtml').then(function (response) {
+            axios.get('/itemCat/findAll.shtml').then(function (response) {
                 console.log(response);
                 //注意：this 在axios中就不再是 vue实例了。
                 app.list = response.data;
@@ -38,7 +75,7 @@
         },
         findPage: function () {
             var that = this;
-            axios.get('/seckillGoods/findPage.shtml', {
+            axios.get('/itemCat/findPage.shtml', {
                 params: {
                     pageNo: this.pageNo
                 }
@@ -55,20 +92,22 @@
         },
         //该方法只要不在生命周期的
         add: function () {
-            axios.post('/seckillGoods/add.shtml', this.entity).then(function (response) {
+            axios.post('/itemCat/add.shtml', this.entity).then(function (response) {
                 console.log(response);
                 if (response.data.success) {
-                    app.searchList(1);
+                    // app.searchList(1);
+                    app.selectList({ id: 0 });
                 }
             }).catch(function (error) {
                 console.log("1231312131321");
             });
         },
         update: function () {
-            axios.post('/seckillGoods/update.shtml', this.entity).then(function (response) {
+            axios.post('/itemCat/update.shtml', this.entity).then(function (response) {
                 console.log(response);
                 if (response.data.success) {
-                    app.searchList(1);
+                    // app.searchList(1);
+                    app.selectList({ id: 0 });
                 }
             }).catch(function (error) {
                 console.log("1231312131321");
@@ -82,14 +121,15 @@
             }
         },
         findOne: function (id) {
-            axios.get('/seckillGoods/findOne/' + id + '.shtml').then(function (response) {
+            axios.get('/itemCat/findOne/' + id + '.shtml').then(function (response) {
                 app.entity = response.data;
             }).catch(function (error) {
                 console.log("1231312131321");
             });
         },
+
         dele: function () {
-            axios.post('/seckillGoods/delete.shtml', this.ids).then(function (response) {
+            axios.post('/itemCat/delete.shtml', this.ids).then(function (response) {
                 console.log(response);
                 if (response.data.success) {
                     app.searchList(1);
@@ -97,23 +137,6 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
-        },
-        updateStatus: function (status) {
-            axios.post('/seckillGoods/updateStatus.shtml?status=' + status, this.ids).then(resp => {
-                if (resp.data.success) {
-                    app.searchList(1);
-                }
-            })
-        },
-        getTime: function (t) {
-            var _time = new Date(t);
-            var year = _time.getFullYear();
-            var month = _time.getMonth() + 1;
-            var date = _time.getDate();
-            var hour = _time.getHours();
-            var minute = _time.getMinutes();
-            var second = _time.getSeconds();
-            return year + "-" + month + "-" + date + "    " + hour + ":" + minute + ":" + second;
         }
 
 
@@ -121,7 +144,9 @@
     //钩子函数 初始化了事件和
     created: function () {
 
-        this.searchList(1);
+        //this.searchList(1);
+        // this.findByParentId(0);
+        this.selectList({ id: 0 });
     }
 
 })

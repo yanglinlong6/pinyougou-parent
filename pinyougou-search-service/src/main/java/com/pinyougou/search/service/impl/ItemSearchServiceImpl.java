@@ -6,7 +6,6 @@ import com.pinyougou.pojo.TbItem;
 import com.pinyougou.search.dao.ItemDao;
 import com.pinyougou.search.service.ItemSearchService;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.StrBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -32,10 +31,8 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 项目名:pinyougou-parent 包名: com.pinyougou.search.service.impl 作者: Yanglinlong 日期: 2019/6/27 23:09
@@ -272,4 +269,30 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         }
         return map;
     }
+    
+    @Override
+    public void addFootMark(Long id) {
+        List itemList = new ArrayList();
+        itemList.add(id);
+        System.out.println("footmark" + id);
+        Date date = new Date();
+        SimpleDateFormat simdate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String str = simdate.format(date);
+        
+        redisTemplate.boundHashOps("FOOTMARK_REDIS_KEY").put(id + str + "", id);
+        // redisTemplate.boundHashOps("FOOTMARK_REDIS_KEY").put("itemidd", 592135L);
+        
+        System.out.println("footmark添加redis成功");
+    }
+    
+    // @Override
+    // public TbGoods tiaoZhaun(Long id) {
+    // TbItem tbItem = new TbItem();
+    // tbItem.setId(id);
+    // TbItem item = itemMapper.selectByPrimaryKey(tbItem);
+    // TbGoods tbGoods = new TbGoods();
+    // tbGoods.setId(item.getGoodsId());
+    // TbGoods goods = goodsMapper.selectByPrimaryKey(tbGoods);
+    // return goods;
+    // }
 }

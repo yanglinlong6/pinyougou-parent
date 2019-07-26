@@ -89,9 +89,9 @@ var app = new Vue({
         },
         //查询订单的状态 当点击立即抢购之后执行。
         queryStatus: function () {
-            let count = 0;
+            var count = 0;
             //三秒钟执行一次
-            let queryorder = window.setInterval(function () {
+            var queryorder = window.setInterval(function () {
                 count += 3;
                 axios.get('/seckillOrder/queryOrderStatus.shtml').then(
                     function (response) {

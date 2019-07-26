@@ -3,8 +3,9 @@ package com.pinyougou.user.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
+import com.pinyougou.cart.service.CartService;
 import com.pinyougou.common.util.PhoneFormatCheckUtils;
-import com.pinyougou.pojo.TbOrder;
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbUser;
 import com.pinyougou.user.service.UserService;
 import entity.Error;
@@ -31,6 +32,16 @@ public class UserController {
 
     @Reference
     private UserService userService;
+
+    @Reference
+    private CartService cartService;
+
+
+    @RequestMapping("/selectCollect")
+    public List<TbItem> selectCollect() {
+
+        return cartService.selectCollect();
+    }
 
     /**
      * 返回全部列表
@@ -187,7 +198,7 @@ public class UserController {
     }
 
     @RequestMapping("/findFootMark")
-    public Map findFootMark() {
+    public Map<String, Object> findFootMark() {
         return userService.findFootMark();
 
     }

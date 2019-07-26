@@ -2,6 +2,7 @@ package com.pinyougou.pojo;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Table(name = "tb_item_cat")
 public class TbItemCat implements Serializable {
@@ -36,7 +37,9 @@ public class TbItemCat implements Serializable {
      */
     @Column(name = "status")
     private String status;
-    
+
+
+
     public String getStatus() {
         return status;
     }

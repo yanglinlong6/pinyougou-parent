@@ -105,7 +105,7 @@ public class ContentServiceImpl extends CoreServiceImpl<TbContent> implements Co
         record.setCategoryId(categoryId);
         record.setStatus("1");//正常的
         List<TbContent> contents = contentMapper.select(record);
-        System.out.println(contents);
+        System.out.println("contents:"+contents);
         redisTemplate.boundHashOps(SysConstants.CONTENT_REDIS_KEY).put(categoryId,contents);
         return contents;
     }

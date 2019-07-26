@@ -35,7 +35,7 @@ public interface UserService extends CoreService<TbUser> {
 
 	boolean checkSmsCode(String phone, String code);
 
-    Map findFootMark();
+    Map<String, Object> findFootMark();
 
 
 }
