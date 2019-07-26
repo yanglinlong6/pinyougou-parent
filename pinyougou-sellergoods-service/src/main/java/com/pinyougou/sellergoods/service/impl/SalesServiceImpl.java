@@ -1,23 +1,24 @@
 package com.pinyougou.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.pinyougou.common.util.MyDateUtil;
 import com.pinyougou.mapper.TbGoodsMapper;
 import com.pinyougou.mapper.TbItemCatMapper;
 import com.pinyougou.mapper.TbOrderItemMapper;
 import com.pinyougou.mapper.TbOrderMapper;
+import com.pinyougou.pojo.TbGoods;
+import com.pinyougou.pojo.TbItemCat;
 import com.pinyougou.pojo.TbOrder;
 import com.pinyougou.pojo.TbOrderItem;
 import com.pinyougou.sellergoods.service.SalesService;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @program: com.pinyougou.sellergoods.service.impl
@@ -60,6 +61,7 @@ public class SalesServiceImpl implements SalesService {
             criteria.andBetween("paymentTime", dateStart, dateEnd);
             List<TbOrder> tbOrders = orderMapper.selectByExample(example);
 
+
             //2获取到该时间段该商家的订单 进行遍历
             if (tbOrders.size() > 0 && tbOrders != null) {
                 //如果不为null name根据订单id获取订单明细 获取总价格
@@ -74,15 +76,15 @@ public class SalesServiceImpl implements SalesService {
                     criteria1.andEqualTo("orderId", orderId);
                     List<TbOrderItem> tbOrderItems = tbOrderItemMapper.selectByExample(example1);
                     //获取到订单明细来进行加 价格
-                    Double totalMoney=0.0;
+                    Double totalMoney = 0.0;
                     for (TbOrderItem tbOrderItem : tbOrderItems) {
                         BigDecimal totalFee = tbOrderItem.getTotalFee(); //获取一个订单明细的总价
                         //进行累加销售额
-                        totalMoney+= totalFee.doubleValue();
+                        totalMoney += totalFee.doubleValue();
                     }
-                    map.put(dateStr,totalMoney); //将累加的销售额存入map
+                    map.put(dateStr, totalMoney); //将累加的销售额存入map
                 }
-            }else {
+            } else {
                 return new HashMap();
             }
         } catch (ParseException e) {
@@ -93,18 +95,47 @@ public class SalesServiceImpl implements SalesService {
     }
 
     /**
-     * 饼状图数据
-     * 1tbItemCat表中查询parentId=0的集合数据 对应一级分类
-     * 2遍历一级分类查询商品二级分类 然后以此类推查询三级分类
-     * 3
+     * 饼状图1--商品销售量
+     * 先从item分类表中获取全部一级分类信息
+     * 从订单表中获取订单商品中商品分类 统计购买的总数量
+     *
      * @return
      */
     @Override
-    public Map<String, Double> findSalesReports() {
+    public Map<String, Float> findSalesReports01() {
+        //1从item分类表中获取一级分类信息 作为map中的key
+        TbItemCat tbItemCat = new TbItemCat();
+        tbItemCat.setParentId((long) 0);
+        List<TbItemCat> itemCatList = itemCatMapper.select(tbItemCat);
+        Set<String> keyList = new HashSet<>();
+        for (TbItemCat itemCat : itemCatList) {
+            keyList.add(itemCat.getName());
+        }
+        //2从订单表中获取购买的商品属于哪些分类 将goodId和num使用map来存储
+        Map<Long, Integer> map = new HashMap<>();
+        List<TbOrderItem> orderItemList = tbOrderItemMapper.selectAll();
+        for (TbOrderItem tbOrderItem : orderItemList) {
+            map.put(tbOrderItem.getGoodsId(), tbOrderItem.getNum());
+        }
+        //3遍历订单map 找出key对应一级分类名称 并将map的value存储到新的map中
+        //新的map中key为一级分类,相当于itemCat表中的parentId;value为卖出的数量
+        Map<Long, Integer> map02 = new HashMap<>();
+        for (Map.Entry<Long, Integer> entry : map.entrySet()) {
+            //根据goodId找出对应的一级分类
+            TbGoods tbGoods = goodsMapper.selectByPrimaryKey(entry.getKey());
+            map02.put(tbGoods.getCategory1Id(), entry.getValue());
+        }
+        //4需要将分类id替换为string字符串中文名称
+        for (Map.Entry<Long, Integer> entry : map02.entrySet()) {
+            TbItemCat itemCat = new TbItemCat();
+            itemCat.setParentId(entry.getKey());
+            List<TbItemCat> tbItemCats = itemCatMapper.select(itemCat);
 
-
+        }
 
 
         return null;
     }
+
+
 }
