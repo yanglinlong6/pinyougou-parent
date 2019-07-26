@@ -22,8 +22,13 @@ public class AddressController {
     public Result addAddress(@RequestBody TbAddress tbAddress){
         try {
             tbAddress.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
-            addressService.insert(tbAddress);
-            return new Result(true,"添加成功");
+            if (tbAddress != null) {
+                addressService.updateByPrimaryKey(tbAddress);
+                return new Result(true,"修改成功");
+            }else {
+                addressService.insert(tbAddress);
+                return new Result(true,"添加成功");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false,"添加失败");

@@ -4,10 +4,12 @@ package com.pinyougou.user.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.cart.service.CartService;
+import com.pinyougou.common.util.MyDateUtil;
 import com.pinyougou.common.util.PhoneFormatCheckUtils;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbUser;
 import com.pinyougou.user.service.UserService;
+import entity.Cart;
 import entity.Error;
 import entity.Result;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -17,6 +19,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.xml.transform.Source;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -36,10 +39,14 @@ public class UserController {
     @Reference
     private CartService cartService;
 
+    /**
+     * 查询用户收藏
+     * @return
+     */
     @RequestMapping("/selectCollect")
     public List<TbItem> selectCollect() {
-
-        return cartService.selectCollect();
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return cartService.selectCollect(name);
     }
 
     /**
@@ -121,7 +128,6 @@ public class UserController {
      */
     @RequestMapping("/findOne/{id}")
     public TbUser findOne(@PathVariable(value = "id") Long id) {
-
         return userService.findOne(id);
     }
 
@@ -171,10 +177,12 @@ public class UserController {
     *@return entity.Result
     *@time 2019-7-24 10:27
     */
-    public Result updateDetail(@RequestBody TbUser tbUser){
+    public Result updateDetail(String date,@RequestBody() TbUser user){
         try {
-            tbUser.setUpdated(new Date());
-            userService.updateByPrimaryKeySelective(tbUser);
+            Date birthDay = MyDateUtil.toDate(date, "yyyy-MM-dd");
+            user.setUpdated(new Date());
+            user.setBirthday(birthDay);
+            userService.updateByPrimaryKeySelective(user);
             return new Result(true,"更新成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -201,5 +209,25 @@ public class UserController {
     public Map<String, Object> findFootMark() {
         return userService.findFootMark();
 
+    }
+
+    @RequestMapping(path = "/addToCart")
+    public Result addToCart(@RequestParam Long id){
+        try {
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+            //3.如果登录 操作的redis
+            //3.1 从redis中获取已有的购物车列表数据
+            List<Cart> redisList = cartService.getCartListFromRedis(userId);
+
+            //3.2 向已有购物车列表中添加 商品 返回一个最新的购物车的列表
+            List<Cart> newestList = cartService.addGoodsToCartList(redisList, id, 1);
+            //3.3 将最新的购物车数据 存储回redis中
+            cartService.saveToRedis(userId, newestList);
+
+            return new Result(true,"添加添加");
+
+        } catch (Exception e) {
+            return new Result(false,"添加失败");
+        }
     }
 }

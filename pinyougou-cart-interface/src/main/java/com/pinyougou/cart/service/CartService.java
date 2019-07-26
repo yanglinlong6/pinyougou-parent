@@ -46,6 +46,6 @@ public interface CartService {
 
     void addGoodsToCollectionList(Long itemId,String name);
 
-    List<TbItem> selectCollect();
+    List<TbItem> selectCollect(String userName);
 
 }

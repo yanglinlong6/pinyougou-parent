@@ -3,11 +3,14 @@ package com.pinyougou.cart.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.cart.service.CartService;
 import com.pinyougou.mapper.TbItemMapper;
+import com.pinyougou.mapper.TbUserCollectMapper;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbOrderItem;
+import com.pinyougou.pojo.TbUserCollect;
 import entity.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -27,6 +30,8 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private TbItemMapper itemMapper;
 
+    @Autowired
+    private TbUserCollectMapper userCollectMapper;
 
     @Override
     public List<Cart> addGoodsToCartList(List<Cart> cartList, Long itemId, Integer num) {
@@ -142,20 +147,56 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public void addGoodsToCollectionList(Long itemId,String name) {
+        TbUserCollect tbUserCollect = new TbUserCollect();
+        tbUserCollect.setUserId(name);
+        tbUserCollect.setItemId(itemId);
+        TbUserCollect tbUserCollectList1 = userCollectMapper.selectByUserAndItem(tbUserCollect);
+        if (tbUserCollectList1 == null) {
+            // 存入数据库
+            tbUserCollect.setUserId(name);
+            tbUserCollect.setItemId(itemId);
+            userCollectMapper.insert(tbUserCollect);
 
-        //通过id查询商品
-        TbItem tbItem = itemMapper.selectByPrimaryKey(itemId);
-        // 存入redis
-        redisTemplate.boundHashOps("userCollect").put(itemId,tbItem);
+            // 更新redis数据
+            Example example = new Example(TbUserCollect.class);
+            example.createCriteria().andEqualTo(name);
+            List<TbUserCollect> tbUserCollectList = userCollectMapper.selectByExample(example);
+            for (TbUserCollect userCollect : tbUserCollectList) {
+                // 根据id，查询商品信息存入redis
+                TbItem tbItem = itemMapper.selectByPrimaryKey(userCollect.getItemId());
+                redisTemplate.boundHashOps("userCollect"+name).put(userCollect.getItemId(),tbItem);
+        }
+
+        }
+
     }
 
     /**
-     * 查询
+     * 查询用户收藏
      * @return
      */
     @Override
-    public List<TbItem> selectCollect() {
-        return redisTemplate.boundHashOps("userCollect").values();
+    public List<TbItem> selectCollect(String name) {
+        List<TbItem> list = redisTemplate.boundHashOps("userCollect" + name).values();
+        if (list == null || list.size()==0) {
+
+            //从数据库查询用户收藏的商品集合
+            TbUserCollect tbUserCollect1 = new TbUserCollect();
+            tbUserCollect1.setUserId(name);
+            List<TbUserCollect> tbUserCollectList = userCollectMapper.select(tbUserCollect1);
+
+            //通过商品id查询商品
+            for (TbUserCollect tbUserCollect : tbUserCollectList) {
+                //根据id查询收藏商品
+                TbItem tbItem = itemMapper.selectByPrimaryKey(tbUserCollect.getItemId());
+                list.add(tbItem);
+                redisTemplate.boundHashOps("userCollect"+name).put(tbUserCollect.getItemId(),tbItem);
+
+            }
+
+        }
+
+        return list;
     }
 
     private TbOrderItem searchItemByItemId(List<TbOrderItem> orderItemList, Long itemId) {

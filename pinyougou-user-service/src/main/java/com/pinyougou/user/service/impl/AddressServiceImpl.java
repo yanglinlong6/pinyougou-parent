@@ -154,4 +154,19 @@ public class AddressServiceImpl extends CoreServiceImpl<TbAddress> implements Ad
 
         return tbAddress;
     }
+
+    @Override
+    public int updateByPrimaryKey(TbAddress record) {
+        record.setAddress(record.getProvinceId()+record.getCityId()+record.getTownId()+record.getAddress());
+        //将省市替换成Id
+        String provinceId = (String) redisTemplate.boundHashOps("Province").get(record.getProvinceId());
+        record.setProvinceId(provinceId);
+        String cityId = (String) redisTemplate.boundHashOps("City").get(record.getCityId());
+        record.setCityId(cityId);
+        String townId = (String) redisTemplate.boundHashOps("Area").get(record.getTownId());
+        record.setTownId(townId);
+        //创建时间
+        record.setCreateDate(new Date());
+        return super.updateByPrimaryKey(record);
+    }
 }
