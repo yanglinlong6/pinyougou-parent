@@ -16,11 +16,12 @@ import java.util.*;
  **/
 @RestController
 @RequestMapping("/sales")
-public class SalesController {
+public class ChartController {
     @Reference
     private SalesService salesService;
 
     /**
+     *
      * 横坐标--时间集合
      * 纵坐标--销售额集合--这里要求和对应的时间保持一致 所以需要进行排序
      * 后端给前台返回Map<String, List>数据结构

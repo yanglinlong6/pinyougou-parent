@@ -36,7 +36,6 @@ public class UserController {
     @Reference
     private CartService cartService;
 
-
     @RequestMapping("/selectCollect")
     public List<TbItem> selectCollect() {
 
@@ -122,6 +121,7 @@ public class UserController {
      */
     @RequestMapping("/findOne/{id}")
     public TbUser findOne(@PathVariable(value = "id") Long id) {
+
         return userService.findOne(id);
     }
 
