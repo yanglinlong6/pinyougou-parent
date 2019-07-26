@@ -64,6 +64,8 @@ public class SalesServiceImpl implements SalesService {
             criteria.andBetween("paymentTime", dateStart, dateEnd);
             List<TbOrder> tbOrders = orderMapper.selectByExample(example);
 
+            System.out.println("该时间段查询的订单长度为====="+tbOrders.size());
+
             //2获取到该时间段该商家的订单 进行遍历
             if (tbOrders.size() > 0 && tbOrders != null) {
                 //如果不为null name根据订单id获取订单明细 获取总价格
@@ -83,6 +85,7 @@ public class SalesServiceImpl implements SalesService {
                         //进行累加销售额
                         totalMoney += totalFee.doubleValue();
                     }
+                    System.out.println("销售额为====="+totalMoney);
                     map.put(dateStr, totalMoney); //将累加的销售额存入map
                 }
             } else {
@@ -92,6 +95,7 @@ public class SalesServiceImpl implements SalesService {
             e.printStackTrace();
             return new HashMap();
         }
+        System.out.println("map封装的数据为     "+map);
         return map;
     }
 
@@ -116,7 +120,6 @@ public class SalesServiceImpl implements SalesService {
             saleList.add(sale);
             totalNum += tbOrderItem.getNum(); //获取到所有的商品数量
         }
-        System.out.println("购买的总数量为===" + totalNum);
         //2根据goodId和goods表的id进行匹配 获取到一级分类的id
         List<TbGoods> tbGoods = goodsMapper.selectAll();
         for (Sale sale : saleList) {
@@ -153,23 +156,33 @@ public class SalesServiceImpl implements SalesService {
             map.put(s, count);
             count = 0; //每个一级分类统计完数量之后都要进行情况 这样下一个分类就数量就重新开始
         }
+        //创建存储饼状图数据的list  将数据使用pojo封装 这样前端js中可以更好获取数据
+        List<SaleCount> saleCountList = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            SaleCount saleCount = new SaleCount();
+            saleCount.setCategoryName(entry.getKey()); //设置商品的一级分类
+            saleCount.setCount(entry.getValue().toString()); //设置一级分类对应的商品总数量
+            saleCountList.add(saleCount);
+        }
+        return saleCountList;
+    }
+
+    /**
+     * 一种可以将两个数相除变成百分数的方法 -- 当然这里已经不需要了
+     * 需要使用到NumberFormat格式化对象 最终结果转化为字符串来存储
+     *
+     * @param totalNum
+     * @param map
+     */
+    private void changePercent(float totalNum, Map<String, Integer> map) {
         //创建存储饼状图数据的map 将数据分别封装在key 和 value 中
         Map<String, String> stringMap = new HashMap<>();
         // 创建一个数值格式化对象
         NumberFormat numberFormat = NumberFormat.getInstance();
         // 设置精确到小数点后2位
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            String result = numberFormat.format((float) entry.getValue() / (float) totalNum * 100);
+            String result = numberFormat.format((float) entry.getValue() / totalNum * 100 + "%");
             stringMap.put(entry.getKey(), result);
         }
-        //创建存储饼状图数据的list  将数据使用pojo封装 这样前端js中可以更好获取数据
-        List<SaleCount> saleCountList = new ArrayList<>();
-        for (Map.Entry<String, String> entry : stringMap.entrySet()) {
-            SaleCount saleCount = new SaleCount();
-            saleCount.setCategoryName(entry.getKey());
-            saleCount.setCount(entry.getValue());
-            saleCountList.add(saleCount);
-        }
-        return saleCountList;
     }
 }

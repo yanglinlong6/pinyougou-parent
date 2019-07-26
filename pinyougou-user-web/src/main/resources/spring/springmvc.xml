@@ -102,7 +102,7 @@
     <dubbo:application name="pinyougou-user-web">
         <dubbo:parameter key="qos-port" value="34588"></dubbo:parameter>
     </dubbo:application>
-    <dubbo:registry protocol="zookeeper" address="192.168.25.133" port="2181"></dubbo:registry>
+    <dubbo:registry protocol="zookeeper" address="172.16.175.204" port="2181"></dubbo:registry>
     <!--dubbo注解配置-->
     <dubbo:annotation package="com.pinyougou.user"></dubbo:annotation>
 

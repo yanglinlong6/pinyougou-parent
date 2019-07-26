@@ -21,7 +21,7 @@ public class ChartController {
     private SalesService salesService;
 
     /**
-     *
+     * 折线图--指定时间段查询
      * 横坐标--时间集合
      * 纵坐标--销售额集合--这里要求和对应的时间保持一致 所以需要进行排序
      * 后端给前台返回Map<String, List>数据结构
@@ -35,8 +35,13 @@ public class ChartController {
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
         //2获取service层传递过来的map 但是此时key为没有顺序的
         Map<String, Double> salesReport = salesService.getSalesReport(sellerId, beginTime, endTime);
+        System.out.println("服务层传过来的map数据========"+salesReport);
+        System.out.println("开始时间为=="+beginTime);
+        System.out.println("结束时间为=="+endTime);
+
         //3所以需要将key进行排序--定义方法
         salesReport=sortMapByKey(salesReport);
+
         List<String> keyList=new ArrayList<>(); //定义存储的时间集合-横坐标
         List<Double> moneyList=new ArrayList<>(); //定义纵坐标集合 --销售额
         Map<String,List> map=new HashMap<>();
@@ -46,6 +51,7 @@ public class ChartController {
         }
         map.put("xAxisList",keyList);
         map.put("seriesSaleList",moneyList);
+        System.out.println("传给前端的数据为"+map);
         return map;
     }
 
@@ -57,7 +63,7 @@ public class ChartController {
     private Map<String, Double> sortMapByKey(Map<String, Double> salesReport) {
 
         if (salesReport==null||salesReport.isEmpty()){
-            return null;
+            return new HashMap<>();
         }
         /**
          * 使用TreeMap 因为TreeMap实现sortMap接口，比较器进行排序 升序排列o1.compareTo(o2)

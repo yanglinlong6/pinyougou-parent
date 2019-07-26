@@ -37,8 +37,6 @@ public class SalesController {
         //调用业务层将分类名称和对应的销售量百分比字符串
         List<SaleCount> saleCountList = salesService.findSalesReports01();
         //创建两个集合 用来存储分类名称 和 销售量百分比字符串
-        System.out.println(saleCountList);
-
         return saleCountList;
     }
 }
