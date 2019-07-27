@@ -22,7 +22,7 @@
                 console.log("该用户被冻结");
                 if(error.toString().indexOf("900") != -1) {
                     alert("抱歉，你的账号冻结了")
-                    window.location.href = "/outLogin.shtml";
+                    window.location.href = "/out/outLogin.shtml";
                 }
             });
         },
@@ -159,7 +159,7 @@
 
         //退出登录
         outLogin:function () {
-            axios.get('/outLogin.shtml').then(function (response) {
+            axios.get('/out/outLogin.shtml').then(function (response) {
                 alert("1111")
                 console.log("退出成功")
             })

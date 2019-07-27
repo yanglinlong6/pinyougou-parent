@@ -37,6 +37,12 @@ public interface UserService extends CoreService<TbUser> {
 
     Map<String, Object> findFootMark();
 
+	/**
+	 * 每次登录，字段加1
+	 * @param name
+	 */
+	public void addCount(String name);
+
 
 
 }

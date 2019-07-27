@@ -8,13 +8,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
 /**
  * 退出登录的controller
  */
-@Controller
+@RestController
+@RequestMapping("/out")
 public class OutLogin {
     @Reference
     private UserService userService;

@@ -1,6 +1,7 @@
 package com.pinyougou.user.interceptor;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.common.util.MyDateUtil;
 import com.pinyougou.pojo.TbUser;
 import com.pinyougou.user.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,6 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * 自定义拦截器，在访问控制器之前进行拦截
@@ -22,13 +24,29 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         boolean flag = false;
-
+        System.out.println("进入拦截器了");
         //获取用户名
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(name);
         TbUser user = new TbUser();
         user.setUsername(name);
         System.out.println(userService);
+
+
+        //在这里先进行判断该用户有没有超过三个月没登录
         TbUser tbUser = userService.selectOne(user);
+        Date lastLoginTime = tbUser.getLastLoginTime();
+        String last = MyDateUtil.toString(lastLoginTime, "yyyy-MM-dd");
+        String now = MyDateUtil.toString(new Date(), "yyyy-MM-dd");
+        boolean isYes = MyDateUtil.isGreaterThanThreeMonths(last, now, "yyyy-MM-dd");
+        if(isYes) {
+            //超过三个月了,修改字段
+            tbUser.setStatus("2");
+            //更新数据库
+            userService.updateByPrimaryKey(tbUser);
+        }
+
+
         String status = tbUser.getStatus();
         System.out.println(status);
             if("2".equals(status)) {
@@ -49,7 +67,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }else {
             System.out.println("这不是一个ajax请求");
             //进行重定向
-            response.sendRedirect("/outLogin.shtml");
+            response.sendRedirect("/out/outLogin.shtml");
         }
     }
 }
