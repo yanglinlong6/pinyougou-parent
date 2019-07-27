@@ -1,5 +1,7 @@
 package com.pinyougou.sellergoods.service;
 
+import entity.SaleCount;
+
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +26,7 @@ public interface SalesService {
      * 饼状图1---商品销售量的图
      * @return
      */
-    Map<String, Float> findSalesReports01();
+    List<SaleCount> findSalesReports01();
 
 
 }

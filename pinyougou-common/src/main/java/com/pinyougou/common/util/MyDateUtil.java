@@ -15,7 +15,7 @@ import java.util.Date;
 public class MyDateUtil {
     /**
      * 将字符串的日期格式转化为pattern类型的日期格式
-     *
+     * 24h
      * @param date
      * @param pattern
      * @return
@@ -48,6 +48,7 @@ public class MyDateUtil {
 
     /**
      * 判断两个日期之间是否超过三个月
+     *
      */
     public static boolean isGreaterThanThreeMonths(String date01, String date02, String format) throws ParseException {
         boolean flag = false;

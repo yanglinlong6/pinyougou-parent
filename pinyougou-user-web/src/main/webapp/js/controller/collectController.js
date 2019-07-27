@@ -151,6 +151,11 @@
                 //alert(response.data)
                 app.list = response.data;
             })
+        },
+        addCart:function (id) {
+            axios.get("/user/addToCart.shtml?id="+id).then(function (response) {
+                alert(response.data.message)
+            })
         }
     },
     //钩子函数 初始化了事件和

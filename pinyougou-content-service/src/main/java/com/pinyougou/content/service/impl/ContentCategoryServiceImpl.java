@@ -18,7 +18,6 @@ import java.util.List;
 @Service
 public class ContentCategoryServiceImpl extends CoreServiceImpl<TbContentCategory> implements ContentCategoryService {
 
-
     private TbContentCategoryMapper contentCategoryMapper;
 
     @Autowired

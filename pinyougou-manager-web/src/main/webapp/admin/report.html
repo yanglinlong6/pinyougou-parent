@@ -30,18 +30,8 @@
         <!-- 数据表格 -->
         <div class="table-box">
 
-            <!--日期控件-->
-            <div align="center">
-                <label for="start">开始日期：</label><input id="start" v-model="beginTime" type="datetime" />
-                <label for="end">结束日期：</label><input id="end" v-model="endTime" type="datetime" />
-                <!--调用getData方法-->
-                <button @click="getData()">查询</button>
-            </div>
-            <!--日期控件-->
-
-            <!--折线图容器-->
-            <div id='main' style='width: 90%;height:400px;' align="center">
-
+            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+            <div id="main" style="width: 600px;height:400px;"></div>
             </div>
 
 
@@ -53,9 +43,9 @@
     <!-- /.box-body -->
 </div>
 </body>
+<script src="../js/echarts.js"></script>
 <script src="../plugins/vue/vue.js"></script>
 <script src="../js/controller/base.js"></script>
 <script src="../plugins/axios/axios.js"></script>
-<script src="../js/echarts.js"></script>
 <script src="../js/controller/report.js"></script>
 </html>
