@@ -71,6 +71,8 @@ public class ImportExcel {
      * @param fileName 导出Excel文件的名字
      * @param response 通过response返回
      * @param mappingFiled pojo映射到excel上的列名,为了确保有序,必须使用LinkedHashMap
+     *                     Key必须为Pojo字段名
+     *                     value则为映射到Excel上的列名
      * @param <T>
      * @throws IOException
      * @throws NoSuchFieldException
