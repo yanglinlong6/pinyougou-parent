@@ -23,9 +23,8 @@ public class LoginController {
     @RequestMapping("/name")
     public String getName() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        if(name != null) {
-            userService.addCount(name);
-        }
+        System.out.println("sadas"+name);
+        userService.addCount(name);
         return name;
     }
 }
