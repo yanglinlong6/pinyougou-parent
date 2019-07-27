@@ -271,4 +271,20 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
 
         return tbOrderList;
     }
+
+    @Override
+    public void updateOrderStatusAndCreateLog(String out_trade_no, String transaction_id, String userId) {
+        TbOrder tbOrder = orderMapper.selectByPrimaryKey(out_trade_no);
+        tbOrder.setStatus("2");
+        TbPayLog tbPayLog = new TbPayLog();
+        tbPayLog.setOutTradeNo(idWorker.nextId()+"");
+        tbPayLog.setOutTradeNo(transaction_id);
+        tbPayLog.setPayTime(new Date());
+        tbPayLog.setUserId(userId);
+        tbPayLog.setTotalFee(tbOrder.getPayment().longValue());
+        tbPayLog.setCreateTime(tbOrder.getCreateTime());
+        tbPayLog.setOrderList(out_trade_no);
+
+        payLogMapper.insert(tbPayLog);
+    }
 }

@@ -43,4 +43,7 @@ public interface OrderService extends CoreService<TbOrder> {
 	 *@time 2019-7-24 22:06
 	 */
 	List<TbOrder> getOrderByStatus(String userId, String status);
+
+    void updateOrderStatusAndCreateLog(String out_trade_no, String transaction_id, String userId);
+
 }

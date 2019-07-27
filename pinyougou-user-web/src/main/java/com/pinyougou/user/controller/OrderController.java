@@ -5,7 +5,6 @@ import com.pinyougou.order.service.OrderService;
 import com.pinyougou.pay.service.WeixinPayService;
 import com.pinyougou.pojo.TbOrder;
 import entity.Result;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,11 +67,8 @@ public class OrderController {
             }
             if ("SUCCESS".equals(resultMap.get("trade_state"))) {//支付成功
                 result = new Result(true, "支付成功");
-
-                       /* + 修改商品的订单的状态
-                        + 支付日志的订单的状态
-                        + 删除掉redis中的支付日志*/
-                orderService.updateOrderStatus(out_trade_no, resultMap.get("transaction_id"));
+                String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+                orderService.updateOrderStatusAndCreateLog(out_trade_no, resultMap.get("transaction_id"),userId);
 
                 break;
             }

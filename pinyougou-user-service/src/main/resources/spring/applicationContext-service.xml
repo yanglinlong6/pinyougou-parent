@@ -9,7 +9,7 @@
         <dubbo:parameter key="qos.port" value="56987"></dubbo:parameter>
     </dubbo:application>
 
-    <dubbo:registry protocol="zookeeper" address="172.16.175.204" port="2181"></dubbo:registry>
+    <dubbo:registry protocol="zookeeper" address="192.168.25.133" port="2181"></dubbo:registry>
     <!--增加暴露服务的端口-->
     <dubbo:protocol name="dubbo" port="20884"></dubbo:protocol>
 

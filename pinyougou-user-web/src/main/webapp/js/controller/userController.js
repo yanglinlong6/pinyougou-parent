@@ -144,7 +144,7 @@
             });
         },
         findAllOrder:function () {
-            axios.get("/order/getAllOrder.shtml").then(function (response) {
+            axios.get("/order/getOrderByStatus.shtml").then(function (response) {
                 app.userOrderList = response.data;
             })
         },
