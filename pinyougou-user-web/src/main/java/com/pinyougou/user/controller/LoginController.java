@@ -2,6 +2,7 @@ package com.pinyougou.user.controller;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.pojo.TbUser;
 import com.pinyougou.user.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +24,13 @@ public class LoginController {
     @RequestMapping("/name")
     public String getName() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("sadas"+name);
-        userService.addCount(name);
+        TbUser tbUser = new TbUser();
+        tbUser.setUsername(name);
+        TbUser tbUser1 = userService.selectOne(tbUser);
+        //数据加一
+        tbUser1.setExperienceValue(tbUser1.getExperienceValue()+1);
+        //数据更新
+        userService.update(tbUser1);
         return name;
     }
 }

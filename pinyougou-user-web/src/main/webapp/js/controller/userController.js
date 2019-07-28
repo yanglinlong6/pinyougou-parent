@@ -22,7 +22,7 @@
                 console.log("该用户被冻结");
                 if(error.toString().indexOf("900") != -1) {
                     alert("抱歉，你的账号冻结了")
-                    window.location.href = "/logout/outLogin.shtml";
+                    window.location.href = "/unfreeze.html";
                 }
             });
         },
@@ -156,6 +156,7 @@
         payNow:function (orderId) {
             axios.get("/")
         },
+
 
     },
     //钩子函数 初始化了事件和

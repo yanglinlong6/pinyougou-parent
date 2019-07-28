@@ -189,21 +189,4 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
         
     }
 
-    /**
-     * 每次登录字段+1
-     * @param name
-     */
-    @Override
-    public void addCount(String name) {
-        System.out.println(userMapper);
-        //根据名字查询
-        TbUser user = new TbUser();
-        System.out.println(name);
-        TbUser tbUser = userMapper.selectOne(user);  //查出来的对象
-        tbUser.setExperienceValue(tbUser.getExperienceValue()+1);  //数据加一
-        //进行更新
-        int i = userMapper.updateByPrimaryKey(tbUser);
-        System.out.println("修改行数"+i);
-    }
-
 }
