@@ -71,10 +71,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         if(accept.contains("application/json")) {
             System.out.println("这是一个ajax请求");
             response.setStatus(900);
+
         }else {
             System.out.println("这不是一个ajax请求");
             //进行重定向
-            response.sendRedirect("/logout/outLogin.shtml");
+            response.sendRedirect("/unfreeze.html");
         }
     }
 }
