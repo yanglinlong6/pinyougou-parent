@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>商品销售额数据查看</title>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+</head>
+<body class="hold-transition skin-red sidebar-mini">
+<div id="app">
+    <!-- .box-body -->
+    <div class="box-header with-border">
+        <h3 class="box-title">商品销售额数据查看</h3>
+    </div>
+
+    <div class="box-body">
+
+        <!-- 数据表格 -->
+        <div class="table-box">
+
+
+            <div class="box-tools pull-right">
+                <div class="has-feedback">
+                    开始时间：<input type="date" v-model="forDate">
+                    结束时间：<input type="date" v-model="toDate">
+                    <button class="btn btn-default" @click="selectShopCount()">范围时间内商品销售额查询</button>
+                </div>
+            </div>
+
+            <!--数据列表-->
+            <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+                <thead>
+                <tr>
+                    <th class="sorting_asc">商品名称</th>
+                    <th class="sorting">销售件数</th>
+                    <th class="sorting">销售总额</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="entity in list">
+                    <td>{{entity.shopName}}</td>
+                    <td>{{entity.shopCount}}</td>
+                    <td>{{entity.shopTotalFee}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <!--数据列表/-->
+        </div>
+        <!-- 数据表格 /-->
+
+
+    </div>
+
+
+</div>
+</body>
+<!--引入JS-->
+<script src="../plugins/vue/vue.js"></script>
+<script src="../plugins/axios/axios.js"></script>
+<script src="../js/pagination.js"></script>
+<script src="../js/controller/shopCount.js"></script>
+</html>

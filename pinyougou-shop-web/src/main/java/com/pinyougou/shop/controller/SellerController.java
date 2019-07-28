@@ -5,12 +5,18 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbSeller;
 import com.pinyougou.sellergoods.service.SellerService;
 import entity.Result;
+import entity.ShopOrderCount;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +27,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/seller")
 public class SellerController {
+
+
 
 	@Reference
 	private SellerService sellerService;
@@ -119,4 +127,15 @@ public class SellerController {
 		System.out.println("55555"+name);
 		return name;
 	}
+
+
+	@RequestMapping("/findDateMoney")
+	public List<ShopOrderCount> findDateMoney(String forDate,  String toDate){
+
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		return sellerService.findDateMoney(username,forDate,toDate);
+	}
+
+
+
 }
