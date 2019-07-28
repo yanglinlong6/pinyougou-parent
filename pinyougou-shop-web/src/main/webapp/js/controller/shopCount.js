@@ -8,6 +8,8 @@ var app = new Vue({
 
     },
     methods: {
+
+
         selectShopCount:function () {
             axios.get('/seller/findDateMoney.shtml?forDate='+this.forDate+'&toDate='+this.toDate).then(function (response) {
                 app.list=response.data;

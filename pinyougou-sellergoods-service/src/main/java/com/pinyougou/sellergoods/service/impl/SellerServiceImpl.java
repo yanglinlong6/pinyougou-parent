@@ -194,7 +194,7 @@ public class SellerServiceImpl extends CoreServiceImpl<TbSeller> implements Sell
         if (!StringUtils.isBlank(toDate)){
             criteria.andGreaterThanOrEqualTo("paymentTime", toDate);
         }
-        //criteria.andBetween("paymentTime", forDate, toDate);
+        //criteria.andBetween("paymentTime", forDate, toDate); 此处并不适用
         List<TbOrder> tbOrders = tbOrderMapper.selectByExample(orderExample);
         ArrayList<Long> orderIds = new ArrayList<>();
         for (TbOrder tbOrder : tbOrders) {
