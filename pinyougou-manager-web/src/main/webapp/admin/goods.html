@@ -48,7 +48,7 @@
                         <button type="button" class="btn btn-default" title="导出" ><i
                                 class="fa fa-refresh"></i> <a href="/goods/importExcelForOrder.shtml">导出订单</a>
                         </button>
-                        <button type="button" class="btn btn-default" title="驳回"><i class="fa fa-ban"></i> 驳回</button>
+                        <button type="button" class="btn btn-default" title="驳回" @click="updateStatus(2)"><i class="fa fa-ban"></i> 驳回</button>
                         <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
                                 class="fa fa-refresh"></i> 刷新
                         </button>

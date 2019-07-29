@@ -1,7 +1,6 @@
 package com.pinyougou.search.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.search.service.ItemSearchService;
 import entity.Result;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +28,8 @@ public class ItemSearchController {
     }
     
     // @RequestMapping("/tiaoZhaun")
-    // public TbGoods tiaoZhaun(Long id){
+    // public Long tiaoZhaun(Long id) {
     // return itemSearchService.tiaoZhaun(id);
-    //
     // }
     
     @RequestMapping("/addFootMark")

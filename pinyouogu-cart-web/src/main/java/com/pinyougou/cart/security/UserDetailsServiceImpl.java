@@ -16,8 +16,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  */
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-
-        return new User(s,"", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
+    public UserDetails loadUserByUsername(String s)
+        throws UsernameNotFoundException {
+        
+        return new User(s, "", AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
     }
 }

@@ -19,8 +19,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
-import java.lang.reflect.MalformedParameterizedTypeException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +47,7 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
     
     @Autowired
     private TbItemMapper itemMapper;
-
+    
     @Autowired
     public UserServiceImpl(TbUserMapper userMapper) {
         super(userMapper, TbUser.class);
@@ -171,21 +169,53 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
     }
     
     @Override
-    public Map<String, Object> findFootMark() {
-        List list = redisTemplate.boundHashOps("FOOTMARK_REDIS_KEY").values();
+    public Map<String, Object> findFootMark(String username, List<Long> markList) {
+        List<Long> list = (List<Long>)redisTemplate.boundHashOps("FOOTMARK_REDIS_KEY").get(username);
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        if (markList != null) {
+            list.addAll(markList);
+        }
+
         Map<String, Object> map = new HashMap<>();
-        List<TbItem> markList = new ArrayList<>();
+        List<TbItem> markItemList = new ArrayList<>();
+//        Set<Long> hashSet = new HashSet<>(list);
+//        System.out.println("set集合:" + hashSet);
+//        for (Long aLong : hashSet) {
+//            TbItem item = new TbItem();
+//            item.setId(aLong);
+//            TbItem tbItem = itemMapper.selectByPrimaryKey(item);
+//            markItemList.add(tbItem);
+//            System.out.println("遍历set:" + aLong);
+//            System.out.println("根据set遍历:" + tbItem);
+//        }
         for (Object o : list) {
             TbItem item = new TbItem();
             item.setId((Long)o);
             TbItem tbItem = itemMapper.selectByPrimaryKey(item);
             System.out.println(tbItem);
-            markList.add(tbItem);
+            markItemList.add(tbItem);
         }
-        map.put("markList", markList);
-        System.out.println(list);
+        map.put("markList", markItemList);
+        System.out.println(markItemList);
         System.out.println(map);
         return map;
-        
+    }
+    
+    @Override
+    public void addFootMark(String username, List<Long> markListNew) {
+        System.out.println("footmark" + markListNew);
+        redisTemplate.boundHashOps("FOOTMARK_REDIS_KEY").put(username, markListNew);
+        System.out.println("footmark添加redis成功");
+    }
+    
+    @Override
+    public List<Long> getMarkListFromRedis(String username) {
+        List<Long> markList = (List<Long>)redisTemplate.boundHashOps("FOOTMARK_REDIS_KEY").get(username);
+        if (markList == null) {
+            markList = new ArrayList<>();
+        }
+        return markList;
     }
 }

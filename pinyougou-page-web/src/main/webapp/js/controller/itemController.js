@@ -70,8 +70,23 @@ var app = new Vue({
                     }
                 })
         },
+        // addFootMark: function (id) {
+        //     axios.post('http://localhost:9104/itemSearch/addFootMark.shtml?id=' + id, { withCredentials: true }).then(resp => {
+        //         alert("发送请求")
+        //         if (resp.data.success) {
+        //             console.log("添加足迹成功")
+        //         }
+        //     }).catch(error => {
+        //         console.log("添加足迹失败")
+        //     })
+        // },
         addFootMark: function (id) {
-            axios.post('http://localhost:9104/itemSearch/addFootMark.shtml?id=' + id, { withCredentials: true }).then(resp => {
+            axios.get('http://localhost:9106/pagemark/addFootMark.shtml', {
+                params: {
+                    id: id,
+                },
+                withCredentials: true
+            }).then(resp => {
                 alert("发送请求")
                 if (resp.data.success) {
                     console.log("添加足迹成功")
@@ -79,7 +94,7 @@ var app = new Vue({
             }).catch(error => {
                 console.log("添加足迹失败")
             })
-        }
+        },
     },
     created: function () {
         let urlParamObject = this.getUrlParam();

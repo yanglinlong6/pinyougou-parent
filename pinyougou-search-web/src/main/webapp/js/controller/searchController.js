@@ -197,32 +197,14 @@
                 console.log("1231312131321");
             });
         },
-        // findDetailsPage:function (id) {
-        //     axios.get('/item/findDetailsPage/' + id + '.shtml').then(resp=>{
-        //         window.location.href = "http://localhost:9107/cart.html";
-        //     })
-        // },
-        // addFootMark: function (id) {
-        //     alert("发送请求")
-        //     axios.get('/itemSearch/addFootMark/' + id + '.shtml', { withCredentials: true }).then(resp => {
-        //         if (resp.data.success) {
-        //             console.log("添加足迹成功")
-        //         }
-        //     }).catch(error => {
-        //         console.log("添加足迹失败")
-        //     });
-        //     app.tiaozhuan();
-        // },
         // tiaozhuan: function (id) {
-        //     // window.location.href = "http://localhost:9105/149187842867983.html";
-        //     axios.get('/item/tiaoZhaun.shtml?id=' + id).then(resp => {
-        //         var tbgoods = JSON.stringify(resp.data);
-        //         console.log(tbgoods);
-        //         window.location.href = "http://localhost:9105/" + tbgoods.id + ".html?id=" + tbgoods.id;
+        //     axios.get('/itemSearch/tiaoZhaun.shtml?id=' + id).then(resp => {
+        //         var goodsId = resp.data;
+        //         console.log(goodsId);
+        //         window.location.href = "http://localhost:9105/" + goodsId + ".html?id=" + goodsId;
         //     }).catch(error => {
         //         console.log("跳转失败")
         //     })
-        //
         // },
         tiaozhuan: function (id) {
             // window.location.href = "http://localhost:9105/149187842867983.html";
