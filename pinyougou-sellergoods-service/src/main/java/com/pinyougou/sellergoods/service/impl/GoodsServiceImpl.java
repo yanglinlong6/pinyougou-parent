@@ -262,9 +262,19 @@ public class GoodsServiceImpl extends CoreServiceImpl<TbGoods> implements GoodsS
         example.createCriteria().andIn("id", Arrays.asList(ids));
         goodsMapper.updateByExampleSelective(record, example);// update set status=1 where id in (12,3)
     }
-    
+
+    @Override
+    public void updateIsMarke(Long[] ids, String isMarke) {
+        TbGoods record = new TbGoods();
+        record.setIsMarketable(isMarke);
+        Example example = new Example(TbGoods.class);
+        example.createCriteria().andIn("id", Arrays.asList(ids));
+        goodsMapper.updateByExampleSelective(record, example);
+    }
+
     @Override
     public List<TbItem> findTbItemListByIds(Long[] ids) {
+        System.out.println("方法中"+Arrays.toString(ids));
         Example example = new Example(TbItem.class);
         example.createCriteria().andIn("goodsId", Arrays.asList(ids)).andEqualTo("status", "1");
         return itemMapper.selectByExample(example);

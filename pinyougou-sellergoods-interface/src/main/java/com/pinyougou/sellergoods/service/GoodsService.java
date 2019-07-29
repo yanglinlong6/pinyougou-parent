@@ -39,6 +39,8 @@ public interface GoodsService extends CoreService<TbGoods> {
     public void update(Goods goods);
     
     public void updateStatus(Long[] ids, String status);
+
+    public void updateIsMarke(Long[] ids, String isMarke);
     
     /**
      * 根据商品SPU的数组对象查询所有的该商品的列表数据

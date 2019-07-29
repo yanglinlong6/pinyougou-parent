@@ -1,5 +1,4 @@
 package com.pinyougou.manager.controller;
-import java.math.BigDecimal;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
@@ -7,7 +6,6 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.common.pojo.MessageInfo;
 import com.pinyougou.common.util.ImportExcel;
 import com.pinyougou.page.service.ItemPageService;
-import com.pinyougou.pojo.TbBrand;
 import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbOrder;
@@ -19,13 +17,12 @@ import entity.Result;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
-import org.jboss.netty.util.internal.ReusableIterator;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -143,12 +140,13 @@ public class GoodsController {
     @Autowired
     private DefaultMQProducer producer;
 
+
     @RequestMapping("/updateStatus/{status}")
     public Result updateStatus(@RequestBody Long[] ids, @PathVariable(value = "status") String status) {
         try {
             goodsService.updateStatus(ids, status);
             if ("1".equals(status)) {
-                System.out.println(ids.toString());
+                System.out.println(Arrays.toString(ids));
                 List<TbItem> tbItemListByIds = goodsService.findTbItemListByIds(ids);
                 System.out.println(tbItemListByIds);
                 MessageInfo messageInfo = new MessageInfo("Goods_Topic", "goods_update_tag", "updateStatus", tbItemListByIds, MessageInfo.METHOD_UPDATE);
@@ -165,6 +163,44 @@ public class GoodsController {
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "更新失败");
+        }
+    }
+
+    /**
+     * 商品上下架  0：未上架
+     *            1：已上架
+     * @param ids
+     * @param isMarke
+     * @return
+     */
+    @RequestMapping("/updateIsMarke/{isMarke}")
+    public Result updateIsMarke(@RequestBody Long[] ids, @PathVariable(value = "isMarke") String isMarke) {
+        try {
+            //更新数据库
+            goodsService.updateIsMarke(ids,isMarke);
+            //要求上架
+            if ("1".equals(isMarke)) {
+                System.out.println(ids.toString());
+                List<TbItem> tbItemListByIds = goodsService.findTbItemListByIds(ids);
+                System.out.println(tbItemListByIds);
+                MessageInfo messageInfo = new MessageInfo("Goods_Topic", "goods_update_tag", "updateStatus", tbItemListByIds, MessageInfo.METHOD_UPDATE);
+                System.out.println(messageInfo.toString());
+                SendResult send = producer.send(new Message(messageInfo.getTopic(), messageInfo.getTags(), messageInfo.getKeys(), JSON.toJSONString(messageInfo).getBytes()));
+                System.out.println(">>>>" + send.getSendStatus());
+    //                itemSearchService.updateIndex(tbItemListByIds);
+    //                for (Long id : ids) {
+    //                    itemPageService.genItemHtml(id);
+    //                    System.out.println(id);
+    //                }
+                //上架驳回
+            }else if("0".equals(isMarke)) {
+                MessageInfo messageInfo = new MessageInfo("Goods_Topic", "goods_delete_tag", "delete", ids, MessageInfo.METHOD_DELETE);
+                producer.send(new Message(messageInfo.getTopic(), messageInfo.getTags(), messageInfo.getKeys(), JSON.toJSONString(messageInfo).getBytes()));
+            }
+            return new Result(true, "操作成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "上架失败");
         }
     }
 

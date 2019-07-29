@@ -1,4 +1,4 @@
-﻿var app = new Vue({
+var app = new Vue({
     el: "#app",
     data: {
         pages: 15,
@@ -6,22 +6,34 @@
         list: [],
         entity: {},
         ids: [],
-        status: ['未审核', '已审核', '审核未通过', '已关闭'],
+        status: ['未上架', '已上架', '上架未通过', '已关闭'],
         itemCatList: [],
-        //searchEntity: {auditStatus: '0'},
-        searchEntity: {},
+        searchEntity: {auditStatus: '1'},
+        //searchEntity: {},
     },
     methods: {
         updateStatus:function (status) {
             axios.post('/goods/updateStatus/'+status+'.shtml',this.ids).then(function (response) {
                 if(response.data.success){
                     app.searchList(1);
+                }
+            }).catch(function (error) {
+                console.log("1231312131321");
+            });
+        },
+
+        //商家上架下架的方法
+        updateIsMarke:function(isMarke) {
+            axios.post('/goods/updateIsMarke/'+isMarke+'.shtml',this.ids).then(function (response) {
+                if(response.data.success){
+
                     window.location.reload();
                 }
             }).catch(function (error) {
                 console.log("1231312131321");
             });
         },
+
         findAllItemCategory: function () {
             //获取所有的商品分类列表
             axios.get('/itemCat/findAll.shtml').then(function (response) {
@@ -117,7 +129,6 @@
                 if (response.data.success) {
                     app.searchList(1);
                     window.location.reload();
-
                 }
             }).catch(function (error) {
                 console.log("1231312131321");
