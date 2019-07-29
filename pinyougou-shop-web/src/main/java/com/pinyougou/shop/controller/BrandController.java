@@ -108,8 +108,8 @@ public class BrandController {
 	@RequestMapping("/updateStatus")
 	public Result updateStatus(@RequestBody Long[] ids){
 		try {
-			long Status=1;
-			brandService.updateStatus(ids);
+			String status="2";
+			brandService.updateStatus(ids,status);
 			return new Result(true, "删除成功");
 		} catch (Exception e) {
 			e.printStackTrace();

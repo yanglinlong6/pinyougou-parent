@@ -1,7 +1,6 @@
 package com.pinyougou.sellergoods.service.impl;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -22,10 +21,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 服务实现层

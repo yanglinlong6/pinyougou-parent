@@ -137,8 +137,8 @@ public class ItemCatController {
 	@RequestMapping("/updateStatus")
 	public Result updateStatus(@RequestBody Long[] ids){
 		try {
-			long Status=1;
-			itemCatService.updateStatus(ids);
+			String status="2";
+			itemCatService.updateStatus(ids,status);
 			return new Result(true, "删除成功");
 		} catch (Exception e) {
 			e.printStackTrace();
