@@ -49,8 +49,6 @@ public class UserController {
      */
     @RequestMapping("/selectCollect")
     public List<TbItem> selectCollect() {
-
-        return cartService.selectCollect();
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         return cartService.selectCollect(name);
     }

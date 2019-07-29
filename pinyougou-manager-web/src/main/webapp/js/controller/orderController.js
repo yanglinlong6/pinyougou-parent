@@ -91,7 +91,7 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
-        }
+        },
 
 
 

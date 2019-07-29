@@ -3,32 +3,29 @@ package com.pinyougou.sellergoods.service.impl;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.rocketmq.client.exception.MQBrokerException;
-import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.common.message.Message;
-import org.apache.rocketmq.remoting.exception.RemotingException;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
+import com.pinyougou.core.service.CoreServiceImpl;
 import com.pinyougou.mapper.TbOrderItemMapper;
 import com.pinyougou.mapper.TbOrderMapper;
 import com.pinyougou.pojo.TbOrder;
 import com.pinyougou.pojo.TbOrderItem;
 import com.pinyougou.sellergoods.service.OrderService;
 import org.apache.commons.lang3.StringUtils;
-import com.pinyougou.core.service.CoreServiceImpl;
-
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import tk.mybatis.mapper.entity.Example;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 服务实现层
@@ -42,40 +39,40 @@ import tk.mybatis.mapper.entity.Example;
  */
 @Service
 public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderService {
-    
+
     private TbOrderMapper orderMapper;
-    
+
     @Value("${template_code}")
     private String templateCode;
-    
+
     @Value("${sign_name}")
     private String signName;
-    
+
     @Autowired
     public OrderServiceImpl(TbOrderMapper orderMapper) {
         super(orderMapper, TbOrder.class);
         this.orderMapper = orderMapper;
     }
-    
+
     @Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo, pageSize);
         List<TbOrder> all = orderMapper.selectAll();
         PageInfo<TbOrder> info = new PageInfo<TbOrder>(all);
-        
+
         // 序列化再反序列化
         String s = JSON.toJSONString(info);
         PageInfo<TbOrder> pageInfo = JSON.parseObject(s, PageInfo.class);
         return pageInfo;
     }
-    
+
     @Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder order) {
         PageHelper.startPage(pageNo, pageSize);
-        
+
         Example example = new Example(TbOrder.class);
         Example.Criteria criteria = example.createCriteria();
-        
+
         if (order != null) {
             if (StringUtils.isNotBlank(order.getPaymentType())) {
                 criteria.andLike("paymentType", "%" + order.getPaymentType() + "%");
@@ -97,14 +94,14 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
                 criteria.andLike("shippingCode", "%" + order.getShippingCode() + "%");
                 // criteria.andShippingCodeLike("%"+order.getShippingCode()+"%");
             }
-            /* ===================================修改 1 */
+            /*===================================修改 1 */
             if (StringUtils.isNotBlank(order.getUserId())) {
-                criteria.andEqualTo("userId", order.getUserId());
-                // criteria.andLike("userId", "%" + order.getUserId() + "%");
-                // criteria.andUserIdLike("%"+order.getUserId()+"%");
+                criteria.andEqualTo("userId",order.getUserId());
+                //criteria.andLike("userId", "%" + order.getUserId() + "%");
+                //criteria.andUserIdLike("%"+order.getUserId()+"%");
             }
-            /* ===================================修改 1 */
-            
+            /*===================================修改 1 */
+
             if (StringUtils.isNotBlank(order.getBuyerMessage())) {
                 criteria.andLike("buyerMessage", "%" + order.getBuyerMessage() + "%");
                 // criteria.andBuyerMessageLike("%"+order.getBuyerMessage()+"%");
@@ -142,7 +139,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
                 // criteria.andSourceTypeLike("%"+order.getSourceType()+"%");
             }
             /* ===================================修改 1 */
-            
+
             if (StringUtils.isNotBlank(order.getSellerId())) {
                 criteria.andEqualTo("sellerId", order.getSellerId());
                 // criteria.andLike("sellerId", "%" + order.getSellerId() + "%");
@@ -154,20 +151,20 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
                 // criteria.andLike("sellerId", "%" + order.getSellerId() + "%");
                 // criteria.andSellerIdLike("%"+order.getSellerId()+"%");
             }
-            
+
         }
         List<TbOrder> all = orderMapper.selectByExample(example);
         PageInfo<TbOrder> info = new PageInfo<TbOrder>(all);
         // 序列化再反序列化
         String s = JSON.toJSONString(info);
         PageInfo<TbOrder> pageInfo = JSON.parseObject(s, PageInfo.class);
-        
+
         return pageInfo;
     }
-    
+
     @Autowired
     private TbOrderItemMapper tbOrderItemMapper;
-    
+
     /**
      * 获取销售额
      *
@@ -191,7 +188,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
             // 设置时间区间
             criteria.andBetween("paymentTime", dateStart, dateEnd);
             List<TbOrder> tbOrders = orderMapper.selectByExample(example);
-            
+
             // 2获取到该时间段该商家的订单 进行遍历
             if (tbOrders.size() > 0 && tbOrders != null) {
                 // 如果不为null name根据订单id获取订单明细 获取总价格
@@ -226,10 +223,10 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
         }
         return map;
     }
-    
+
     @Autowired
     private DefaultMQProducer producer;
-    
+
     @Override
     public void deliverGoods(Long[] ids) {
         // todo
@@ -245,7 +242,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
             order.setShippingName(arr[j]);
             int i = orderMapper.updateByPrimaryKey(order);
             System.out.println("成功" + i);
-            
+
             // String code = (long)((Math.random() * 9 + 1) * 100000) + "";
 //            String code = "12354687799225";
 //            Map<String, String> map = new HashMap<>();
@@ -264,5 +261,6 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
 //            }
         }
     }
-    
+
+
 }

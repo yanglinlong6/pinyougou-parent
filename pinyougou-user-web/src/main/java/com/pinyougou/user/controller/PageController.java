@@ -46,10 +46,11 @@ public class PageController {
     
     @Reference
     private CartService cartService;
-    
+
     @RequestMapping("/selectCollect")
     public List<TbItem> selectCollect() {
-        return cartService.selectCollect();
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return cartService.selectCollect(name);
     }
     
     @RequestMapping("/addFootMark")
