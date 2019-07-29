@@ -7,4 +7,7 @@ public interface TbUserMapper extends Mapper<TbUser> {
 
     Integer findUserNum();
 
+    Integer findActiveNum();
+
+    Integer findUnActiveNum();
 }
