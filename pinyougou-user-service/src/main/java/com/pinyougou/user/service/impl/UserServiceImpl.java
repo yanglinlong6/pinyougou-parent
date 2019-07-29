@@ -177,19 +177,19 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
         if (markList != null) {
             list.addAll(markList);
         }
-
+        
         Map<String, Object> map = new HashMap<>();
         List<TbItem> markItemList = new ArrayList<>();
-//        Set<Long> hashSet = new HashSet<>(list);
-//        System.out.println("set集合:" + hashSet);
-//        for (Long aLong : hashSet) {
-//            TbItem item = new TbItem();
-//            item.setId(aLong);
-//            TbItem tbItem = itemMapper.selectByPrimaryKey(item);
-//            markItemList.add(tbItem);
-//            System.out.println("遍历set:" + aLong);
-//            System.out.println("根据set遍历:" + tbItem);
-//        }
+        // Set<Long> hashSet = new HashSet<>(list);
+        // System.out.println("set集合:" + hashSet);
+        // for (Long aLong : hashSet) {
+        // TbItem item = new TbItem();
+        // item.setId(aLong);
+        // TbItem tbItem = itemMapper.selectByPrimaryKey(item);
+        // markItemList.add(tbItem);
+        // System.out.println("遍历set:" + aLong);
+        // System.out.println("根据set遍历:" + tbItem);
+        // }
         for (Object o : list) {
             TbItem item = new TbItem();
             item.setId((Long)o);
@@ -218,5 +218,5 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
         }
         return markList;
     }
-
+    
 }
