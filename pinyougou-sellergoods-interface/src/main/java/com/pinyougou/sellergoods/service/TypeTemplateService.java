@@ -40,4 +40,5 @@ public interface TypeTemplateService extends CoreService<TbTypeTemplate> {
 	void insertAll(List<Map<String, String>> forExcel);
 
 
+    void updateStatus(Long[] ids);
 }

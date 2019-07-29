@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/cart")
-@CrossOrigin(origins = "http://localhost:9105", allowCredentials = "true")
+@CrossOrigin(origins = "*", allowCredentials = "true")
 public class CartController {
 
     @Reference

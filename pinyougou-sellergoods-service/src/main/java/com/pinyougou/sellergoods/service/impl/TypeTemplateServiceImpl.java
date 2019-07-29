@@ -279,5 +279,18 @@ public class TypeTemplateServiceImpl extends CoreServiceImpl<TbTypeTemplate> imp
         }
         return builder.toString();
     }
+
+
+    @Override
+    public void updateStatus(Long[] ids) {
+        TbTypeTemplate tbTypeTemplate = new TbTypeTemplate();
+        tbTypeTemplate.setStatus("1");
+
+        Example exmaple = new Example(TbTypeTemplate.class);
+        Example.Criteria criteria = exmaple.createCriteria();
+        criteria.andIn("id", Arrays.asList(ids));
+        typeTemplateMapper.updateByExampleSelective(tbTypeTemplate, exmaple);
+
+    }
     
 }

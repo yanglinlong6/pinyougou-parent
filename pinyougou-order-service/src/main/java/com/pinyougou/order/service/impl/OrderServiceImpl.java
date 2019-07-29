@@ -253,20 +253,22 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
         //找出所有订单
         List<TbOrder> tbOrderList = tbOrderMapper.select(tbOrder);
         //遍历订单，找出订单所有的商品信息
-        for (TbOrder order : tbOrderList) {
-            //设置店铺名称
-            order.setSellerNickName(tbSellerMapper.selectByPrimaryKey(order.getSellerId()).getNickName());
-            Long orderId = order.getOrderId();
-            TbOrderItem tbOrderItem = new TbOrderItem();
-            tbOrderItem.setOrderId(orderId);
-            List<TbOrderItem> tbOrderItemList = tbOrderItemMapper.select(tbOrderItem);
-            for (TbOrderItem orderItem : tbOrderItemList) {
-                TbItem tbItem = itemMapper.selectByPrimaryKey(orderItem.getItemId());
-                orderItem.setSpec(tbItem.getSpec().replace("{","")
-                        .replace("}","")
-                        .replace("\"",""));//设置规格属性
+        if (tbOrderList != null) {
+            for (TbOrder order : tbOrderList) {
+                //设置店铺名称
+                order.setSellerNickName(tbSellerMapper.selectByPrimaryKey(order.getSellerId()).getNickName());
+                Long orderId = order.getOrderId();
+                TbOrderItem tbOrderItem = new TbOrderItem();
+                tbOrderItem.setOrderId(orderId);
+                List<TbOrderItem> tbOrderItemList = tbOrderItemMapper.select(tbOrderItem);
+                for (TbOrderItem orderItem : tbOrderItemList) {
+                    TbItem tbItem = itemMapper.selectByPrimaryKey(orderItem.getItemId());
+                    orderItem.setSpec(tbItem.getSpec().replace("{","")
+                            .replace("}","")
+                            .replace("\"",""));//设置规格属性
+                }
+                order.setOrderItemList(tbOrderItemList);
             }
-            order.setOrderItemList(tbOrderItemList);
         }
 
         return tbOrderList;
@@ -276,6 +278,8 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
     public void updateOrderStatusAndCreateLog(String out_trade_no, String transaction_id, String userId) {
         TbOrder tbOrder = orderMapper.selectByPrimaryKey(out_trade_no);
         tbOrder.setStatus("2");
+        orderMapper.updateByPrimaryKey(tbOrder);
+
         TbPayLog tbPayLog = new TbPayLog();
         tbPayLog.setOutTradeNo(idWorker.nextId()+"");
         tbPayLog.setOutTradeNo(transaction_id);

@@ -10,8 +10,28 @@
 
     <link rel="stylesheet" type="text/css" href="css/webbase.css" />
     <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
-</head>
+	<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$("#service").hover(function(){
+				$(".service").show();
+			},function(){
+				$(".service").hide();
+			});
+			$("#shopcar").hover(function(){
+				$("#shopcarlist").show();
+			},function(){
+				$("#shopcarlist").hide();
+			});
 
+		})
+	</script>
+	<script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
+	<script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
+	<script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
+	<script type="text/javascript" src="js/widget/nav.js"></script>
+</head>
+<div id="app">
 <body>
     <!-- 头部栏位 -->
     <!--页面顶部-->
@@ -86,7 +106,7 @@
 						<div class="fr shopcar">
 							<div class="show-shopcar" id="shopcar">
 								<span class="car"></span>
-								<a class="sui-btn btn-default btn-xlarge" href="cart.html" target="_blank">
+								<a class="sui-btn btn-default btn-xlarge"  @click="toCart()">
 									<span>我的购物车</span>
 									<i class="shopnum">0</i>
 								</a>
@@ -122,29 +142,10 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-<script type="text/javascript">
-$(function(){
-	$("#service").hover(function(){
-		$(".service").show();
-	},function(){
-		$(".service").hide();
-	});
-	$("#shopcar").hover(function(){
-		$("#shopcarlist").show();
-	},function(){
-		$("#shopcarlist").hide();
-	});
 
-})
-</script>
-<script type="text/javascript" src="js/plugins/jquery.easing/jquery.easing.min.js"></script>
-<script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
-<script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
-<script type="text/javascript" src="js/widget/nav.js"></script>
 </body>
     <!--header-->
-<div id="app">
+
     <div id="account">
         <div class="py-container">
             <div class="yui3-g collect">

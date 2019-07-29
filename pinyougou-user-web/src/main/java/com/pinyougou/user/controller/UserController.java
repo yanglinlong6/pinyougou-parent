@@ -19,6 +19,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -42,7 +44,6 @@ public class UserController {
     @Reference
     private CartService cartService;
 
-
     /**
      * 查询用户收藏
      * @return
@@ -63,10 +64,10 @@ public class UserController {
         return userService.findAll();
     }
 
+
     @RequestMapping("/findPage")
-    public PageInfo<TbUser> findPage(
-        @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
-        @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize) {
+    public PageInfo<TbUser> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
+                                     @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize) {
         return userService.findPage(pageNo, pageSize);
     }
 
@@ -80,19 +81,19 @@ public class UserController {
     public Result add(@Valid @RequestBody TbUser user, BindingResult bindingResult,
         @PathVariable(value = "smscode") String smscode) {
         try {
-            if (bindingResult.hasErrors()) {
-                Result result = new Result(false, "失败");
+            if(bindingResult.hasErrors()){
+                Result result = new Result(false,"失败");
                 List<FieldError> fieldErrors = bindingResult.getFieldErrors();
                 for (FieldError fieldError : fieldErrors) {
-                    result.getErrorsList().add(new Error(fieldError.getField(), fieldError.getDefaultMessage()));
+                    result.getErrorsList().add(new Error(fieldError.getField(),fieldError.getDefaultMessage()));
                 }
                 return result;
             }
             boolean checkSmsCode = userService.checkSmsCode(user.getPhone(), smscode);
 
-            if (checkSmsCode == false) {
-                Result result = new Result(false, "验证码输入错误");
-                result.getErrorsList().add(new Error("smsCode", "验证码输入错误"));
+            if(checkSmsCode==false){
+                Result result = new Result(false,"验证码输入错误");
+                result.getErrorsList().add(new Error("smsCode","验证码输入错误"));
                 return result;
             }
 
@@ -102,8 +103,7 @@ public class UserController {
             user.setPassword(password);
             userService.add(user);
             return new Result(true, "增加成功");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "增加失败");
         }
@@ -120,8 +120,7 @@ public class UserController {
         try {
             userService.update(user);
             return new Result(true, "修改成功");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "修改失败");
         }
@@ -149,18 +148,17 @@ public class UserController {
         try {
             userService.delete(ids);
             return new Result(true, "删除成功");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "删除失败");
         }
     }
 
+
     @RequestMapping("/search")
-    public PageInfo<TbUser> findPage(
-        @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
-        @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
-        @RequestBody TbUser user) {
+    public PageInfo<TbUser> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
+                                     @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
+                                     @RequestBody TbUser user) {
         return userService.findPage(pageNo, pageSize, user);
     }
 
@@ -172,8 +170,7 @@ public class UserController {
         try {
             userService.createSmsCode(phone);
             return new Result(true, "验证码发送成功");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new Result(true, "验证码发送失败");
         }
@@ -181,11 +178,11 @@ public class UserController {
 
     @RequestMapping(path = "/updateDetail")
     /**
-     *@Description //更新用户个人信息
-     *@param  []
-     *@return entity.Result
-     *@time 2019-7-24 10:27
-     */
+    *@Description //更新用户个人信息
+    *@param  []
+    *@return entity.Result
+    *@time 2019-7-24 10:27
+    */
     public Result updateDetail(String date,@RequestBody() TbUser user){
         try {
             Date birthDay = MyDateUtil.toDate(date, "yyyy-MM-dd");
@@ -200,15 +197,14 @@ public class UserController {
         }
     }
 
-
     @RequestMapping(path = "/findByUserId")
     /**
-     * @Description //用户的原始信息
-     * @param []
-     * @return com.pinyougou.pojo.TbUser
-     * @time 2019-7-24 21:17
-     */
-    public TbUser findByUserId() {
+    *@Description //用户的原始信息
+    *@param  []
+    *@return com.pinyougou.pojo.TbUser
+    *@time 2019-7-24 21:17
+    */
+    public TbUser findByUserId(){
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         TbUser tbUser = new TbUser();
         tbUser.setUsername(userId);
@@ -242,5 +238,4 @@ public class UserController {
             return new Result(false,"添加失败");
         }
     }
-
 }

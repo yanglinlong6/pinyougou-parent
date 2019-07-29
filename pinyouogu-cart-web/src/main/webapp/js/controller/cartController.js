@@ -101,11 +101,11 @@ var app = new Vue({
 
                 }
             )
-        }
-
+        },
     },
     created: function () {
         this.findCartList();
+
         if (window.location.href.indexOf("getOrderInfo.html") != -1) {
             this.findAddressList();
         }
