@@ -1,5 +1,8 @@
 package com.pinyougou.sellergoods.service;
 
+import entity.SaleCount;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,8 +23,10 @@ public interface SalesService {
     Map<String, Double> getSalesReport(String sellerId, String beginTime, String endTime);
 
     /**
-     * 饼状图数据
+     * 饼状图1---商品销售量的图
      * @return
      */
-    Map<String, Double> findSalesReports();
+    List<SaleCount> findSalesReports01();
+
+
 }

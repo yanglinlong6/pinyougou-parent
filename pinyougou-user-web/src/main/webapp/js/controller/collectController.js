@@ -146,10 +146,15 @@
                 app.footMarkList = app.data.footMarkList;
             })
         },
-        selectCollect:function () {
+        selectCollect:function () {//查询所有收藏商品
             axios.get("/user/selectCollect.shtml").then(function (response) {
-               // alert(response.data)
+                //alert(response.data)
                 app.list = response.data;
+            })
+        },
+        addCart:function (id) {
+            axios.get("/user/addToCart.shtml?id="+id).then(function (response) {
+                alert(response.data.message)
             })
         }
     },

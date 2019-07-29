@@ -32,11 +32,13 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!--引入dao-->
+        <!--引入dao-->
         <dependency>
             <groupId>com.pinyougou</groupId>
             <artifactId>pinyougou-dao</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
 
         <!-- Spring -->
         <dependency>

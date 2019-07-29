@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
@@ -11,11 +11,11 @@
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd
        http://code.alibabatech.com/schema/dubbo
-       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
     <!-- context mvc tx aop cache dubbo security elatissearch -->
 
     <!--组件扫描 注解驱动-->
-    <context:component-scan base-package="com.pinyougou.user.controller"></context:component-scan>
+    <context:component-scan base-package="com.pinyougou.user"></context:component-scan>
     <!--加载json的转换器 默认是使用Jackson的json jar包这里使用fastjson-->
     <!--注解驱动并设置统一日期的输出格式-->
     <!--<mvc:annotation-driven>-->
@@ -86,13 +86,29 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
+
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--对那些方法进行拦截-->
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/unfreeze.html"></mvc:exclude-mapping>
+            <mvc:exclude-mapping path="/unfreeze/unfree.shtml"></mvc:exclude-mapping>
+            <bean class="com.pinyougou.user.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+
+
     <!--配置dubbo的配置项-->
     <dubbo:application name="pinyougou-user-web">
         <dubbo:parameter key="qos-port" value="34588"></dubbo:parameter>
     </dubbo:application>
     <dubbo:registry protocol="zookeeper" address="192.168.25.133" port="2181"></dubbo:registry>
     <!--dubbo注解配置-->
-    <dubbo:annotation package="com.pinyougou.user.controller"></dubbo:annotation>
+    <dubbo:annotation package="com.pinyougou.user"></dubbo:annotation>
 
     <dubbo:consumer timeout="100000"></dubbo:consumer>
 

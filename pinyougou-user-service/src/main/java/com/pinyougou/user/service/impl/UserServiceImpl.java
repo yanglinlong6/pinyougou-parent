@@ -218,4 +218,5 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
         }
         return markList;
     }
+
 }

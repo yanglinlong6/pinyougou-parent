@@ -3,6 +3,10 @@ import com.pinyougou.pojo.TbSeller;
 
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.core.service.CoreService;
+import entity.ShopOrderCount;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 服务层接口
@@ -30,4 +34,6 @@ public interface SellerService extends CoreService<TbSeller> {
 	PageInfo<TbSeller> findPage(Integer pageNo, Integer pageSize, TbSeller Seller);
 
 	public void updateStatus(String id,String status);
+
+    List<ShopOrderCount> findDateMoney(String username, String forDate, String toDate);
 }

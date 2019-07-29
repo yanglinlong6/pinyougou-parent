@@ -19,10 +19,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/content")
 public class ContentController {
-    
+
     @Reference
     private ContentService contentService;
-    
+
     /**
      * 返回全部列表
      *
@@ -32,14 +32,14 @@ public class ContentController {
     public List<TbContent> findAll() {
         return contentService.findAll();
     }
-    
+
     @RequestMapping("/findPage")
     public PageInfo<TbContent> findPage(
         @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
         @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize) {
         return contentService.findPage(pageNo, pageSize);
     }
-    
+
     /**
      * 增加
      *
@@ -57,7 +57,7 @@ public class ContentController {
             return new Result(false, "增加失败");
         }
     }
-    
+
     /**
      * 修改
      *
@@ -75,7 +75,7 @@ public class ContentController {
             return new Result(false, "修改失败");
         }
     }
-    
+
     /**
      * 获取实体
      *
@@ -86,7 +86,7 @@ public class ContentController {
     public TbContent findOne(@PathVariable(value = "id") Long id) {
         return contentService.findOne(id);
     }
-    
+
     /**
      * 批量删除
      *
@@ -104,7 +104,7 @@ public class ContentController {
             return new Result(false, "删除失败");
         }
     }
-    
+
     @RequestMapping("/search")
     public PageInfo<TbContent> findPage(
         @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
@@ -112,17 +112,17 @@ public class ContentController {
         @RequestBody TbContent content) {
         return contentService.findPage(pageNo, pageSize, content);
     }
-    
+
     @RequestMapping("/findByCategoryId/{categoryId}")
     public List<TbContent> findByCategoryId(@PathVariable(value = "categoryId") Long categoryId) {
-        
+
         List<TbContent> contents = contentService.findByCategoryId(categoryId);
         return contents;
     }
-    
+
     /**
      * 前台商品分类展示
-     * 
+     *
      * @param parentId
      * @return
      */
@@ -131,5 +131,5 @@ public class ContentController {
         // return contentService.findByItemCat(parentId);
         return contentService.findByItemCat3(parentId);
     }
-    
+
 }

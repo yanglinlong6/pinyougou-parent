@@ -69,4 +69,13 @@ public class TbSpecification implements Serializable {
     public void setSpecName(String specName) {
         this.specName = specName;
     }
+
+    @Override
+    public String toString() {
+        return "TbSpecification{" +
+                "id=" + id +
+                ", specName='" + specName + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

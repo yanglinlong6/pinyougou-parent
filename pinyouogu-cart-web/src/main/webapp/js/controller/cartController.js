@@ -82,12 +82,22 @@ var app = new Vue({
                 }
             })
         },
-        addGoodsToCollectionList:function (itemId){
+        addGoodsToCollectionList:function (itemId){// 添加收藏
             axios.get('/cart/addGoodsToCollectionList.shtml?itemId=' + itemId).then(
                 function (response) {
-                    if (response.data.success){
-                        window.location.href='http://localhost:9106/home-person-collect.html?itemId='+itemId
+                    //未登录
+                    if (response.data.message=='请登录') {
+                        alert("要登录");
+                        var url = window.location.href;//获取当前浏览器中的URL的地址
+                        window.location.href = "http://localhost:9107/page/login.shtml?url=" + url;
+                    }else {
+                        if (response.data.success){
+                            window.location.href='http://localhost:9106/home-person-collect.html?itemId='+itemId
+                        }else {
+
+                        }
                     }
+
 
                 }
             )

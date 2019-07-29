@@ -19,7 +19,11 @@
             axios.get('/login/name.shtml').then(function (response) {
                 app.loginName = response.data;
             }).catch(function (error) {
-                console.log("1231312131321");
+                console.log("该用户被冻结");
+                if(error.toString().indexOf("900") != -1) {
+                    alert("抱歉，你的账号冻结了")
+                    window.location.href = "/unfreeze.html";
+                }
             });
         },
         formSubmit: function () {
@@ -140,7 +144,7 @@
             });
         },
         findAllOrder:function () {
-            axios.get("/order/getAllOrder.shtml").then(function (response) {
+            axios.get("/order/getOrderByStatus.shtml").then(function (response) {
                 app.userOrderList = response.data;
             })
         },
@@ -151,7 +155,9 @@
         },
         payNow:function (orderId) {
             axios.get("/")
-        }
+        },
+
+
     },
     //钩子函数 初始化了事件和
     created: function () {

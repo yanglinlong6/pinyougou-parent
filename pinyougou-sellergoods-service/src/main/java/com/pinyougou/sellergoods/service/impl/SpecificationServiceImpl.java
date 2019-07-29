@@ -82,16 +82,19 @@ public class SpecificationServiceImpl extends CoreServiceImpl<TbSpecification> i
      */
     @Override
     public void add(Specification specification){
-        TbSpecification specification1 = specification.getSpecification();
-
-        specificationMapper.insert(specification1);
+        TbSpecification tbSpecification = specification.getSpecification();
         List<TbSpecificationOption> optionList = specification.getOptionList();
-
+        tbSpecification.setStatus("0");
+        specificationMapper.insert(tbSpecification);
         for (TbSpecificationOption tbSpecificationOption : optionList) {
-            tbSpecificationOption.setSpecId(specification1.getId());
+            tbSpecificationOption.setSpecId(tbSpecification.getId());
             optionMapper.insert(tbSpecificationOption);
         }
     }
+
+
+
+
     @Override
     public Specification findOne(Long id) {
         Specification specification = new Specification();

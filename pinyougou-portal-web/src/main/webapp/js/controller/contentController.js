@@ -7,7 +7,10 @@
         list1: [],
         list2: [],
         entity: {},
-        contentList: [],
+        contentList: [],// 首页轮播广告
+        contentList2: [],// 家用电器广告
+        contentList3: [],//手机通讯广告
+        content:{contentList:[],contentList2:[],contentList3:[]},
         grade: 1,// 分类级别
         ids: [],
         keywords: '',
@@ -20,10 +23,26 @@
         doSearch: function () {
             window.location.href = "http://localhost:9104/search.html?keywords=" + encodeURIComponent(this.keywords);
         },
+        changeCategory:function(categoryId){
+            for (var categoryId;categoryId<=3;categoryId++){
+                this.findByCategoryId(categoryId);
+            }
+        },
         findByCategoryId: function (categoryId) {
             axios.get('/content/findByCategoryId/' + categoryId + '.shtml').then(function (response) {
                 //alert(response.data);
-                app.contentList = response.data;
+                var data = response.data;
+                for (var i=1;i<=data.length;i++){
+                    if (categoryId==1){
+                        app.content.contentList = response.data;
+                    } else if (categoryId==2){
+                        app.content.contentList2 = response.data;
+                    }else {
+                        app.content.contentList3 = response.data;
+                    }
+                }
+
+
             }).catch(function (error) {
                 console.log("1231312131321");
             });
@@ -152,12 +171,6 @@
                 console.log("1231312131321");
             })
         },
-        enter: function () {
-            this.seen = true;
-        },
-        leave: function () {
-            this.seen = false;
-        }
 
 
     },

@@ -8,10 +8,9 @@ var app = new Vue({
     methods: {
         //点击查询执行的方法
         getData: function () {
-            axios.get("/sales/getSalesReport.shtml?beginTime="+this.beginTime+"&endTime="+this.endTime).then(function (response) {
+            axios.get("/sales/getSalesReport.shtml?beginTime=" + this.beginTime + "&endTime=" + this.endTime).then(function (response) {
                 //调用生成图标的方法
                 app.generateChart(response.data);
-
             })
         },
         //生成图标的方法
@@ -21,55 +20,48 @@ var app = new Vue({
             myChart.clear();
             var option = {
                 title: {
-                    text: '销售额曲线图',
-                    subtext:'纯属虚构'
+                    text: '销售额',
                 },
                 //提示框组件
                 tooltip: {
                     //坐标轴触发，主要用于柱状图，折线图等
                     trigger: 'axis'
                 },
-                //数据全部显示
-                axisLabel: {
-                    interval: 0
-                },
                 //图例
                 legend: {
                     data: ['销售额']
                 },
                 toolbox: {
-                    show : true,
-                    feature : {
-                        mark : {show: true},
-                        dataView : {show: true, readOnly: false},
-                        magicType : {show: true, type: ['line', 'bar']},
-                        restore : {show: true},
-                        saveAsImage : {show: true}
+                    show: true,
+                    feature: {
+                        mark: {show: true},
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
                     }
                 },
-                calculable : true,
+                calculable: true,
                 //横轴
                 xAxis: {
-                    type:'date',
-                    boundaryGap:false,
-                    data: data.xAxisList
+                    //type: 'date',
+                    boundaryGap: false,
+                    data: data.xAxisList,
                 },
                 //纵轴
                 yAxis: {
-                    type : 'value',
-                    axisLabel : {
+                    type: 'value',
+                    axisLabel: {
                         formatter: '{value} 元'
                     }
                 },
                 //系列列表。每个系列通过type决定自己的图表类型
-                series: [
-                    {
+                series: [{
                         name: '销售额',
                         //折线图
                         type: 'line',
-                        data: app.dataToFixed(data)//处理小数点数据
-                    }
-                ]
+                        data: app.dataToFixed(data) //处理小数点数据app.dataToFixed(data)
+                    }]
             };
             //使用刚指定的配置项和数据显示图表
             myChart.setOption(option);

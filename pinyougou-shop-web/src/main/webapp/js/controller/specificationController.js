@@ -5,8 +5,8 @@
         pageNo:1,
         list:[],
         ids:[],
-        entity:{specification:{},optionList:[{},{},{}]},
-        status:['未申请','申请中','已审核','已驳回'],
+        entity:{specification:{},optionList:[]},
+        status:['未申请','已审核','申请中','已驳回'],
         searchEntity:{}
     },
     methods: {
@@ -51,12 +51,12 @@
         //该方法只要不在生命周期的
         add:function () {
             axios.post('/specification/add.shtml',this.entity).then(function (response) {
-                console.log(response);
                 if(response.data.success){
+                    alert("添加成功");
                     app.searchList(1);
                 }
             }).catch(function (error) {
-                console.log("1231312131321");
+                alert("添加失败");
             });
         },
         update:function () {
@@ -73,7 +73,6 @@
             if(this.entity.id!=null){
                 this.update();
             }else{
-                this.entity.status=0;
                 this.add();
             }
         },
@@ -103,7 +102,17 @@
             }).catch(function (error) {
                 console.log("1231312131321");
             });
+        },
+
+        addOptionList:function () {
+            this.entity.optionList.push({})
+        },
+        removeTableRow:function(index){
+            this.entity.optionList.splice(index,1)
         }
+
+
+
 
 
 

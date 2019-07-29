@@ -1,8 +1,16 @@
 package com.pinyougou.sellergoods.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.pinyougou.mapper.TbGoodsMapper;
+import com.pinyougou.mapper.TbOrderItemMapper;
+import com.pinyougou.mapper.TbOrderMapper;
+import com.pinyougou.pojo.TbOrder;
+import com.pinyougou.pojo.TbOrderItem;
+import entity.ShopOrderCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -172,4 +180,82 @@ public class SellerServiceImpl extends CoreServiceImpl<TbSeller> implements Sell
         //根据主键来更新
         sellerMapper.updateByPrimaryKeySelective(seller);
     }
+
+
+    @Override
+    public List<ShopOrderCount> findDateMoney(String username, String forDate, String toDate) {
+        List<ShopOrderCount> resultList = new ArrayList<>();
+        Example orderExample = new Example(TbOrder.class);
+        Example.Criteria criteria = orderExample.createCriteria();
+        criteria.andEqualTo("sellerId", username);
+        if (!StringUtils.isBlank(forDate)){
+            criteria.andLessThanOrEqualTo("paymentTime", forDate);
+        }
+        if (!StringUtils.isBlank(toDate)){
+            criteria.andGreaterThanOrEqualTo("paymentTime", toDate);
+        }
+        //criteria.andBetween("paymentTime", forDate, toDate); 此处并不适用
+        List<TbOrder> tbOrders = tbOrderMapper.selectByExample(orderExample);
+        ArrayList<Long> orderIds = new ArrayList<>();
+        for (TbOrder tbOrder : tbOrders) {
+            orderIds.add(tbOrder.getOrderId());
+        }
+
+        if (orderIds.size()>0){
+            Example orderItemExample = new Example(TbOrderItem.class);
+            Example.Criteria orderItemCriteria = orderItemExample.createCriteria();
+            orderItemCriteria.andIn("orderId", orderIds);
+            List<TbOrderItem> tbOrderItems = tbOrderItemMapper.selectByExample(orderItemExample);
+            for (TbOrderItem tbOrderItem : tbOrderItems) {
+                if (resultList.size()>0){
+                    for (int i = 0; i < resultList.size(); i++) {
+                        ShopOrderCount shopOrderCount = resultList.get(i);
+                        if (shopOrderCount.getShopGoodsId().equals(tbOrderItem.getGoodsId())) {
+                            shopOrderCount.setShopCount(
+                                    shopOrderCount.getShopCount()+tbOrderItem.getNum()
+                            );
+                            shopOrderCount.setShopTotalFee(
+                                    //new BigDecimal(shopOrderCount.getShopTotalFee().doubleValue() + tbOrderItem.getTotalFee().doubleValue())
+                                    shopOrderCount.getShopTotalFee().add(tbOrderItem.getTotalFee())
+                            );
+                            break;
+                        }
+
+                        if (i == resultList.size()-1){
+                            ShopOrderCount newShopOrderCount = new ShopOrderCount();
+                            newShopOrderCount.setShopGoodsId(tbOrderItem.getGoodsId());
+                            newShopOrderCount.setShopName(
+                                    tbGoodsMapper.selectByPrimaryKey(tbOrderItem.getGoodsId()).getGoodsName()
+                            );
+                            newShopOrderCount.setShopCount(tbOrderItem.getNum());
+                            newShopOrderCount.setShopTotalFee(tbOrderItem.getTotalFee());
+                            resultList.add(newShopOrderCount);
+                        }
+                    }
+
+                }else{
+                    ShopOrderCount shopOrderCount = new ShopOrderCount();
+                    shopOrderCount.setShopGoodsId(tbOrderItem.getGoodsId());
+                    shopOrderCount.setShopName(
+                            tbGoodsMapper.selectByPrimaryKey(tbOrderItem.getGoodsId()).getGoodsName()
+                    );
+                    shopOrderCount.setShopCount(tbOrderItem.getNum());
+                    shopOrderCount.setShopTotalFee(tbOrderItem.getTotalFee());
+                    resultList.add(shopOrderCount);
+                }
+            }
+        }
+        return resultList;
+    }
+
+    @Autowired
+    private TbOrderMapper tbOrderMapper;
+
+    @Autowired
+    TbOrderItemMapper tbOrderItemMapper;
+
+    @Autowired
+    TbGoodsMapper tbGoodsMapper;
+
+
 }

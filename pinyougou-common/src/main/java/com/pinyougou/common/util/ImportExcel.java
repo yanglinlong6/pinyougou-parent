@@ -2,7 +2,7 @@ package com.pinyougou.common.util;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -13,14 +13,12 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ImportExcel {
 
@@ -64,6 +62,53 @@ public class ImportExcel {
         ServletOutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
         outputStream.close();
+    }
+
+    /**
+     *
+     * @param dataList 需要导出的数据集
+     * @param dataPojo 需要导出的对应数据集的Pojo
+     * @param fileName 导出Excel文件的名字
+     * @param response 通过response返回
+     * @param mappingFiled pojo映射到excel上的列名,为了确保有序,必须使用LinkedHashMap
+     *                     Key必须为Pojo字段名
+     *                     value则为映射到Excel上的列名
+     * @param <T>
+     * @throws IOException
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     */
+    public <T> void importExcel(List<T> dataList, Class<T> dataPojo, String fileName, HttpServletResponse response,LinkedHashMap<String,String> mappingFiled) throws IOException, NoSuchFieldException, IllegalAccessException {
+        ArrayList<Field> pojoFiled = new ArrayList<>();
+        for (String filed : mappingFiled.keySet()) {
+            pojoFiled.add(dataPojo.getDeclaredField(filed));
+        }
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet rows = workbook.createSheet();
+        int rowCount = 0;
+        Row indexRow = rows.createRow(rowCount++);
+        for (int i = 0; i < pojoFiled.size(); i++) {
+            String excelFiled = mappingFiled.get(pojoFiled.get(i).getName());
+            if (excelFiled != null) {
+                indexRow.createCell(i).setCellValue(excelFiled);
+            }
+        }
+        for (T data : dataList) {
+            int cellCount = 0;
+            Row row = rows.createRow(rowCount++);
+            for (Field field : pojoFiled) {
+                field.setAccessible(true);
+                row.createCell(cellCount++).
+                        setCellValue(
+                                String.valueOf(field.get(data))
+                        );
+            }
+        }
+        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=\"" + new String(fileName.getBytes("gb2312"), "ISO8859-1"));
+        ServletOutputStream os = response.getOutputStream();
+        workbook.write(os);
     }
 
 

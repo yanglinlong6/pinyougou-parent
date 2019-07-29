@@ -29,15 +29,15 @@ import java.util.Map;
  */
 @Service
 public class ContentServiceImpl extends CoreServiceImpl<TbContent> implements ContentService {
-    
+
     private TbContentMapper contentMapper;
-    
+
     @Autowired
     private RedisTemplate redisTemplate;
-    
+
     @Autowired
     private TbItemCatMapper itemCatMapper;
-    
+
     /**
      * Instantiates a new Content service.
      *
@@ -48,26 +48,26 @@ public class ContentServiceImpl extends CoreServiceImpl<TbContent> implements Co
         super(contentMapper, TbContent.class);
         this.contentMapper = contentMapper;
     }
-    
+
     @Override
     public PageInfo<TbContent> findPage(Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo, pageSize);
         List<TbContent> all = contentMapper.selectAll();
         PageInfo<TbContent> info = new PageInfo<TbContent>(all);
-        
+
         // 序列化再反序列化
         String s = JSON.toJSONString(info);
         PageInfo<TbContent> pageInfo = JSON.parseObject(s, PageInfo.class);
         return pageInfo;
     }
-    
+
     @Override
     public PageInfo<TbContent> findPage(Integer pageNo, Integer pageSize, TbContent content) {
         PageHelper.startPage(pageNo, pageSize);
-        
+
         Example example = new Example(TbContent.class);
         Example.Criteria criteria = example.createCriteria();
-        
+
         if (content != null) {
             if (StringUtils.isNotBlank(content.getTitle())) {
                 criteria.andLike("title", "%" + content.getTitle() + "%");
@@ -89,17 +89,17 @@ public class ContentServiceImpl extends CoreServiceImpl<TbContent> implements Co
                 criteria.andLike("status", "%" + content.getStatus() + "%");
                 // criteria.andStatusLike("%"+content.getStatus()+"%");
             }
-            
+
         }
         List<TbContent> all = contentMapper.selectByExample(example);
         PageInfo<TbContent> info = new PageInfo<TbContent>(all);
         // 序列化再反序列化
         String s = JSON.toJSONString(info);
         PageInfo<TbContent> pageInfo = JSON.parseObject(s, PageInfo.class);
-        
+
         return pageInfo;
     }
-    
+
     @Override
     public List<TbContent> findByCategoryId(Long categoryId) {
         List<TbContent> contentsFromRedis =
@@ -113,9 +113,11 @@ public class ContentServiceImpl extends CoreServiceImpl<TbContent> implements Co
         List<TbContent> contents = contentMapper.select(record);
         System.out.println("contents:" + contents);
         redisTemplate.boundHashOps(SysConstants.CONTENT_REDIS_KEY).put(categoryId, contents);
+        System.out.println("contents:"+contents.toString());
+        redisTemplate.boundHashOps(SysConstants.CONTENT_REDIS_KEY).put(categoryId,contents);
         return contents;
     }
-    
+
     @Override
     public List<TbItemCat> findByItemCat3(Long parentId) {
         // 1.先从redis缓存中 , 获取三级分类信息!
@@ -139,7 +141,7 @@ public class ContentServiceImpl extends CoreServiceImpl<TbContent> implements Co
                         itemCat01.setId(itemCat.getId());
                         itemCat01.setName(itemCat.getName());
                         itemCat01.setParentId(itemCat.getParentId());
-                        
+
                         // 根据一级分类的id -> 找到对应的二级分类!
                         List<TbItemCat> itemCatList02 = new ArrayList<>();
                         TbItemCat tbItemCat02 = new TbItemCat();
@@ -163,7 +165,7 @@ public class ContentServiceImpl extends CoreServiceImpl<TbContent> implements Co
                             itemCat02.setItemCatList(itemCatList03);
                             itemCatList02.add(itemCat02);
                             // System.out.println(itemCat02List);
-                            
+
                         }
                         itemCat01.setItemCatList(itemCatList02);
                         itemCat01List.add(itemCat01); // 添加一级分类
@@ -174,9 +176,9 @@ public class ContentServiceImpl extends CoreServiceImpl<TbContent> implements Co
                     return itemCat01List;
                 }
             }
-            
+
         }
-        
+
         // 3.若缓存中有数据 , 直接返回即可!
         System.out.println(itemCat01List);
         return itemCat01List;
