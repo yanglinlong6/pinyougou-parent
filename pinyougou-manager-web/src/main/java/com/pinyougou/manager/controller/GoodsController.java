@@ -213,7 +213,7 @@ public class GoodsController {
         try {
             System.out.println("执行导出请求");
             List<TbGoods> tbGoods = goodsService.selectAll();
-            importExcel.importExcel(tbGoods, TbGoods.class, "TbGoods.xls",response);
+            importExcel.importExcel(tbGoods, TbGoods.class, "Goods.xls",response);
         } catch (Exception e) {
             e.printStackTrace();
         }
