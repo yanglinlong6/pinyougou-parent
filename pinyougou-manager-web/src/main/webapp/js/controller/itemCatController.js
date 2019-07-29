@@ -20,7 +20,7 @@
                 console.log(response);
                 if (response.data.success) {
                     // app.searchList(1);
-                    app.searchList({ id: 0 });
+                    app.selectList({ id: 0 });
                 }
             }).catch(function (error) {
                 console.log("1231312131321");
