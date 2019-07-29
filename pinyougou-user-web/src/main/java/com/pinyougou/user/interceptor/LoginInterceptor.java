@@ -27,43 +27,47 @@ public class LoginInterceptor implements HandlerInterceptor {
         System.out.println("进入拦截器了");
         //获取用户名
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(name);
-        TbUser user = new TbUser();
-        user.setUsername(name);
-        System.out.println(userService);
 
-
-        //在这里先进行判断该用户有没有超过三个月没登录
-        TbUser tbUser = userService.selectOne(user);
-        Date lastLoginTime = tbUser.getLastLoginTime();
-        //判断是否为空
-        if(lastLoginTime != null) {
-            String last = MyDateUtil.toString(lastLoginTime, "yyyy-MM-dd");
-            String now = MyDateUtil.toString(new Date(), "yyyy-MM-dd");
-            boolean isYes = MyDateUtil.isGreaterThanThreeMonths(last, now, "yyyy-MM-dd");
-            if(isYes) {
-                //超过三个月了,修改字段
-                tbUser.setStatus("2");
-            }else {
+        //匿名用户需要放行
+        if ("anonymous".equals(name)) {
+            return true;
+        } else {
+            System.out.println(name);
+            TbUser user = new TbUser();
+            user.setUsername(name);
+            System.out.println(userService);
+            //在这里先进行判断该用户有没有超过三个月没登录
+            TbUser tbUser = userService.selectOne(user);
+            Date lastLoginTime = tbUser.getLastLoginTime();
+            //判断是否为空
+            if ( lastLoginTime != null ) {
+                String last = MyDateUtil.toString(lastLoginTime, "yyyy-MM-dd");
+                String now = MyDateUtil.toString(new Date(), "yyyy-MM-dd");
+                boolean isYes = MyDateUtil.isGreaterThanThreeMonths(last, now, "yyyy-MM-dd");
+                if ( isYes ) {
+                    //超过三个月了,修改字段
+                    tbUser.setStatus("2");
+                } else {
+                    tbUser.setLastLoginTime(new Date());
+                }
+            } else {
                 tbUser.setLastLoginTime(new Date());
             }
-        }else {
-            tbUser.setLastLoginTime(new Date());
-        }
 
-        //更新数据库
-        userService.updateByPrimaryKey(tbUser);
+            //更新数据库
+            userService.updateByPrimaryKey(tbUser);
 
-        String status = tbUser.getStatus();
-        System.out.println(status);
-            if("2".equals(status)) {
+            String status = tbUser.getStatus();
+            System.out.println(status);
+            if ( "2".equals(status) ) {
                 //该用户已冻结
-                redirect(request,response);
-            }else {
+                redirect(request, response);
+            } else {
                 flag = true;
             }
 
-        return flag;
+            return flag;
+        }
     }
 
     private void redirect(HttpServletRequest request, HttpServletResponse response) throws Exception {
