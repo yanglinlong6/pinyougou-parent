@@ -110,7 +110,7 @@ public class SpecificationController {
 	public Result updateStatus(@RequestBody Long[] ids){
 		try {
 			long Status=1;
-			specificationService.updateStatus(ids);
+			specificationService.updateStatus(status, ids);
 			return new Result(true, "删除成功");
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -31,4 +31,13 @@ public class Specification implements Serializable {
     public void setOptionList(List<TbSpecificationOption> optionList) {
         this.optionList = optionList;
     }
+
+
+    @Override
+    public String toString() {
+        return "Specification{" +
+                "specification=" + specification +
+                ", optionList=" + optionList +
+                '}';
+    }
 }

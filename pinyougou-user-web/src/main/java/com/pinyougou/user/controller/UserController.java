@@ -1,9 +1,10 @@
 package com.pinyougou.user.controller;
 
-
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.cart.service.CartService;
+import com.pinyougou.common.util.CookieUtil;
 import com.pinyougou.common.util.MyDateUtil;
 import com.pinyougou.common.util.PhoneFormatCheckUtils;
 import com.pinyougou.pojo.TbItem;
@@ -18,6 +19,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.xml.transform.Source;
 import java.util.Date;
@@ -73,7 +78,8 @@ public class UserController {
      * @return
      */
     @RequestMapping("/add/{smscode}")
-    public Result add(@Valid @RequestBody TbUser user, BindingResult bindingResult, @PathVariable(value = "smscode") String smscode){
+    public Result add(@Valid @RequestBody TbUser user, BindingResult bindingResult,
+        @PathVariable(value = "smscode") String smscode) {
         try {
             if(bindingResult.hasErrors()){
                 Result result = new Result(false,"失败");
@@ -206,9 +212,11 @@ public class UserController {
     }
 
     @RequestMapping("/findFootMark")
-    public Map<String, Object> findFootMark() {
-        return userService.findFootMark();
-
+    public Map<String, Object> findFootMark(HttpServletRequest request, HttpServletResponse response) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String markListstring = CookieUtil.getCookieValue(request, "markList", true);
+        List<Long> markList = JSON.parseArray(markListstring, Long.class);
+        return userService.findFootMark(username, markList);
     }
 
     @RequestMapping(path = "/addToCart")

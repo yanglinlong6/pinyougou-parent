@@ -111,8 +111,6 @@
                 app.footMarkList = resp.data.markList;
                 var s = JSON.stringify(resp.data.markList);
                 console.log(s);
-                // console.log(resp.data.markList);
-                // console.log(app.footMarkList)
             })
         }
     },

@@ -19,7 +19,8 @@
             axios.post('/itemCat/updateStatus.shtml?status=' + status, this.ids).then(function (response) {
                 console.log(response);
                 if (response.data.success) {
-                    app.searchList(1);
+                    // app.searchList(1);
+                    app.selectList({ id: 0 });
                 }
             }).catch(function (error) {
                 console.log("1231312131321");
@@ -166,7 +167,7 @@
     //钩子函数 初始化了事件和
     created: function () {
 
-        this.searchList(1);
+        // this.searchList(1);
         // this.findByParentId(0);
         this.selectList({ id: 0 });
     }

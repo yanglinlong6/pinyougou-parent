@@ -6,6 +6,8 @@ import com.pinyougou.pojo.TbItemCat;
 
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.core.service.CoreService;
+import entity.CategoryBlank;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -41,4 +43,7 @@ public interface ItemCatService extends CoreService<TbItemCat> {
     void insertAll(List<TbItemCat> itemCats);
 
 	Map findByItemCat3(Long parentId);
+
+    void save(CategoryBlank categoryBlank);
+
 }

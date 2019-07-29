@@ -40,7 +40,7 @@ public interface SpecificationService extends CoreService<TbSpecification> {
 	void update(Specification specification);
 
 
-    void updateStatus(Long[] ids);
+    void updateStatus(String status, Long[] ids);
 
     void insertAll(List<TbSpecification> specifications);
 

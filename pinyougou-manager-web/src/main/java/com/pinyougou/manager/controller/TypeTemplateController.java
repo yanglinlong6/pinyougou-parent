@@ -125,7 +125,7 @@ public class TypeTemplateController {
     @RequestMapping("/updateStatus")
     public Result updateStatus(@RequestParam String status, @RequestBody Long[] ids) {
         try {
-            typeTemplateService.updateStatus(ids);
+            typeTemplateService.updateStatus(status,ids);
             return new Result(true, "审核成功");
         }
         catch (Exception e) {

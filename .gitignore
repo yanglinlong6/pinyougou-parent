@@ -13,7 +13,6 @@
 target/
 # Package Files #
 *.iml
-*.xml
 *.jar
 *.war
 *.nar

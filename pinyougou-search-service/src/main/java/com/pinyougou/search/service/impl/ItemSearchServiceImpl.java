@@ -51,6 +51,9 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     @Autowired
     private ItemDao dao;
 
+//    @Autowired
+//    private TbItemMapper itemMapper;
+
     @Override
     public Map<String, Object> search(Map<String, Object> searchMap) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -250,6 +253,10 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     @Override
     public void deleteByIds(Long[] ids) {
         DeleteQuery query = new DeleteQuery();
+        // 删除多个goodsid
+        query.setQuery(QueryBuilders.termQuery("goodsId", ids));
+        // 根据删除条件 索引名 和类型
+        // 删除多个goodsid
         //删除多个goodsid
         query.setQuery(QueryBuilders.termsQuery("goodsId", ids));
         //根据删除条件 索引名 和类型
@@ -284,15 +291,13 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         
         System.out.println("footmark添加redis成功");
     }
-    
-    // @Override
-    // public TbGoods tiaoZhaun(Long id) {
-    // TbItem tbItem = new TbItem();
-    // tbItem.setId(id);
-    // TbItem item = itemMapper.selectByPrimaryKey(tbItem);
-    // TbGoods tbGoods = new TbGoods();
-    // tbGoods.setId(item.getGoodsId());
-    // TbGoods goods = goodsMapper.selectByPrimaryKey(tbGoods);
-    // return goods;
-    // }
+
+//    @Override
+//    public Long tiaoZhaun(Long id) {
+//        TbItem tbItem = new TbItem();
+//        tbItem.setId(id);
+//        TbItem item = itemMapper.selectByPrimaryKey(tbItem);
+//        Long goodsId = item.getGoodsId();
+//        return goodsId;
+//    }
 }

@@ -37,8 +37,17 @@ public class TbItemCat implements Serializable {
      */
     @Column(name = "status")
     private String status;
+    
+    @Transient
+    private List<TbItemCat> itemCatList;
 
+    public List<TbItemCat> getItemCatList() {
+        return itemCatList;
+    }
 
+    public void setItemCatList(List<TbItemCat> itemCatList) {
+        this.itemCatList = itemCatList;
+    }
 
     public String getStatus() {
         return status;
@@ -124,5 +133,17 @@ public class TbItemCat implements Serializable {
      */
     public void setTypeId(Long typeId) {
         this.typeId = typeId;
+    }
+
+    @Override
+    public String toString() {
+        return "TbItemCat{" +
+                "id=" + id +
+                ", parentId=" + parentId +
+                ", name='" + name + '\'' +
+                ", typeId=" + typeId +
+                ", status='" + status + '\'' +
+                ", itemCatList=" + itemCatList +
+                '}';
     }
 }

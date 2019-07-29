@@ -173,7 +173,7 @@
                     </div>
                 </div>
                 <!--右侧主内容-->
-                <div class="yui3-u-5-6">{{userDetail}}
+                <div class="yui3-u-5-6">{{userDetail}}   {{gender}}
                     <div class="body userInfo">
                         <ul class="sui-nav nav-tabs nav-large nav-primary ">
                             <li class="active"><a href="#one" data-toggle="tab">基本资料</a></li>
@@ -190,12 +190,12 @@
                                     </div>
                                     <div class="control-group">
                                         <label for="inputGender" class="control-label">性别：</label>
-                                        <div class="controls">
+                                        <div id="inputGender" class="controls">
                                             <label data-toggle="radio" class="radio-pretty inline">
-                                            <input type="radio" name="sex" value="1" v-model="userDetail.sex" :checked="userDetail.sex==1?'checked':''"><span>男</span>
+                                            <input type="radio" name="sex" value="1" v-model="userDetail.sex"><span>男</span>
                                        		</label>
                                             <label data-toggle="radio" class="radio-pretty inline">
-                                            <input type="radio" name="sex" value="2" v-model="userDetail.sex" :checked="userDetail.sex==2?'checked':''"><span>女</span>
+                                            <input type="radio" name="sex" value="2" v-model="userDetail.sex"><span>女</span>
                                         	</label>
                                         </div>
                                     </div>

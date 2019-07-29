@@ -6,22 +6,10 @@
         list:[],
         entity:{},
         ids:[],
-        searchEntity:{},
-        status: ['未审核', '已审核', '审核未通过', '已关闭'], //定义商品的状态数组
+        status:['未审核','已审核','已驳回'],
+        searchEntity:{}
     },
     methods: {
-        //新增品牌审核的需求：
-        updateStatus:function (status) {
-            //注意: 没有使用restful风格
-            axios.post('/brand/updateStatus.shtml?status='+status,this.ids).then(function (response) {
-                console.log(response);
-                if (response.data.success) {
-                    app.searchList(1);
-                }
-            }).catch(function (error) {
-                console.log("1231312131321");
-            });
-        },
         searchList:function (curPage) {
             axios.post('/brand/search.shtml?pageNo='+curPage,this.searchEntity).then(function (response) {
                 //获取数据
@@ -85,6 +73,7 @@
             if(this.entity.id!=null){
                 this.update();
             }else{
+                this.entity.status=0;
                 this.add();
             }
         },
@@ -105,32 +94,16 @@
                 console.log("1231312131321");
             });
         },
-
-        upload: function () {
-            var formData = new FormData();
-            //参数formData.append('file' 中的file 为表单的参数名  必须和 后台的file一致
-            //file.files[0]  中的file 指定的时候页面中的input="file"的id的值 files 指定的是选中的图片所在的文件对象数组，这里只有一个就选中[0]
-            formData.append('file', file.files[0]);
-            axios({
-                url: '/brand/importData.shtml',
-                data: formData,
-                method: 'post',
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+        updateStatus:function () {
+            axios.post('/brand/updateStatus.shtml',this.ids).then(function (response) {
+                console.log(response);
+                if(response.data.success){
+                    app.searchList(1);
                 }
-
-            }).then(function (response) {
-                if (response.data.success) {
-                    alert("上传成功");
-                    window.location.reload();
-                } else {
-                    //上传失败
-                    alert(response.data.message);
-                }
-            })
+            }).catch(function (error) {
+                console.log("1231312131321");
+            });
         }
-
-
 
 
     },

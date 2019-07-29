@@ -155,6 +155,14 @@
         addCart:function (id) {
             axios.get("/user/addToCart.shtml?id="+id).then(function (response) {
                 alert(response.data.message)
+
+            })
+        },
+        toCart:function () {
+
+            axios.get('http://localhost:9107/cart/findCartList.shtml',{withCredentials:true})
+                .then(function (response) {
+                    window.location.href = "http://localhost:9107/cart.html";
             })
         }
     },

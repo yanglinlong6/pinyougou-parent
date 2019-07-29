@@ -3,11 +3,13 @@ package com.pinyougou.portal.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbContent;
+import com.pinyougou.pojo.TbItemCat;
 import com.pinyougou.service.ContentService;
 import entity.Result;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * controller
@@ -31,10 +33,10 @@ public class ContentController {
         return contentService.findAll();
     }
 
-
     @RequestMapping("/findPage")
-    public PageInfo<TbContent> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
-                                        @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize) {
+    public PageInfo<TbContent> findPage(
+        @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
+        @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize) {
         return contentService.findPage(pageNo, pageSize);
     }
 
@@ -49,7 +51,8 @@ public class ContentController {
         try {
             contentService.add(content);
             return new Result(true, "增加成功");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "增加失败");
         }
@@ -66,7 +69,8 @@ public class ContentController {
         try {
             contentService.update(content);
             return new Result(true, "修改成功");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "修改失败");
         }
@@ -94,17 +98,18 @@ public class ContentController {
         try {
             contentService.delete(ids);
             return new Result(true, "删除成功");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "删除失败");
         }
     }
 
-
     @RequestMapping("/search")
-    public PageInfo<TbContent> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
-                                        @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
-                                        @RequestBody TbContent content) {
+    public PageInfo<TbContent> findPage(
+        @RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
+        @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
+        @RequestBody TbContent content) {
         return contentService.findPage(pageNo, pageSize, content);
     }
 
@@ -113,6 +118,18 @@ public class ContentController {
 
         List<TbContent> contents = contentService.findByCategoryId(categoryId);
         return contents;
+    }
+
+    /**
+     * 前台商品分类展示
+     *
+     * @param parentId
+     * @return
+     */
+    @RequestMapping("/findByParentId/{parentId}")
+    public List<TbItemCat> findByParentId(@PathVariable(value = "parentId") Long parentId) {
+        // return contentService.findByItemCat(parentId);
+        return contentService.findByItemCat3(parentId);
     }
 
 }

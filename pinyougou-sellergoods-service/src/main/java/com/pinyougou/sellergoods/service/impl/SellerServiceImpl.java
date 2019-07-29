@@ -189,10 +189,10 @@ public class SellerServiceImpl extends CoreServiceImpl<TbSeller> implements Sell
         Example.Criteria criteria = orderExample.createCriteria();
         criteria.andEqualTo("sellerId", username);
         if (!StringUtils.isBlank(forDate)){
-            criteria.andLessThanOrEqualTo("paymentTime", forDate);
+            criteria.andGreaterThanOrEqualTo("paymentTime", forDate);
         }
         if (!StringUtils.isBlank(toDate)){
-            criteria.andGreaterThanOrEqualTo("paymentTime", toDate);
+            criteria.andLessThanOrEqualTo("paymentTime", toDate);
         }
         //criteria.andBetween("paymentTime", forDate, toDate); 此处并不适用
         List<TbOrder> tbOrders = tbOrderMapper.selectByExample(orderExample);

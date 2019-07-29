@@ -24,6 +24,7 @@ public interface ItemSearchService {
     void deleteByIds(Long[] ids);
     
     void addFootMark(Long id);
-    
-    // TbGoods tiaoZhaun(Long id);
+
+//    Long tiaoZhaun(Long id);
+
 }

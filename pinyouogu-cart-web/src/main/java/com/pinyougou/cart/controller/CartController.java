@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/cart")
-@CrossOrigin(origins = "http://localhost:9105", allowCredentials = "true")
+@CrossOrigin(origins = "*", allowCredentials = "true")
 public class CartController {
 
     @Reference
@@ -77,7 +77,7 @@ public class CartController {
                 }
                 List<Cart> cartList = JSON.parseArray(cartListstring, Cart.class);
 
-                //2.2 向已有的购物车列表中 添加 商品   返回一个最新的购物车列表                 写一个方法 (向已有的购物车中添加商品:)
+                //2.2 向已有的购物车列表中 添加 商品   返回一个最新的购物车列表  写一个方法 (向已有的购物车中添加商品:)
                 List<Cart> newestList = cartService.addGoodsToCartList(cartList, itemId, num);
 
                 String jsonString = JSON.toJSONString(newestList);

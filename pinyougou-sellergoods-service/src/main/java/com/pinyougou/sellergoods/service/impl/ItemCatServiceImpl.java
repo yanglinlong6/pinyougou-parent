@@ -3,6 +3,8 @@ package com.pinyougou.sellergoods.service.impl;
 import java.util.*;
 
 import com.pinyougou.pojo.TbBrand;
+import entity.CategoryBlank;
+import entity.SubItemCat;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -86,6 +88,7 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat> implements It
         for (TbItemCat itemCat : list) {
             redisTemplate.boundHashOps("itemCat").put(itemCat.getName(), itemCat.getTypeId());
         }
+        System.out.println(itemCats);
         return itemCats;
     }
     
@@ -98,7 +101,6 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat> implements It
         itemCatMapper.updateByExampleSelective(itemCat, example);
     }
 
-
     @Override
     public void updateStatus(Long[] ids) {
         TbItemCat cat = new TbItemCat();
@@ -106,13 +108,10 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat> implements It
 
         Example exmaple = new Example(TbBrand.class);
         Example.Criteria criteria = exmaple.createCriteria();
-        criteria.andIn("id",Arrays.asList(ids));
-        itemCatMapper.updateByExampleSelective(cat,exmaple);
+        criteria.andIn("id", Arrays.asList(ids));
+        itemCatMapper.updateByExampleSelective(cat, exmaple);
 
     }
-
-
-
 
     @Override
     public void insertAll(List<TbItemCat> itemCats) {
@@ -174,5 +173,35 @@ public class ItemCatServiceImpl extends CoreServiceImpl<TbItemCat> implements It
         return map;
 
     }
+
+    @Override
+    public void save(CategoryBlank categoryBlank) {
+        TbItemCat category1 = categoryBlank.getCategory1();
+        category1.setParentId(0L);
+        category1.setStatus("0");
+        itemCatMapper.insert(category1);
+
+        List<SubItemCat> category2 = categoryBlank.getCategory2();
+        if (category2 != null && category2.size()>0){
+            for (SubItemCat subItemCat : category2) {
+                TbItemCat tbItemCat = new TbItemCat();
+                tbItemCat.setParentId(category1.getId());
+                tbItemCat.setName(subItemCat.getName());
+                tbItemCat.setTypeId(subItemCat.getTypeId());
+                tbItemCat.setStatus("0");
+                itemCatMapper.insert(tbItemCat);
+                List<TbItemCat> category3 = subItemCat.getCategory3();
+                if (category3!= null && category3.size() > 0){
+                    for (TbItemCat itemCat : category3) {
+                        itemCat.setParentId(tbItemCat.getId());
+                        itemCat.setStatus("0");
+                        itemCatMapper.insert(itemCat);
+                    }
+                }
+            }
+        }
+
+    }
+
 
 }

@@ -1,5 +1,4 @@
 package com.pinyougou.sellergoods.service;
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -35,10 +34,11 @@ public interface TypeTemplateService extends CoreService<TbTypeTemplate> {
 	List<Map> findSpecList(Long id);
 
 
-    void updateStatus(Long[] ids);
+    void updateStatus(String status, Long[] ids);
 
 
 	void insertAll(List<Map<String, String>> forExcel);
 
 
+    void updateStatus(Long[] ids);
 }
