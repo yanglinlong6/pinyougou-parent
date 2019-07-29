@@ -8,6 +8,7 @@ import java.util.List;
 import com.pinyougou.common.util.IdWorker;
 import com.pinyougou.mapper.*;
 import com.pinyougou.order.service.OrderService;
+import com.pinyougou.order.service.OrderService;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbOrderItem;
 import com.pinyougou.pojo.TbPayLog;
@@ -70,76 +71,76 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
 
 
     @Override
-    public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder order) {
+    public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder TbOrder) {
         PageHelper.startPage(pageNo, pageSize);
 
         Example example = new Example(TbOrder.class);
         Example.Criteria criteria = example.createCriteria();
 
-        if (order != null) {
-            if (StringUtils.isNotBlank(order.getPaymentType())) {
-                criteria.andLike("paymentType", "%" + order.getPaymentType() + "%");
-                //criteria.andPaymentTypeLike("%"+order.getPaymentType()+"%");
+        if (TbOrder != null) {
+            if (StringUtils.isNotBlank(TbOrder.getPaymentType())) {
+                criteria.andLike("paymentType", "%" + TbOrder.getPaymentType() + "%");
+                //criteria.andPaymentTypeLike("%"+TbOrder.getPaymentType()+"%");
             }
-            if (StringUtils.isNotBlank(order.getPostFee())) {
-                criteria.andLike("postFee", "%" + order.getPostFee() + "%");
-                //criteria.andPostFeeLike("%"+order.getPostFee()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getPostFee())) {
+                criteria.andLike("postFee", "%" + TbOrder.getPostFee() + "%");
+                //criteria.andPostFeeLike("%"+TbOrder.getPostFee()+"%");
             }
-            if (StringUtils.isNotBlank(order.getStatus())) {
-                criteria.andLike("status", "%" + order.getStatus() + "%");
-                //criteria.andStatusLike("%"+order.getStatus()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getStatus())) {
+                criteria.andLike("status", "%" + TbOrder.getStatus() + "%");
+                //criteria.andStatusLike("%"+TbOrder.getStatus()+"%");
             }
-            if (StringUtils.isNotBlank(order.getShippingName())) {
-                criteria.andLike("shippingName", "%" + order.getShippingName() + "%");
-                //criteria.andShippingNameLike("%"+order.getShippingName()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getShippingName())) {
+                criteria.andLike("shippingName", "%" + TbOrder.getShippingName() + "%");
+                //criteria.andShippingNameLike("%"+TbOrder.getShippingName()+"%");
             }
-            if (StringUtils.isNotBlank(order.getShippingCode())) {
-                criteria.andLike("shippingCode", "%" + order.getShippingCode() + "%");
-                //criteria.andShippingCodeLike("%"+order.getShippingCode()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getShippingCode())) {
+                criteria.andLike("shippingCode", "%" + TbOrder.getShippingCode() + "%");
+                //criteria.andShippingCodeLike("%"+TbOrder.getShippingCode()+"%");
             }
-            if (StringUtils.isNotBlank(order.getUserId())) {
-                criteria.andLike("userId", "%" + order.getUserId() + "%");
-                //criteria.andUserIdLike("%"+order.getUserId()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getUserId())) {
+                criteria.andLike("userId", "%" + TbOrder.getUserId() + "%");
+                //criteria.andUserIdLike("%"+TbOrder.getUserId()+"%");
             }
-            if (StringUtils.isNotBlank(order.getBuyerMessage())) {
-                criteria.andLike("buyerMessage", "%" + order.getBuyerMessage() + "%");
-                //criteria.andBuyerMessageLike("%"+order.getBuyerMessage()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getBuyerMessage())) {
+                criteria.andLike("buyerMessage", "%" + TbOrder.getBuyerMessage() + "%");
+                //criteria.andBuyerMessageLike("%"+TbOrder.getBuyerMessage()+"%");
             }
-            if (StringUtils.isNotBlank(order.getBuyerNick())) {
-                criteria.andLike("buyerNick", "%" + order.getBuyerNick() + "%");
-                //criteria.andBuyerNickLike("%"+order.getBuyerNick()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getBuyerNick())) {
+                criteria.andLike("buyerNick", "%" + TbOrder.getBuyerNick() + "%");
+                //criteria.andBuyerNickLike("%"+TbOrder.getBuyerNick()+"%");
             }
-            if (StringUtils.isNotBlank(order.getBuyerRate())) {
-                criteria.andLike("buyerRate", "%" + order.getBuyerRate() + "%");
-                //criteria.andBuyerRateLike("%"+order.getBuyerRate()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getBuyerRate())) {
+                criteria.andLike("buyerRate", "%" + TbOrder.getBuyerRate() + "%");
+                //criteria.andBuyerRateLike("%"+TbOrder.getBuyerRate()+"%");
             }
-            if (StringUtils.isNotBlank(order.getReceiverAreaName())) {
-                criteria.andLike("receiverAreaName", "%" + order.getReceiverAreaName() + "%");
-                //criteria.andReceiverAreaNameLike("%"+order.getReceiverAreaName()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getReceiverAreaName())) {
+                criteria.andLike("receiverAreaName", "%" + TbOrder.getReceiverAreaName() + "%");
+                //criteria.andReceiverAreaNameLike("%"+TbOrder.getReceiverAreaName()+"%");
             }
-            if (StringUtils.isNotBlank(order.getReceiverMobile())) {
-                criteria.andLike("receiverMobile", "%" + order.getReceiverMobile() + "%");
-                //criteria.andReceiverMobileLike("%"+order.getReceiverMobile()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getReceiverMobile())) {
+                criteria.andLike("receiverMobile", "%" + TbOrder.getReceiverMobile() + "%");
+                //criteria.andReceiverMobileLike("%"+TbOrder.getReceiverMobile()+"%");
             }
-            if (StringUtils.isNotBlank(order.getReceiverZipCode())) {
-                criteria.andLike("receiverZipCode", "%" + order.getReceiverZipCode() + "%");
-                //criteria.andReceiverZipCodeLike("%"+order.getReceiverZipCode()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getReceiverZipCode())) {
+                criteria.andLike("receiverZipCode", "%" + TbOrder.getReceiverZipCode() + "%");
+                //criteria.andReceiverZipCodeLike("%"+TbOrder.getReceiverZipCode()+"%");
             }
-            if (StringUtils.isNotBlank(order.getReceiver())) {
-                criteria.andLike("receiver", "%" + order.getReceiver() + "%");
-                //criteria.andReceiverLike("%"+order.getReceiver()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getReceiver())) {
+                criteria.andLike("receiver", "%" + TbOrder.getReceiver() + "%");
+                //criteria.andReceiverLike("%"+TbOrder.getReceiver()+"%");
             }
-            if (StringUtils.isNotBlank(order.getInvoiceType())) {
-                criteria.andLike("invoiceType", "%" + order.getInvoiceType() + "%");
-                //criteria.andInvoiceTypeLike("%"+order.getInvoiceType()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getInvoiceType())) {
+                criteria.andLike("invoiceType", "%" + TbOrder.getInvoiceType() + "%");
+                //criteria.andInvoiceTypeLike("%"+TbOrder.getInvoiceType()+"%");
             }
-            if (StringUtils.isNotBlank(order.getSourceType())) {
-                criteria.andLike("sourceType", "%" + order.getSourceType() + "%");
-                //criteria.andSourceTypeLike("%"+order.getSourceType()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getSourceType())) {
+                criteria.andLike("sourceType", "%" + TbOrder.getSourceType() + "%");
+                //criteria.andSourceTypeLike("%"+TbOrder.getSourceType()+"%");
             }
-            if (StringUtils.isNotBlank(order.getSellerId())) {
-                criteria.andLike("sellerId", "%" + order.getSellerId() + "%");
-                //criteria.andSellerIdLike("%"+order.getSellerId()+"%");
+            if (StringUtils.isNotBlank(TbOrder.getSellerId())) {
+                criteria.andLike("sellerId", "%" + TbOrder.getSellerId() + "%");
+                //criteria.andSellerIdLike("%"+TbOrder.getSellerId()+"%");
             }
 
         }
@@ -153,33 +154,33 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
     }
 
     @Override
-    public void add(TbOrder order) {
-        List<Cart> cartList = (List<Cart>) redisTemplate.boundHashOps("CART_REDIS_KEY").get(order.getUserId());
+    public void add(TbOrder TbOrder) {
+        List<Cart> cartList = (List<Cart>) redisTemplate.boundHashOps("CART_REDIS_KEY").get(TbOrder.getUserId());
         List<Long> orderList = new ArrayList<>();
         double total_money = 0;
         for (Cart cart : cartList) {
             long orderId = idWorker.nextId();
             TbOrder tbOrder = new TbOrder();
             tbOrder.setOrderId(orderId);
-            tbOrder.setUserId(order.getUserId());
-            tbOrder.setPaymentType(order.getPaymentType());
+            tbOrder.setUserId(TbOrder.getUserId());
+            tbOrder.setPaymentType(TbOrder.getPaymentType());
             tbOrder.setStatus("1");
             tbOrder.setCreateTime(new Date());
             tbOrder.setUpdateTime(new Date());
-            tbOrder.setReceiverAreaName(order.getReceiverAreaName());
-            tbOrder.setReceiverMobile(order.getReceiverMobile());
-            tbOrder.setReceiver(order.getReceiver());
-            tbOrder.setSourceType(order.getSourceType());
+            tbOrder.setReceiverAreaName(TbOrder.getReceiverAreaName());
+            tbOrder.setReceiverMobile(TbOrder.getReceiverMobile());
+            tbOrder.setReceiver(TbOrder.getReceiver());
+            tbOrder.setSourceType(TbOrder.getSourceType());
             tbOrder.setSellerId(cart.getSellerId());
             double money = 0;
-            for (TbOrderItem orderItem : cart.getOrderItemList()) {
-                orderItem.setId(idWorker.nextId());
-                orderItem.setOrderId(orderId);
-                orderItem.setSellerId(cart.getSellerId());
-                TbItem item = itemMapper.selectByPrimaryKey(orderItem.getItemId());
-                orderItem.setGoodsId(item.getGoodsId());
-                money += orderItem.getTotalFee().doubleValue();
-                orderItemMapper.insert(orderItem);
+            for (TbOrderItem TbOrderItem : cart.getOrderItemList()) {
+                TbOrderItem.setId(idWorker.nextId());
+                TbOrderItem.setOrderId(orderId);
+                TbOrderItem.setSellerId(cart.getSellerId());
+                TbItem item = itemMapper.selectByPrimaryKey(TbOrderItem.getItemId());
+                TbOrderItem.setGoodsId(item.getGoodsId());
+                money += TbOrderItem.getTotalFee().doubleValue();
+                orderItemMapper.insert(TbOrderItem);
             }
             tbOrder.setPayment(new BigDecimal(money));
             total_money += money;
@@ -194,10 +195,10 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
         payLog.setPayType("1");
         payLog.setTotalFee((long) (total_money * 100));
         payLog.setTradeState("0");
-        payLog.setUserId(order.getUserId());
+        payLog.setUserId(TbOrder.getUserId());
         payLogMapper.insert(payLog);
-        redisTemplate.boundHashOps("payLog").put(order.getUserId(), payLog);
-        redisTemplate.boundHashOps("CART_REDIS_KEY").delete(order.getUserId());
+        redisTemplate.boundHashOps("payLog").put(TbOrder.getUserId(), payLog);
+        redisTemplate.boundHashOps("CART_REDIS_KEY").delete(TbOrder.getUserId());
 
 
     }
@@ -254,20 +255,20 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
         List<TbOrder> tbOrderList = tbOrderMapper.select(tbOrder);
         //遍历订单，找出订单所有的商品信息
         if (tbOrderList != null) {
-            for (TbOrder order : tbOrderList) {
+            for (TbOrder TbOrder : tbOrderList) {
                 //设置店铺名称
-                order.setSellerNickName(tbSellerMapper.selectByPrimaryKey(order.getSellerId()).getNickName());
-                Long orderId = order.getOrderId();
+                TbOrder.setSellerNickName(tbSellerMapper.selectByPrimaryKey(TbOrder.getSellerId()).getNickName());
+                Long orderId = TbOrder.getOrderId();
                 TbOrderItem tbOrderItem = new TbOrderItem();
                 tbOrderItem.setOrderId(orderId);
                 List<TbOrderItem> tbOrderItemList = tbOrderItemMapper.select(tbOrderItem);
-                for (TbOrderItem orderItem : tbOrderItemList) {
-                    TbItem tbItem = itemMapper.selectByPrimaryKey(orderItem.getItemId());
-                    orderItem.setSpec(tbItem.getSpec().replace("{","")
+                for (TbOrderItem TbOrderItem : tbOrderItemList) {
+                    TbItem tbItem = itemMapper.selectByPrimaryKey(TbOrderItem.getItemId());
+                    TbOrderItem.setSpec(tbItem.getSpec().replace("{","")
                             .replace("}","")
                             .replace("\"",""));//设置规格属性
                 }
-                order.setOrderItemList(tbOrderItemList);
+                TbOrder.setOrderItemList(tbOrderItemList);
             }
         }
 
