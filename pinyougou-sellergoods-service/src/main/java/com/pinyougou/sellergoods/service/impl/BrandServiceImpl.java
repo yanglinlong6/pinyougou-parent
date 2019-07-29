@@ -65,7 +65,13 @@ public class BrandServiceImpl extends CoreServiceImpl<TbBrand> implements BrandS
                 criteria.andLike("firstChar", "%" + brand.getFirstChar() + "%");
                 // criteria.andFirstCharLike("%"+brand.getFirstChar()+"%");
             }
-            
+            if(StringUtils.isNotBlank(brand.getSellerID())){
+                criteria.andLike("sellerID","%"+brand.getSellerID()+"%");// sellerID="%l%"
+            }
+
+            if(StringUtils.isNotBlank(brand.getStatus())){
+                criteria.andLike("status","%"+brand.getStatus()+"%");// status="%l%"
+            }
         }
         List<TbBrand> all = brandMapper.selectByExample(example);
         PageInfo<TbBrand> info = new PageInfo<TbBrand>(all);

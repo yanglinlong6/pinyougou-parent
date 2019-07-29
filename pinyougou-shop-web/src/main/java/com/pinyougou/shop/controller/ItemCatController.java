@@ -3,7 +3,10 @@ package com.pinyougou.shop.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbItemCat;
+import com.pinyougou.pojo.TbTypeTemplate;
 import com.pinyougou.sellergoods.service.ItemCatService;
+import com.pinyougou.sellergoods.service.TypeTemplateService;
+import entity.CategoryBlank;
 import entity.Result;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,9 @@ public class ItemCatController {
 
 	@Reference
 	private ItemCatService itemCatService;
+
+	@Reference
+    private TypeTemplateService typeTemplateService;
 	
 	/**
 	 * 返回全部列表
@@ -53,6 +59,25 @@ public class ItemCatController {
 			return new Result(false, "增加失败");
 		}
 	}
+
+    @RequestMapping( "/getTypeList")
+    public List<TbTypeTemplate> getTypeList(){
+	    return typeTemplateService.findAll();
+    }
+
+
+
+	@RequestMapping("/save")
+	public Result save(@RequestBody CategoryBlank categoryBlank){
+		try {
+            itemCatService.save(categoryBlank);
+			return new Result(true, "增加成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "增加失败");
+		}
+	}
+
 	
 	/**
 	 * 修改

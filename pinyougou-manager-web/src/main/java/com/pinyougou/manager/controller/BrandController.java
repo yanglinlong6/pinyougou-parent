@@ -8,6 +8,7 @@ import entity.Result;
 import com.pinyougou.sellergoods.service.BrandService;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.TbBrand;
@@ -68,6 +69,9 @@ public class BrandController {
     @RequestMapping("/add")
     public Result add(@RequestBody TbBrand brand) {
         try {
+            String name = SecurityContextHolder.getContext().getAuthentication().getName();
+            brand.setSellerID(name);
+            brand.setStatus("0");
             brandService.add(brand);
             return new Result(true, "增加成功");
         } catch (Exception e) {
@@ -85,6 +89,9 @@ public class BrandController {
     @RequestMapping("/update")
     public Result update(@RequestBody TbBrand brand) {
         try {
+            String name = SecurityContextHolder.getContext().getAuthentication().getName();
+            brand.setSellerID(name);
+            brand.setStatus("0");
             brandService.update(brand);
             return new Result(true, "修改成功");
         } catch (Exception e) {
@@ -126,6 +133,8 @@ public class BrandController {
     public PageInfo<TbBrand> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
                                       @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
                                       @RequestBody TbBrand brand) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        brand.setSellerID(name);
         return brandService.findPage(pageNo, pageSize, brand);
     }
 
