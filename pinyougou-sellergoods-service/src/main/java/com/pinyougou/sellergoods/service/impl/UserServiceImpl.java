@@ -134,7 +134,11 @@ public class UserServiceImpl extends CoreServiceImpl<TbUser> implements UserServ
     public Map<String, Integer> findUserNum() {
         Map<String, Integer> map = new HashMap<>();
         Integer userTotalNum = userMapper.findUserNum();
+        Integer activeNum = userMapper.findActiveNum();
+        Integer unActiveNum = userMapper.findUnActiveNum();
         map.put("userTotalNum", userTotalNum);
+        map.put("activeNum", activeNum);
+        map.put("unActiveNum", unActiveNum);
         return map;
     }
     

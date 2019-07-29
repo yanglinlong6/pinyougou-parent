@@ -32,4 +32,14 @@
         select count(*)
         from tb_user;
     </select>
+    <select id="findActiveNum" resultType="java.lang.Integer">
+        select count(*)
+        from tb_user
+        where experience_value &gt;= 1;
+    </select>
+    <select id="findUnActiveNum" resultType="java.lang.Integer">
+        select count(*)
+        from tb_user
+        where experience_value &lt; 1;
+    </select>
 </mapper>
