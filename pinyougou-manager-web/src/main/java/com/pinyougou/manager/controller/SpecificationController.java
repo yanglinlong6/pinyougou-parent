@@ -33,7 +33,7 @@ public class SpecificationController {
     @RequestMapping("/updateStatus")
     public Result updateStatus(@RequestParam String status, @RequestBody Long[] ids){
         try {
-            specificationService.updateStatus(ids);
+            specificationService.updateStatus(status,ids);
             return new Result(true,"审核成功");
         } catch (Exception e) {
             e.printStackTrace();
