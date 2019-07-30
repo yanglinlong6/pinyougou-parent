@@ -14,6 +14,7 @@ import com.pinyougou.pojo.TbOrderItem;
 import com.pinyougou.sellergoods.service.OrderService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import tk.mybatis.mapper.entity.Example;
@@ -35,40 +36,40 @@ import java.util.List;
  */
 @Service
 public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderService {
-
+    
     private TbOrderMapper orderMapper;
-
+    
     @Value("${template_code}")
     private String templateCode;
-
+    
     @Value("${sign_name}")
     private String signName;
-
+    
     @Autowired
     public OrderServiceImpl(TbOrderMapper orderMapper) {
         super(orderMapper, TbOrder.class);
         this.orderMapper = orderMapper;
     }
-
+    
     @Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize) {
         PageHelper.startPage(pageNo, pageSize);
         List<TbOrder> all = orderMapper.selectAll();
         PageInfo<TbOrder> info = new PageInfo<TbOrder>(all);
-
+        
         // 序列化再反序列化
         String s = JSON.toJSONString(info);
         PageInfo<TbOrder> pageInfo = JSON.parseObject(s, PageInfo.class);
         return pageInfo;
     }
-
+    
     @Override
     public PageInfo<TbOrder> findPage(Integer pageNo, Integer pageSize, TbOrder order) {
         PageHelper.startPage(pageNo, pageSize);
-
+        
         Example example = new Example(TbOrder.class);
         Example.Criteria criteria = example.createCriteria();
-
+        
         if (order != null) {
             if (StringUtils.isNotBlank(order.getPaymentType())) {
                 criteria.andLike("paymentType", "%" + order.getPaymentType() + "%");
@@ -90,14 +91,14 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
                 criteria.andLike("shippingCode", "%" + order.getShippingCode() + "%");
                 // criteria.andShippingCodeLike("%"+order.getShippingCode()+"%");
             }
-            /*===================================修改 1 */
+            /* ===================================修改 1 */
             if (StringUtils.isNotBlank(order.getUserId())) {
-                criteria.andEqualTo("userId",order.getUserId());
-                //criteria.andLike("userId", "%" + order.getUserId() + "%");
-                //criteria.andUserIdLike("%"+order.getUserId()+"%");
+                criteria.andEqualTo("userId", order.getUserId());
+                // criteria.andLike("userId", "%" + order.getUserId() + "%");
+                // criteria.andUserIdLike("%"+order.getUserId()+"%");
             }
-            /*===================================修改 1 */
-
+            /* ===================================修改 1 */
+            
             if (StringUtils.isNotBlank(order.getBuyerMessage())) {
                 criteria.andLike("buyerMessage", "%" + order.getBuyerMessage() + "%");
                 // criteria.andBuyerMessageLike("%"+order.getBuyerMessage()+"%");
@@ -135,7 +136,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
                 // criteria.andSourceTypeLike("%"+order.getSourceType()+"%");
             }
             /* ===================================修改 1 */
-
+            
             if (StringUtils.isNotBlank(order.getSellerId())) {
                 criteria.andEqualTo("sellerId", order.getSellerId());
                 // criteria.andLike("sellerId", "%" + order.getSellerId() + "%");
@@ -147,20 +148,20 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
                 // criteria.andLike("sellerId", "%" + order.getSellerId() + "%");
                 // criteria.andSellerIdLike("%"+order.getSellerId()+"%");
             }
-
+            
         }
         List<TbOrder> all = orderMapper.selectByExample(example);
         PageInfo<TbOrder> info = new PageInfo<TbOrder>(all);
         // 序列化再反序列化
         String s = JSON.toJSONString(info);
         PageInfo<TbOrder> pageInfo = JSON.parseObject(s, PageInfo.class);
-
+        
         return pageInfo;
     }
-
+    
     @Autowired
     private TbOrderItemMapper tbOrderItemMapper;
-
+    
     /**
      * 获取销售额
      *
@@ -184,7 +185,7 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
             // 设置时间区间
             criteria.andBetween("paymentTime", dateStart, dateEnd);
             List<TbOrder> tbOrders = orderMapper.selectByExample(example);
-
+            
             // 2获取到该时间段该商家的订单 进行遍历
             if (tbOrders.size() > 0 && tbOrders != null) {
                 // 如果不为null name根据订单id获取订单明细 获取总价格
@@ -219,13 +220,12 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
         }
         return map;
     }
-
+    
     @Autowired
     private DefaultMQProducer producer;
-
+    
     @Override
     public void deliverGoods(Long[] ids) {
-        // todo
         String[] arr = {"顺丰快递", "京东快递", "百世汇通快递", "圆通快递", "天天快递", "中通快递", "黑马快递"};
         for (Long id : ids) {
             TbOrder order = orderMapper.selectByPrimaryKey(id);
@@ -237,26 +237,23 @@ public class OrderServiceImpl extends CoreServiceImpl<TbOrder> implements OrderS
             int j = r.nextInt(7);
             order.setShippingName(arr[j]);
             int i = orderMapper.updateByPrimaryKey(order);
-            System.out.println("成功" + i);
 
-            // String code = (long)((Math.random() * 9 + 1) * 100000) + "";
-//            String code = "12354687799225";
-//            Map<String, String> map = new HashMap<>();
-//            map.put("mobile", order.getReceiverMobile());
-//            map.put("sign_name", signName);
-//            map.put("template_code", templateCode);
-//            map.put("param", "{\"code\":\"" + code + "\"}");
-//            Message message =
-//                new Message("FAHUO_TOPIC", "FAHUO_MESSAGE_TAG", "deliverGoods", JSON.toJSONString(map).getBytes());
-//            try {
-//                producer.send(message);
-//                System.out.println("发送成功");
-//            }
-//            catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            String code = "12354687799225";
+            Map<String, String> map = new HashMap<>();
+            map.put("mobile", order.getReceiverMobile());
+            map.put("sign_name", signName);
+            map.put("template_code", templateCode);
+            map.put("param", "{\"code\":\"" + code + "\"}");
+            Message message =
+                new Message("FAHUO_TOPIC", "FAHUO_MESSAGE_TAG", "deliverGoods", JSON.toJSONString(map).getBytes());
+            try {
+                producer.send(message);
+                System.out.println("发送成功");
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
-
-
+    
 }
