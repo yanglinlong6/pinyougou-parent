@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>普通订单统计</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+</head>
+<!--加入指令 进行商家审核 所以这里显示的应该都是全都是状态为0 所以要去搜索状态为0的 定义搜索对象状态为0-->
+<body class="hold-transition skin-red sidebar-mini">
+<div id="app">
+    <!-- .box-body -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">普通订单统计</h3>
+        </div>
+
+        <div class="box-body">
+
+            <!-- 数据表格 -->
+            <div class="table-box">
+
+                <!--工具栏-->
+
+                <div class="box-tools pull-right">
+                    <div class="has-feedback">
+                        起始时间：<input type="date" v-model="searchEntity.createTime">
+                        结束时间：<input type="date" v-model="searchEntity.updateTime">
+                        <button class="btn btn-default" @click="searchList(1)">查询</button>
+                    </div>
+                </div>
+                <!--工具栏/-->
+
+                <!--数据列表-->
+                <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+                    <thead>
+                    <tr>
+                        <th class="" style="padding-right:0px">
+                            <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                        </th>
+                        <th class="sorting_asc">商品ID</th>
+                        <th class="sorting">商品名称</th>
+                        <th class="sorting">商品单价</th>
+                        <th class="sorting">商品销售数量</th>
+                        <th class="sorting">商品销售总金额</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--循环实体类-->
+                    <tr v-for="entity in list0">
+                        <td><input  type="checkbox" v-model="ids" :value="entity.goodsId"></td>
+                        <td>{{entity.goodsId}}</td>
+                        <td>{{entity.goods.goodsName}}</td>
+                        <td>{{entity.price}}</td>
+                        <td>{{entity.num}}</td>
+                        <td>{{entity.totalFee}}</td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+                <!--数据列表/-->
+                <navigation :pages="pages" :current.sync="pageNo"  @navpage="searchList"></navigation>
+
+            </div>
+            <!-- 数据表格 /-->
+
+
+        </div>
+        <!-- /.box-body -->
+
+    </div>
+</div>
+</body>
+<script src="../plugins/vue/vue.js"></script>
+<script src="../plugins/axios/axios.js"></script>
+<script src="../js/pagination.js"></script>
+<script src="../js/controller/ordersStatisticController.js"></script>
+
+
+</html>

@@ -63,6 +63,7 @@ public class ItemPageServiceImpl implements ItemPageService {
         TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(id);
         //2.使用freemarker生成静态页（模板 + 数据集=html）
         System.out.println("更新成功222");
+        System.out.println(pageDir);
         genHTML("item.ftl", tbGoods, tbGoodsDesc);
     }
 
