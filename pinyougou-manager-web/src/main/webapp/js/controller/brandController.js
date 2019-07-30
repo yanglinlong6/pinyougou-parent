@@ -94,8 +94,8 @@
                 console.log("1231312131321");
             });
         },
-        updateStatus:function () {
-            axios.post('/brand/updateStatus.shtml',this.ids).then(function (response) {
+        updateStatus:function (status) {
+            axios.post('/brand/updateStatus/'+status+'.shtml',this.ids).then(function (response) {
                 console.log(response);
                 if(response.data.success){
                     app.searchList(1);

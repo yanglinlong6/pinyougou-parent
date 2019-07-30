@@ -38,14 +38,13 @@
                             </div>
 							<div class="box-tools pull-right">
 								<div class="has-feedback">
-									状态：<select>
+									状态：<select v-model="searchEntity.status">
 									<option value="">全部</option>
-									<option value="0">未申请</option>
-									<option value="1">申请中</option>
-									<option value="2">已审核</option>
-									<option value="3">已驳回</option>
+									<option value="0">未审核</option>
+									<option value="1">已审核</option>
+									<option value="2">已驳回</option>
 								</select>
-									品牌名称：<input >
+									品牌名称：<input v-model="searchEntity.name">
 									<button class="btn btn-default" @click="searchList(1)">查询</button>
 								</div>
 							</div>

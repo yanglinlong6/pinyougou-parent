@@ -29,7 +29,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
 
         //匿名用户需要放行
-        if ("anonymous".equals(name)) {
+        if ("anonymousUser".equals(name)) {
             return true;
         } else {
             System.out.println(name);

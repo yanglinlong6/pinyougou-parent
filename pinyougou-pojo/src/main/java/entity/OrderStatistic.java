@@ -6,7 +6,7 @@ import com.pinyougou.pojo.TbGoods;
 import java.math.BigDecimal;
 
 public class OrderStatistic {
-    private TbGoods TbGoods;
+    private TbGoods goods;
     private TbGoodsDesc TbGoodsDesc;//
     private BigDecimal price;//商品单价
     private Integer num;//商品购买数量
@@ -14,11 +14,11 @@ public class OrderStatistic {
     private Long goodsId;//SPU ID
 
     public TbGoods getGoods() {
-        return TbGoods;
+        return goods;
     }
 
-    public void setGoods(TbGoods TbGoods) {
-        this.TbGoods = TbGoods;
+    public void setGoods(TbGoods Goods) {
+        this.goods = Goods;
     }
 
     public TbGoodsDesc getGoodsDesc() {
@@ -64,7 +64,7 @@ public class OrderStatistic {
     @Override
     public String toString() {
         return "OrderStatistic{" +
-                "Goods=" + TbGoods +
+                "TbGoods=" + goods +
                 ", TbGoodsDesc=" + TbGoodsDesc +
                 ", price=" + price +
                 ", num=" + num +

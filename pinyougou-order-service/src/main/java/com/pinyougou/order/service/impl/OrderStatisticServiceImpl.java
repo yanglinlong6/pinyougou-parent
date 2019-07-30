@@ -120,8 +120,9 @@ public class OrderStatisticServiceImpl extends CoreServiceImpl<TbGoods> implemen
                 }
             }
             ArrayList<OrderStatistic> orderStatistics = new ArrayList<>(orderStatisticHashMap.values());
-
             PageInfo<OrderStatistic> info = new PageInfo<OrderStatistic>(orderStatistics);
+            info.setList(orderStatistics);
+            System.out.println(info);
             //序列化再反序列化
             String s = JSON.toJSONString(info);
             PageInfo<OrderStatistic> pageInfo = JSON.parseObject(s, PageInfo.class);

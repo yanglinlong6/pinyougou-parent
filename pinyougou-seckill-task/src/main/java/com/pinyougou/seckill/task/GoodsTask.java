@@ -73,7 +73,7 @@ public class GoodsTask {
 //            redisTemplate.boundHashOps(SysConstants.SEC_KILL_GOODS).put(tbSeckillGoods.getId(), tbSeckillGoods);
 //        }
         redisTemplate.boundValueOps("n+ihao").set("nishi yife ");
-        System.out.println("chenggong");
+        //System.out.println("chenggong");
     }
 
     public void pushGoodsList(TbSeckillGoods goods) {
@@ -90,15 +90,18 @@ public class GoodsTask {
         Date date = new Date();
         //从缓存中拿取所有已经上架的秒杀商品（应该是从缓存拿，而不是数据库拿）
         List<TbSeckillGoods> goods = redisTemplate.boundHashOps(SysConstants.SEC_KILL_GOODS).values();
+
         for (TbSeckillGoods good : goods) {
+            System.out.println(good.getEndTime().getTime()+"----------"+date.getTime());
             if (good.getEndTime().getTime()<date.getTime()){//如果结束日期小于当前日期，则表示过期
-                System.out.println(good);//打印要删除的商品
+                System.out.println("此秒杀商品没有卖完："+good);//打印要删除的商品
                 if (good.getStockCount()>0){//判断商品剩余库存数是否大于0
                     //库存都没有卖完
                     //将缓存中的信息存到数据库(包括剩余的库存量)
                     seckillGoodsMapper.updateByPrimaryKeySelective(good);
                     //若队列中存在未卖完的商品，也要清除队列
                     redisTemplate.boundListOps(SysConstants.SEC_KILL_GOODS_PREFIX+good.getId()).remove(0,-1);
+                    System.out.println("删除成功");
                 }
                 //删除秒杀商品
                 redisTemplate.boundHashOps(SysConstants.SEC_KILL_GOODS).delete(good.getId());

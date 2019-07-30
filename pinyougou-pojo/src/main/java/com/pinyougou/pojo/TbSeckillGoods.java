@@ -392,4 +392,18 @@ public class TbSeckillGoods implements Serializable {
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
     }
+
+    @Override
+    public String toString() {
+        return "TbSeckillGoods{" +
+                "id=" + id +
+                ", goodsId=" + goodsId +
+                ", title='" + title + '\'' +
+                ", sellerId='" + sellerId + '\'' +
+                ", createTime=" + createTime +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", stockCount=" + stockCount +
+                '}';
+    }
 }

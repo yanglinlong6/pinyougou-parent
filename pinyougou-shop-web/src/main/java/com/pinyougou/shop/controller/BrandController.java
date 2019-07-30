@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.pinyougou.pojo.TbBrand;
 import com.pinyougou.sellergoods.service.BrandService;
 import entity.Result;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +47,9 @@ public class BrandController {
 	@RequestMapping("/add")
 	public Result add(@RequestBody TbBrand brand){
 		try {
+			String name = SecurityContextHolder.getContext().getAuthentication().getName();
+			brand.setSellerID(name);
+			brand.setStatus("0");//未审核
 			brandService.add(brand);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {
@@ -62,6 +66,9 @@ public class BrandController {
 	@RequestMapping("/update")
 	public Result update(@RequestBody TbBrand brand){
 		try {
+			String name = SecurityContextHolder.getContext().getAuthentication().getName();
+			brand.setSellerID(name);
+			brand.setStatus("0");
 			brandService.update(brand);
 			return new Result(true, "修改成功");
 		} catch (Exception e) {
@@ -101,6 +108,9 @@ public class BrandController {
     public PageInfo<TbBrand> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
                                       @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
                                       @RequestBody TbBrand brand) {
+		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+		brand.setSellerID(name);
+		System.out.println(name);
         return brandService.findPage(pageNo, pageSize, brand);
     }
 

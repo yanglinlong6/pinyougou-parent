@@ -31,9 +31,8 @@ public class BrandController {
     @Reference
     private BrandService brandService;
 
-    @RequestMapping("/updateStatus")
-    public Result updateStatus(@RequestParam String status, @RequestBody Long[] ids){
-
+    @RequestMapping("/updateStatus/{status}")
+    public Result updateStatus(@RequestBody Long[] ids, @PathVariable(value = "status") String status){
         try {
             brandService.updateStatus(ids,status);
             return new Result(true,"审核成功");
@@ -69,9 +68,6 @@ public class BrandController {
     @RequestMapping("/add")
     public Result add(@RequestBody TbBrand brand) {
         try {
-            String name = SecurityContextHolder.getContext().getAuthentication().getName();
-            brand.setSellerID(name);
-            brand.setStatus("0");
             brandService.add(brand);
             return new Result(true, "增加成功");
         } catch (Exception e) {
@@ -89,9 +85,6 @@ public class BrandController {
     @RequestMapping("/update")
     public Result update(@RequestBody TbBrand brand) {
         try {
-            String name = SecurityContextHolder.getContext().getAuthentication().getName();
-            brand.setSellerID(name);
-            brand.setStatus("0");
             brandService.update(brand);
             return new Result(true, "修改成功");
         } catch (Exception e) {
@@ -133,8 +126,7 @@ public class BrandController {
     public PageInfo<TbBrand> findPage(@RequestParam(value = "pageNo", defaultValue = "1", required = true) Integer pageNo,
                                       @RequestParam(value = "pageSize", defaultValue = "10", required = true) Integer pageSize,
                                       @RequestBody TbBrand brand) {
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        brand.setSellerID(name);
+
         return brandService.findPage(pageNo, pageSize, brand);
     }
 

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @program: entity
  * @author: Sun jinwei
  * @create: 2019-07-26 12:55
- * @description: 销售饼状图的pojo类 
+ * @description: 销售饼状图的pojo类
  **/
 public class Sale implements Serializable {
     private Long goodsId;

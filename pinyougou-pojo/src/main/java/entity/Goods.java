@@ -1,5 +1,6 @@
 package entity;
 
+import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbGoodsDesc;
 import com.pinyougou.pojo.TbItem;
 
@@ -13,24 +14,24 @@ import java.util.List;
  * 日期: 2019/6/25 10:19
  */
 public class Goods implements Serializable {
-    private Goods Goods;//商品SPU
-    private TbGoodsDesc TbGoodsDesc;//商品扩展
+    private TbGoods goods;//商品SPU
+    private TbGoodsDesc goodsDesc;//商品扩展
     private List<TbItem> itemList;//商品SKU列表
 
-    public Goods getGoods() {
-        return Goods;
+    public TbGoods getGoods() {
+        return goods;
     }
 
-    public void setGoods(Goods Goods) {
-        this.Goods = Goods;
+    public void setGoods(TbGoods goods) {
+        this.goods = goods;
     }
 
     public TbGoodsDesc getGoodsDesc() {
-        return TbGoodsDesc;
+        return goodsDesc;
     }
 
-    public void setGoodsDesc(TbGoodsDesc TbGoodsDesc) {
-        this.TbGoodsDesc = TbGoodsDesc;
+    public void setGoodsDesc(TbGoodsDesc goodsDesc) {
+        this.goodsDesc = goodsDesc;
     }
 
     public List<TbItem> getItemList() {

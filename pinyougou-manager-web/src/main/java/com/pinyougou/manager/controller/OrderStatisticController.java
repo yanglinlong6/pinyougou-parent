@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.xml.transform.Source;
 import java.util.List;
 
 @RestController
@@ -30,6 +31,7 @@ public class OrderStatisticController {
         System.out.println(order.getCreateTime()+"创建时间");
         System.out.println(order.getUpdateTime()+"更新时间");
         PageInfo<OrderStatistic> page = orderStatisticService.findPage(pageNo, pageSize, order);
+        System.out.println(page);
         return page;
     }
 }
