@@ -59,7 +59,7 @@
         <!--//和设置编译插件是一样的效果-->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <joda-time.version>2.9.9</joda-time.version>
         <spring.version>5.0.2.RELEASE</spring.version>
         <!--分页插件使用的是4.0版本的 不是5.0版本的-->
@@ -408,7 +408,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
 
