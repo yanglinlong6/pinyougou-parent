@@ -61,7 +61,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <junit.version>4.12</junit.version>
         <joda-time.version>2.9.9</joda-time.version>
-        <spring.version>5.0.2.RELEASE</spring.version>
+        <spring.version>5.3.18</spring.version>
         <!--分页插件使用的是4.0版本的 不是5.0版本的-->
         <pagehelper.version>4.0.0</pagehelper.version>
         <servlet-api.version>2.5</servlet-api.version>
