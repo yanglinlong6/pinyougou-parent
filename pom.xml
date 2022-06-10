@@ -65,7 +65,7 @@
         <!--分页插件使用的是4.0版本的 不是5.0版本的-->
         <pagehelper.version>4.0.0</pagehelper.version>
         <servlet-api.version>2.5</servlet-api.version>
-        <dubbo.version>2.6.1</dubbo.version>
+        <dubbo.version>2.6.12</dubbo.version>
         <zookeeper.version>3.4.7</zookeeper.version>
         <zkclient.version>0.1</zkclient.version>
         <mybatis.version>3.4.5</mybatis.version>
